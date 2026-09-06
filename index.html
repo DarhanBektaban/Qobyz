@@ -3,648 +3,447 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>QOBYZ.COM — Шынайы Қылқобыз Үні</title>
+  <title>Шынайы Қылқобыз Симуляторы</title>
   <style>
     :root {
-      --bg: #0c0a09;
-      --panel: #171412;
-      --panel-hover: #221d19;
-      --accent: #d4a373;
-      --accent-hover: #faedcd;
+      --bg: #120e0c;
       --text: #e6e2dd;
-      --muted: #8c827a;
-      --border: #292420;
-      --string-glow: rgba(212, 163, 115, 0.45);
+      --wood-dark: #2a1610;
+      --wood-light: #5d3a29;
+      --skin: #d4ba9f;
+      --string: #c4b5a9;
+      --string-glow: #ffc872;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       user-select: none;
+      font-family: system-ui, sans-serif;
     }
 
     body {
       background-color: var(--bg);
       color: var(--text);
-      line-height: 1.6;
-      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+      touch-action: none; /* Мобильді құрылғыда экран сырғып кетпеуі үшін */
     }
 
     header {
-      padding: 22px 8%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid var(--border);
-      position: sticky;
-      top: 0;
-      background: rgba(12, 10, 9, 0.94);
-      backdrop-filter: blur(10px);
-      z-index: 50;
+      text-align: center;
+      padding: 20px;
+      z-index: 10;
     }
 
-    .logo {
-      font-size: 1.35rem;
-      font-weight: 700;
-      letter-spacing: 0.18em;
-      color: var(--accent);
+    h1 {
+      font-size: 1.8rem;
+      color: #d4a373;
+      margin-bottom: 10px;
+      letter-spacing: 2px;
       text-transform: uppercase;
     }
 
-    nav a {
-      color: var(--muted);
-      text-decoration: none;
-      margin-left: 24px;
+    p {
+      color: #8c827a;
       font-size: 0.95rem;
-      transition: color 0.2s;
+      max-width: 500px;
+      margin: 0 auto 20px;
+      line-height: 1.5;
     }
 
-    nav a:hover {
-      color: var(--accent-hover);
-    }
-
-    .hero {
-      padding: 60px 8% 50px;
-      display: grid;
-      grid-template-columns: 1.05fr 1.35fr;
-      gap: 40px;
-      align-items: center;
-      min-height: 80vh;
-    }
-
-    .hero h1 {
-      font-size: 3rem;
-      line-height: 1.15;
-      font-weight: 600;
-      margin-bottom: 20px;
-      color: #fff;
-    }
-
-    .hero p {
-      color: var(--muted);
-      font-size: 1.05rem;
-      line-height: 1.7;
-      margin-bottom: 28px;
-    }
-
-    .controls-row {
-      display: flex;
-      gap: 14px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-
-    .btn {
-      display: inline-block;
-      padding: 13px 26px;
-      background: var(--accent);
-      color: var(--bg);
-      text-decoration: none;
-      font-weight: 600;
-      border-radius: 4px;
+    .start-btn {
+      background: #d4a373;
+      color: #120e0c;
       border: none;
+      padding: 10px 24px;
+      font-size: 1rem;
+      font-weight: bold;
+      border-radius: 4px;
       cursor: pointer;
-      transition: all 0.2s;
+      box-shadow: 0 4px 15px rgba(212, 163, 115, 0.3);
+      transition: 0.2s;
     }
 
-    .btn:hover {
-      background: var(--accent-hover);
-      box-shadow: 0 0 16px var(--string-glow);
+    .start-btn:hover {
+      background: #faedcd;
+      transform: translateY(-2px);
     }
 
-    .btn-secondary {
-      background: transparent;
-      border: 1px solid var(--border);
-      color: var(--text);
-    }
-
-    .btn-secondary:hover {
-      background: var(--panel);
-      border-color: var(--accent);
-    }
-
-    /* Қобыз интерактивті тақтасы */
-    .interactive-card {
-      background: var(--panel);
-      border: 1px solid var(--border);
-      padding: 30px;
-      border-radius: 8px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-    }
-
-    .board-header {
+    /* ҚОБЫЗДЫҢ БЕЙНЕСІ */
+    .qobyz-container {
+      position: relative;
+      margin-top: 10px;
       display: flex;
-      justify-content: space-between;
+      flex-direction: column;
       align-items: center;
-      margin-bottom: 20px;
+      filter: drop-shadow(0 20px 30px rgba(0,0,0,0.8));
+      opacity: 0.5;
+      pointer-events: none;
+      transition: opacity 0.5s;
     }
 
-    .status-badge {
-      font-size: 0.8rem;
-      padding: 4px 10px;
-      border-radius: 20px;
-      background: #110e0c;
-      color: var(--accent);
-      border: 1px solid var(--border);
+    .qobyz-container.active {
+      opacity: 1;
+      pointer-events: auto;
     }
 
+    /* Қобыз басы / құлақтары */
+    .qobyz-head {
+      width: 60px;
+      height: 80px;
+      background: linear-gradient(to right, #1a0d09, var(--wood-dark), #1a0d09);
+      border-radius: 10px 10px 0 0;
+      position: relative;
+    }
+
+    .tuning-peg {
+      width: 15px;
+      height: 10px;
+      background: #110805;
+      position: absolute;
+      top: 30px;
+      border-radius: 2px;
+    }
+    .peg-left { left: -10px; }
+    .peg-right { right: -10px; top: 50px; }
+
+    /* Қобыз мойны (ойнайтын аймақ) */
     .qobyz-neck {
+      width: 45px;
+      height: 350px; /* Ойнайтын ұзындық */
+      background: linear-gradient(to right, #22110c, var(--wood-dark), #22110c);
+      position: relative;
+      z-index: 2;
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
+    }
+
+    /* Қобыз шанағы */
+    .qobyz-body {
+      width: 220px;
+      height: 280px;
+      background: radial-gradient(circle at center, var(--wood-light), #1a0d09);
+      border-radius: 40% 40% 45% 45%;
+      margin-top: -30px;
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      padding-bottom: 20px;
+      border: 2px solid #1a0d09;
+    }
+
+    /* Түйе терісі (жарғақ) */
+    .qobyz-skin {
+      width: 170px;
+      height: 150px;
+      background: radial-gradient(circle at center, var(--skin), #a88a6b);
+      border-radius: 10px 10px 45% 45%;
+      position: relative;
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
       display: flex;
       justify-content: center;
-      gap: 50px;
-      background: linear-gradient(180deg, #14100e 0%, #0d0a09 100%);
-      padding: 24px 20px;
-      border-radius: 6px;
-      border: 1px solid var(--border);
-      position: relative;
     }
 
-    .string-track {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-      position: relative;
-    }
-
-    .string-track-label {
-      font-size: 0.8rem;
-      font-weight: 600;
-      letter-spacing: 0.05em;
-      color: var(--muted);
-      text-transform: uppercase;
-    }
-
-    .note-stops {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      width: 140px;
-    }
-
-    .note-btn {
-      background: #120f0d;
-      border: 1px solid var(--border);
-      color: var(--text);
-      padding: 10px 14px;
+    /* Тиек (Bridge) */
+    .qobyz-bridge {
+      width: 40px;
+      height: 12px;
+      background: #110805;
+      position: absolute;
+      top: 30px;
       border-radius: 4px;
-      cursor: pointer;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.5);
+    }
+
+    /* ҚЫЛДАР (Интерактивті аймақтар) */
+    .string-hitbox {
+      position: absolute;
+      top: 0;
+      height: 100%;
+      width: 22px;
+      cursor: ns-resize; /* Жоғары-төмен курсор */
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.85rem;
-      transition: all 0.15s ease;
+      justify-content: center;
+      touch-action: none;
+    }
+    
+    .string-hitbox.left { left: 0; }
+    .string-hitbox.right { right: 0; }
+
+    /* Көрінетін қыл */
+    .string-visual {
+      width: 3px;
+      height: 460px; /* Басынан тиекке дейін */
+      background: var(--string);
+      position: absolute;
+      top: -20px;
+      box-shadow: 0 0 3px rgba(0,0,0,0.8);
+      transition: background 0.1s;
+      z-index: 5;
+      pointer-events: none;
     }
 
-    .note-btn kbd {
-      font-size: 0.7rem;
-      padding: 2px 6px;
-      background: #201b17;
-      border-radius: 3px;
-      color: var(--accent);
-      border: 1px solid #332b25;
+    .string-hitbox.active .string-visual {
+      background: #fff;
+      box-shadow: 0 0 15px var(--string-glow), 0 0 5px var(--string-glow);
+      width: 4px;
     }
 
-    .note-btn:hover {
-      background: #241e1a;
-      border-color: var(--accent);
-      transform: translateX(2px);
+    /* Саусақтың орнын көрсететін жарқыл (Finger position indicator) */
+    .finger-indicator {
+      width: 14px;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 50%;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      pointer-events: none;
+      box-shadow: 0 0 10px var(--string-glow);
+      opacity: 0;
+      transition: opacity 0.1s;
     }
 
-    .note-btn.active {
-      background: var(--accent);
-      color: var(--bg);
-      border-color: var(--accent);
-      box-shadow: 0 0 12px var(--string-glow);
+    .string-hitbox.active .finger-indicator {
+      opacity: 1;
     }
 
-    .note-btn.active kbd {
-      background: #a97e54;
-      color: #fff;
-      border-color: #8c633a;
-    }
-
-    .fx-bar {
+    .status {
       margin-top: 20px;
-      display: flex;
-      justify-content: space-between;
-      gap: 16px;
-      font-size: 0.8rem;
-      color: var(--muted);
-    }
-
-    .fx-item {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .fx-item input[type="range"] {
-      accent-color: var(--accent);
-      cursor: pointer;
-    }
-
-    /* Ақпараттық секциялар */
-    section {
-      padding: 80px 8%;
-      border-top: 1px solid var(--border);
-    }
-
-    .section-title {
-      font-size: 1.8rem;
-      margin-bottom: 36px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--accent);
-    }
-
-    .grid-3 {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 24px;
-    }
-
-    .card {
-      background: var(--panel);
-      border: 1px solid var(--border);
-      padding: 28px;
-      border-radius: 4px;
-    }
-
-    .card h3 {
-      margin-bottom: 10px;
       font-size: 1.2rem;
-      color: #fff;
-    }
-
-    .card p {
-      color: var(--muted);
-      font-size: 0.95rem;
-    }
-
-    footer {
-      padding: 36px 8%;
-      text-align: center;
-      border-top: 1px solid var(--border);
-      color: var(--muted);
-      font-size: 0.85rem;
-    }
-
-    @media (max-width: 960px) {
-      .hero {
-        grid-template-columns: 1fr;
-        padding-top: 40px;
-      }
-      .qobyz-neck {
-        gap: 20px;
-      }
-      .note-stops {
-        width: 100%;
-      }
+      color: var(--string-glow);
+      font-family: monospace;
+      height: 30px;
     }
   </style>
 </head>
 <body>
 
   <header>
-    <div class="logo">Qobyz.com</div>
-    <nav>
-      <a href="#uinder">Қыл дыбысы</a>
-      <a href="#anatomiia">Аспап сипаты</a>
-      <a href="#kuiler">Күйлер</a>
-    </nav>
+    <h1>Қылқобыз</h1>
+    <p>«Бастау» батырмасын басыңыз. Содан соң қылдың бойымен (мойын тұсынан) басып тұрып, жоғары-төмен сырғытып ойнаңыз.</p>
+    <button class="start-btn" id="startBtn">Бастау / Дыбысты қосу</button>
   </header>
 
-  <main>
-    <section class="hero" id="uinder">
-      <div>
-        <h1>Дала күңірені мен қыл сарыны</h1>
-        <p>
-          Қылқобыз — қарапайым екі ішектің ғана шертілуі емес, әр қыл шоғырының бойындағы тырнақ жанасуынан туатын обертондар, ысқыш пен терінің шуыл-резонансы. Төмендегі қылдарды басып, нағыз күй үнін тыңдаңыз немесе пернетақтамен ойнаңыз.
-        </p>
-
-        <div class="controls-row">
-          <button class="btn" onclick="playKorkytChord()">«Қоңыр» аккорды</button>
-          <button class="btn btn-secondary" onclick="playSaryarkaRun()">Күй үзіндісі</button>
-        </div>
+  <!-- ҚОБЫЗ БЕЙНЕСІ -->
+  <div class="qobyz-container" id="qobyz">
+    <div class="qobyz-head">
+      <div class="tuning-peg peg-left"></div>
+      <div class="tuning-peg peg-right"></div>
+    </div>
+    
+    <div class="qobyz-neck" id="neck">
+      <!-- Сол жақ қыл (Жуан, D3) -->
+      <div class="string-hitbox left" id="str-left">
+        <div class="string-visual"></div>
+        <div class="finger-indicator" id="finger-left"></div>
       </div>
-
-      <div class="interactive-card">
-        <div class="board-header">
-          <div>
-            <h4 style="color: var(--accent); font-weight: 600;">Қыл мойны (Ноталар мен пернелер)</h4>
-            <span style="font-size: 0.78rem; color: var(--muted);">Тырнақты жанастыру арқылы ойнау</span>
-          </div>
-          <span class="status-badge" id="currentNoteText">Үн: Күтуде</span>
-        </div>
-
-        <div class="qobyz-neck">
-          <!-- ЖУАН ҚЫЛ (Бас қыл / Ре - D3) -->
-          <div class="string-track">
-            <span class="string-track-label">Тоғанақ (D3)</span>
-            <div class="note-stops">
-              <button class="note-btn" data-key="a" onmousedown="triggerQobyz(146.83, this)" onmouseup="stopQobyz()" onmouseleave="stopQobyz()">
-                <span>Бос ішек (D3)</span> <kbd>A</kbd>
-              </button>
-              <button class="note-btn" data-key="s" onmousedown="triggerQobyz(164.81, this)" onmouseup="stopQobyz()" onmouseleave="stopQobyz()">
-                <span>Ми (E3)</span> <kbd>S</kbd>
-              </button>
-              <button class="note-btn" data-key="d" onmousedown="triggerQobyz(174.61, this)" onmouseup="stopQobyz()" onmouseleave="stopQobyz()">
-                <span>Фа (F3)</span> <kbd>D</kbd>
-              </button>
-              <button class="note-btn" data-key="f" onmousedown="triggerQobyz(196.00, this)" onmouseup="stopQobyz()" onmouseleave="stopQobyz()">
-                <span>Соль (G3)</span> <kbd>F</kbd>
-              </button>
-              <button class="note-btn" data-key="g" onmousedown="triggerQobyz(220.00, this)" onmouseup="stopQobyz()" onmouseleave="stopQobyz()">
-                <span>Ля (A3)</span> <kbd>G</kbd>
-              </button>
-            </div>
-          </div>
-
-          <!-- ЖІҢІШКЕ ҚЫЛ (Жоғарғы қыл / Ля - A3) -->
-          <div class="string-track">
-            <span class="string-track-label">Кілтең (A3)</span>
-            <div class="note-stops">
-              <button class="note-btn" data-key="q" onmousedown="triggerQobyz(220.00, this)" onmouseup="stopQobyz()" onmouseleave="stopQobyz()">
-                <span>Бос ішек (A3)</span> <kbd>Q</kbd>
-              </button>
-              <button class="note-btn" data-key="w" onmousedown="triggerQobyz(246.94, this)" onmouseup="stopQobyz()" onmouseleave="stopQobyz()">
-                <span>Си (B3)</span> <kbd>W</kbd>
-              </button>
-              <button class="note-btn" data-key="e" onmousedown="triggerQobyz(261.63, this)" onmouseup="stopQobyz()" onmouseleave="stopQobyz()">
-                <span>До (C4)</span> <kbd>E</kbd>
-              </button>
-              <button class="note-btn" data-key="r" onmousedown="triggerQobyz(293.66, this)" onmouseup="stopQobyz()" onmouseleave="stopQobyz()">
-                <span>Ре (D4)</span> <kbd>R</kbd>
-              </button>
-              <button class="note-btn" data-key="t" onmousedown="triggerQobyz(329.63, this)" onmouseup="stopQobyz()" onmouseleave="stopQobyz()">
-                <span>Ми (E4)</span> <kbd>T</kbd>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div class="fx-bar">
-          <div class="fx-item">
-            <label>Ысқыш үйкелісі (Қыл шықыры)</label>
-            <input type="range" id="bowNoise" min="0" max="0.35" step="0.01" value="0.14">
-          </div>
-          <div class="fx-item">
-            <label>Түйе терісі резонансы (Formant)</label>
-            <input type="range" id="bodyResonance" min="400" max="1100" step="10" value="620">
-          </div>
-        </div>
+      
+      <!-- Оң жақ қыл (Жіңішке, A3) -->
+      <div class="string-hitbox right" id="str-right">
+        <div class="string-visual"></div>
+        <div class="finger-indicator" id="finger-right"></div>
       </div>
-    </section>
+    </div>
 
-    <section id="anatomiia">
-      <div class="section-title">Қылқобыз акустикасының құпиясы</div>
-      <div class="grid-3">
-        <div class="card">
-          <h3>Тырнақ жанасуы (Қылды баспау)</h3>
-          <p>Қобызшы ішекті саусақ жастықшасымен баспайды, тырнақтың қырымен жанастырады. Бұл күңгірт әрі нәзік обертондардың ашылуына мүмкіндік береді.</p>
-        </div>
-        <div class="card">
-          <h3>Түйе терісі (Шанақ мембранасы)</h3>
-          <p>Шанақтың төменгі жартысына керілген түйе терісі акустикалық резонатор қызметін атқарып, дыбысқа қоңыр, тұңғиық тембр қосады.</p>
-        </div>
-        <div class="card">
-          <h3>60-80 Жылқы қылы</h3>
-          <p>Бір ішекте ондаған қыл шоғырланады. Ысқышпен тартқанда әр талшық өз бетінше микро-фазалық ауытқу жасап, бірегей хор эффектісін жасайды.</p>
-        </div>
+    <div class="qobyz-body">
+      <div class="qobyz-skin">
+        <div class="qobyz-bridge"></div>
       </div>
-    </section>
-  </main>
+    </div>
+  </div>
 
-  <footer>
-    <p>&copy; 2026 Qobyz.com — Қазақ рухани мұрасын сақтау және сандық үн синтезі бастамасы.</p>
-  </footer>
+  <div class="status" id="statusText"></div>
 
   <script>
-    /* ==========================================================
-       QOBYZ PHYSICAL-MODELING AUDIO SYNTHESIZER (Web Audio API)
-       ========================================================== */
-
     let audioCtx = null;
-    let activeNodes = [];
-    let currentActiveButton = null;
+    let isPlaying = false;
+    
+    // Синтезатор инстанстары (екі қылға бөлек)
+    const voices = {
+      left: { active: false, voice: null, baseFreq: 146.83, maxSemitones: 14 }, // D3-тен жоғары
+      right: { active: false, voice: null, baseFreq: 220.00, maxSemitones: 14 } // A3-тен жоғары
+    };
 
-    function getAudioContext() {
+    const startBtn = document.getElementById('startBtn');
+    const qobyzContainer = document.getElementById('qobyz');
+    const statusText = document.getElementById('statusText');
+
+    startBtn.addEventListener('click', () => {
       if (!audioCtx) {
         audioCtx = new (window.AudioContext || window.webkitAudioContext)();
       }
-      if (audioCtx.state === 'suspended') {
-        audioCtx.resume();
-      }
-      return audioCtx;
-    }
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      
+      qobyzContainer.classList.add('active');
+      startBtn.style.display = 'none';
+      statusText.textContent = 'Қылды сырғытып ойнаңыз...';
+    });
 
-    // Ақ шуыл генераторы (Ысқыштың қылға үйкеліс дыбысы)
-    function createNoiseBuffer(ctx) {
-      const bufferSize = ctx.sampleRate * 2;
-      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-      const data = buffer.getChannelData(0);
-      for (let i = 0; i < bufferSize; i++) {
-        data[i] = Math.random() * 2 - 1;
-      }
-      return buffer;
-    }
-
-    let noiseBuffer = null;
-
-    function playQobyzVoice(freq, duration = 0) {
-      const ctx = getAudioContext();
-      if (!noiseBuffer) noiseBuffer = createNoiseBuffer(ctx);
-
+    // Қобыз үнінің синтезаторы (алдыңғы физикалық моделдеу)
+    function createQobyzVoice(ctx, initialFreq) {
       const now = ctx.currentTime;
+      
+      const masterGain = ctx.createGain();
+      masterGain.gain.setValueAtTime(0, now);
+      masterGain.gain.linearRampToValueAtTime(0.35, now + 0.1); // Жұмсақ басталу (Attack)
 
-      // 1. Негізгі қыл генераторлары (Chorused Sawtooth + Triangle)
+      // Негізгі қыл генераторлары
       const osc1 = ctx.createOscillator();
       const osc2 = ctx.createOscillator();
-      const subOsc = ctx.createOscillator();
-
       osc1.type = 'sawtooth';
-      osc1.frequency.setValueAtTime(freq, now);
-
-      // Қыл шоғырының қалыңдығын беретін микро-ауытқу (detune)
       osc2.type = 'sawtooth';
-      osc2.frequency.setValueAtTime(freq, now);
-      osc2.detune.setValueAtTime(7, now);
+      
+      osc1.frequency.setValueAtTime(initialFreq, now);
+      osc2.frequency.setValueAtTime(initialFreq, now);
+      osc2.detune.setValueAtTime(8, now); // Хор эффектісі (бірнеше қыл)
 
-      subOsc.type = 'triangle';
-      subOsc.frequency.setValueAtTime(freq * 0.5, now); // Шанақ түбіндегі бас гуіл
-
-      // 2. Вибрато (LFO) - орындаушы қол қимылы
+      // Вибрато (LFO)
       const lfo = ctx.createOscillator();
       const lfoGain = ctx.createGain();
-      lfo.frequency.setValueAtTime(5.2, now); // 5.2 Hz тербеліс
-      lfoGain.gain.setValueAtTime(3.5, now);  // Тереңдігі
+      lfo.frequency.setValueAtTime(5, now);
+      lfoGain.gain.setValueAtTime(3, now);
       lfo.connect(osc1.frequency);
       lfo.connect(osc2.frequency);
 
-      // 3. Шанақ пен тері фильтрі (Body Formant Filter)
-      const bodyFilter = ctx.createBiquadFilter();
-      const userResonance = parseFloat(document.getElementById('bodyResonance').value) || 620;
-      bodyFilter.type = 'bandpass';
-      bodyFilter.frequency.setValueAtTime(userResonance, now);
-      bodyFilter.Q.setValueAtTime(3.2, now);
+      // Шанақ фильтрі (Formant)
+      const filter = ctx.createBiquadFilter();
+      filter.type = 'bandpass';
+      filter.frequency.setValueAtTime(600, now);
+      filter.Q.setValueAtTime(2.5, now);
 
-      // Жоғарғы жиілікті жұмсарту
-      const lowpass = ctx.createBiquadFilter();
-      lowpass.type = 'lowpass';
-      lowpass.frequency.setValueAtTime(1600, now);
-
-      // 4. Ысқыштың қылға тию шуылы (Bow Friction)
-      const noiseSource = ctx.createBufferSource();
-      noiseSource.buffer = noiseBuffer;
-      noiseSource.loop = true;
-
-      const noiseFilter = ctx.createBiquadFilter();
-      noiseFilter.type = 'bandpass';
-      noiseFilter.frequency.setValueAtTime(freq * 2.5, now);
-      noiseFilter.Q.setValueAtTime(1.5, now);
-
-      const noiseGain = ctx.createGain();
-      const userNoise = parseFloat(document.getElementById('bowNoise').value) || 0.14;
-      noiseGain.gain.setValueAtTime(userNoise, now);
-
-      noiseSource.connect(noiseFilter);
-      noiseFilter.connect(noiseGain);
-
-      // 5. Негізгі дыбыс деңгейінің конверті (ADSR)
-      const masterGain = ctx.createGain();
-      masterGain.gain.setValueAtTime(0.001, now);
-      // Ысқыш тартылғандағы баяу басталу (Attack)
-      masterGain.gain.exponentialRampToValueAtTime(0.35, now + 0.18);
-
-      // Желілерді біріктіру
-      osc1.connect(bodyFilter);
-      osc2.connect(bodyFilter);
-      subOsc.connect(bodyFilter);
-
-      bodyFilter.connect(lowpass);
-      noiseGain.connect(lowpass);
-
-      lowpass.connect(masterGain);
+      osc1.connect(filter);
+      osc2.connect(filter);
+      filter.connect(masterGain);
       masterGain.connect(ctx.destination);
 
-      // Ойнату
       lfo.start(now);
       osc1.start(now);
       osc2.start(now);
-      subOsc.start(now);
-      noiseSource.start(now);
 
-      const voice = {
-        stop: function(releaseTime = 0.35) {
-          const stopNow = ctx.currentTime;
-          masterGain.gain.cancelScheduledValues(stopNow);
-          masterGain.gain.setValueAtTime(masterGain.gain.value, stopNow);
-          masterGain.gain.exponentialRampToValueAtTime(0.0001, stopNow + releaseTime);
-
+      return {
+        setFrequency: (freq) => {
+          // Дыбыстың сырғуы (Портаменто/Глиссандо) үшін setTargetAtTime қолданамыз
+          osc1.frequency.setTargetAtTime(freq, ctx.currentTime, 0.05);
+          osc2.frequency.setTargetAtTime(freq, ctx.currentTime, 0.05);
+        },
+        stop: () => {
+          const stopTime = ctx.currentTime;
+          masterGain.gain.cancelScheduledValues(stopTime);
+          masterGain.gain.setValueAtTime(masterGain.gain.value, stopTime);
+          masterGain.gain.linearRampToValueAtTime(0, stopTime + 0.15); // Жұмсақ сөну (Release)
+          
           setTimeout(() => {
-            try {
-              osc1.stop();
-              osc2.stop();
-              subOsc.stop();
-              lfo.stop();
-              noiseSource.stop();
-            } catch (e) {}
-          }, releaseTime * 1000 + 50);
+            osc1.stop();
+            osc2.stop();
+            lfo.stop();
+          }, 200);
         }
       };
-
-      if (duration > 0) {
-        setTimeout(() => voice.stop(), duration * 1000);
-      }
-
-      return voice;
     }
 
-    function triggerQobyz(freq, btnElement) {
-      stopQobyz();
-      if (btnElement) {
-        if (currentActiveButton) currentActiveButton.classList.remove('active');
-        currentActiveButton = btnElement;
-        currentActiveButton.classList.add('active');
-        document.getElementById('currentNoteText').textContent = 'Үн: ' + btnElement.querySelector('span').textContent;
-      }
-      const voice = playQobyzVoice(freq);
-      activeNodes.push(voice);
+    // Тышқан/Саусақ орнын жиілікке (pitch) айналдыру
+    function calculateFrequency(yPos, rectHeight, baseFreq, maxSemitones) {
+      // yPos 0 болғанда (ең үсті) -> baseFreq (ашық ішек)
+      // yPos rectHeight болғанда (ең асты) -> ең жоғарғы нота
+      // Шынайы аспапта пернелер логарифмдік қысқарады, бірақ визуалды оңай болу үшін сызықтық пайыз аламыз
+      let percent = Math.max(0, Math.min(1, yPos / rectHeight));
+      
+      // Жиілік формуласы: f = f0 * 2^(n/12), мұндағы n - жартытондар саны
+      let semitones = percent * maxSemitones; 
+      return baseFreq * Math.pow(2, semitones / 12);
     }
 
-    function stopQobyz() {
-      while (activeNodes.length > 0) {
-        const v = activeNodes.pop();
-        v.stop(0.25);
-      }
-      if (currentActiveButton) {
-        currentActiveButton.classList.remove('active');
-        currentActiveButton = null;
-      }
-      document.getElementById('currentNoteText').textContent = 'Үн: Күтуде';
+    function getNoteName(freq) {
+      const notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+      const c0 = 16.35;
+      const halfStepsBelowMiddleC = Math.round(12 * Math.log2(freq / c0));
+      const octave = Math.floor(halfStepsBelowMiddleC / 12);
+      const note = notes[halfStepsBelowMiddleC % 12];
+      return `${note}${octave}`;
     }
 
-    // Қос қылмен «Қоңыр» аккордын ойнау
-    function playKorkytChord() {
-      stopQobyz();
-      document.getElementById('currentNoteText').textContent = 'Үн: Қоңыр (D3 + A3)';
-      const v1 = playQobyzVoice(146.83, 2.5);
-      const v2 = playQobyzVoice(220.00, 2.5);
-      activeNodes.push(v1, v2);
-    }
+    // Әр қылға интерактивтілікті қосу
+    function setupString(stringId, side) {
+      const element = document.getElementById(stringId);
+      const indicator = document.getElementById(`finger-${side}`);
+      const voiceData = voices[side];
 
-    // Қысқа күй сарыны
-    function playSaryarkaRun() {
-      stopQobyz();
-      const melody = [
-        { f: 146.83, d: 0.35 },
-        { f: 174.61, d: 0.35 },
-        { f: 196.00, d: 0.4 },
-        { f: 220.00, d: 0.5 },
-        { f: 261.63, d: 0.4 },
-        { f: 246.94, d: 0.35 },
-        { f: 220.00, d: 0.9 }
-      ];
+      function startPlay(event) {
+        if (!audioCtx) return;
+        event.preventDefault(); // Экран сырғымау үшін
+        element.classList.add('active');
+        voiceData.active = true;
+        
+        let yPos = getClientY(event) - element.getBoundingClientRect().top;
+        let freq = calculateFrequency(yPos, element.clientHeight, voiceData.baseFreq, voiceData.maxSemitones);
+        
+        indicator.style.top = `${yPos}px`;
+        statusText.textContent = `Нота: ${getNoteName(freq)} (${Math.round(freq)} Hz)`;
 
-      let delay = 0;
-      melody.forEach(item => {
-        setTimeout(() => {
-          playQobyzVoice(item.f, item.d);
-        }, delay * 1000);
-        delay += item.d * 0.85;
-      });
-    }
-
-    // Пернетақта батырмаларын тыңдау (A S D F G | Q W E R T)
-    const keyMap = {
-      'a': 146.83, 's': 164.81, 'd': 174.61, 'f': 196.00, 'g': 220.00,
-      'q': 220.00, 'w': 246.94, 'e': 261.63, 'r': 293.66, 't': 329.63
-    };
-
-    let pressedKeys = new Set();
-
-    window.addEventListener('keydown', (e) => {
-      const key = e.key.toLowerCase();
-      if (keyMap[key] && !pressedKeys.has(key)) {
-        pressedKeys.add(key);
-        const btn = document.querySelector(`button[data-key="${key}"]`);
-        triggerQobyz(keyMap[key], btn);
+        if (voiceData.voice) voiceData.voice.stop();
+        voiceData.voice = createQobyzVoice(audioCtx, freq);
       }
-    });
 
-    window.addEventListener('keyup', (e) => {
-      const key = e.key.toLowerCase();
-      if (pressedKeys.has(key)) {
-        pressedKeys.delete(key);
-        if (pressedKeys.size === 0) {
-          stopQobyz();
+      function movePlay(event) {
+        if (!voiceData.active || !voiceData.voice) return;
+        event.preventDefault();
+        
+        let rect = element.getBoundingClientRect();
+        let yPos = getClientY(event) - rect.top;
+        
+        // Шектен шықпау
+        yPos = Math.max(0, Math.min(rect.height, yPos));
+        
+        let freq = calculateFrequency(yPos, rect.height, voiceData.baseFreq, voiceData.maxSemitones);
+        
+        indicator.style.top = `${yPos}px`;
+        statusText.textContent = `Нота: ${getNoteName(freq)} (${Math.round(freq)} Hz)`;
+        
+        // Синтезатор жиілігін үздіксіз жаңарту (Глиссандо)
+        voiceData.voice.setFrequency(freq);
+      }
+
+      function stopPlay(event) {
+        if (event) event.preventDefault();
+        if (voiceData.active) {
+          element.classList.remove('active');
+          voiceData.active = false;
+          if (voiceData.voice) {
+             voiceData.voice.stop();
+             voiceData.voice = null;
+          }
+          statusText.textContent = 'Қылды сырғытып ойнаңыз...';
         }
       }
-    });
+
+      function getClientY(e) {
+        return e.touches ? e.touches[0].clientY : e.clientY;
+      }
+
+      // Тінтуір (Mouse) оқиғалары
+      element.addEventListener('mousedown', startPlay);
+      window.addEventListener('mousemove', (e) => { if (voiceData.active) movePlay(e); });
+      window.addEventListener('mouseup', stopPlay);
+
+      // Сенсорлы экран (Touch) оқиғалары
+      element.addEventListener('touchstart', startPlay, {passive: false});
+      element.addEventListener('touchmove', movePlay, {passive: false});
+      element.addEventListener('touchend', stopPlay);
+      element.addEventListener('touchcancel', stopPlay);
+    }
+
+    // Екі қылды іске қосу
+    setupString('str-left', 'left');
+    setupString('str-right', 'right');
+
   </script>
 </body>
 </html>
