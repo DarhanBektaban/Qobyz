@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QOBYZ.COM — Shynajy Saby Menyrghaghy</title>
+  <title>QOBYZ.COM — Shynajy Qobyz</title>
   <style>
     :root {
       --bg: #070605;
@@ -12,7 +12,6 @@
       --accent: #d4a373;
       --glow: #ffb852;
       --rhythm: #4ef0a3;
-      --drone: #70d6ff;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
@@ -22,44 +21,18 @@
     h1 { color: var(--accent); letter-spacing: 2px; font-size: 1.35rem; text-transform: uppercase; margin-bottom: 2px; }
     p { color: #8c827a; font-size: 0.78rem; max-width: 520px; line-height: 1.35; }
 
-    .deck {
-      display: flex;
-      gap: 8px;
-      margin-top: 6px;
-      flex-wrap: wrap;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .btn {
-      padding: 6px 14px;
-      background: var(--panel);
-      border: 1px solid var(--border);
-      color: #b5a497;
-      font-size: 0.75rem;
+    .btn-start {
+      margin-top: 8px;
+      padding: 8px 24px;
+      background: var(--accent);
+      color: #070605;
+      font-weight: bold;
+      border: none;
       border-radius: 4px;
       cursor: pointer;
-      transition: 0.2s;
-    }
-    .btn:hover { border-color: var(--accent); color: #fff; }
-    .btn.active {
-      background: var(--accent);
-      color: #070605;
-      font-weight: bold;
-      border-color: var(--accent);
-      box-shadow: 0 0 10px rgba(212, 163, 115, 0.4);
-    }
-
-    .btn-start {
-      background: var(--accent);
-      color: #070605;
-      font-weight: bold;
-      border-color: var(--accent);
       box-shadow: 0 0 12px rgba(212, 163, 115, 0.4);
     }
-    .btn-start:hover { background: #faedcd; }
 
-    /* Qobyz Korpusy */
     .qobyz-stage {
       position: relative;
       margin-top: 4px;
@@ -75,23 +48,16 @@
     svg.qobyz-svg { width: 100%; height: 100%; overflow: visible; position: absolute; top: 0; left: 0; }
     canvas#stringCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 4; }
 
-    /* Mojyn boiynsha tutas syrghu zonasy */
-    #neck-slide-area {
-      cursor: pointer;
-      fill: transparent;
-    }
-
+    #neck-slide-area { cursor: pointer; fill: transparent; }
     .touch-point { fill: #fff; filter: drop-shadow(0 0 8px var(--glow)); opacity: 0; pointer-events: none; }
     .touch-point.active { opacity: 1; }
 
-    /* Ysqysh */
     #bow-group { cursor: grab; }
     #bow-group:active { cursor: grabbing; }
     .bow-stick { fill: #422617; stroke: #6e3d23; stroke-width: 1.5; }
     .bow-string { stroke: #faebd7; stroke-width: 3.5; stroke-linecap: round; }
     #bow-group.active .bow-string { stroke: #fff; filter: drop-shadow(0 0 8px var(--glow)); }
 
-    /* Dashboard */
     .dashboard {
       margin-top: 8px;
       background: var(--panel);
@@ -105,22 +71,16 @@
     }
     .dashboard span { font-family: monospace; font-weight: bold; }
     .val-rhythm { color: var(--rhythm); }
-    .val-tempo { color: var(--glow); }
+    .val-mode { color: var(--glow); }
     .val-note { color: var(--accent); }
-    .val-feedback { color: var(--drone); }
   </style>
 </head>
 <body>
 
   <header>
-    <h1>QOBYZ.COM — Shynajy Syrghytu Modeli</h1>
-    <p>Саусақты көтермей қыл бойымен жай сырғытыңыз — үн мен иірімдер бір-біріне үзіліссіз ұласып отырады.</p>
-
-    <div class="deck">
-      <button class="btn btn-start" id="startBtn" onclick="initEngine()">Қобызды ояту</button>
-      <button class="btn" id="feedbackBtn" onclick="toggleFeedback(this)">Күңірен резонаторы: Қосулы</button>
-      <button class="btn" id="doubleStringBtn" onclick="toggleDoubleString(this)">Қос қыл (Тоғанақ): Қосулы</button>
-    </div>
+    <h1>QOBYZ.COM — Erkin Qobyzdauy</h1>
+    <p>Ысқыш сол жақта болса — Тоғанақ, оң жақта — Кілтең, ортасында — қос қыл бірге күңіренеді.</p>
+    <button class="btn-start" id="startBtn" onclick="initEngine()">Қобызды ояту</button>
   </header>
 
   <div class="qobyz-stage" id="stage">
@@ -147,32 +107,24 @@
         </radialGradient>
       </defs>
 
-      <!-- 1. Basy zhaine quilaqtary -->
       <path d="M 140 12 C 140 4, 170 4, 170 12 L 167 46 L 143 46 Z" fill="url(#woodGrad)" stroke="#090302" stroke-width="1.5"/>
       <rect x="119" y="20" width="22" height="6" rx="2" fill="#0c0503"/>
       <circle cx="117" cy="23" r="5" fill="#241208"/>
       <rect x="169" y="32" width="22" height="6" rx="2" fill="#0c0503"/>
       <circle cx="193" cy="35" r="5" fill="#241208"/>
 
-      <!-- 2. Mojyn -->
       <path d="M 143 46 L 139 220 L 171 220 L 167 46 Z" fill="url(#woodGrad)" stroke="#0c0503"/>
 
-      <!-- 3. Shanaq zhaine terisi -->
       <path d="M 139 220 C 90 210, 65 270, 71 320 C 77 370, 97 450, 135 468 L 175 468 C 213 450, 233 370, 239 320 C 245 270, 220 210, 171 220 Z" fill="url(#woodGrad)" stroke="#090302" stroke-width="2"/>
       <path d="M 155 230 C 130 230, 93 250, 97 295 C 101 335, 135 350, 155 358 C 175 350, 209 335, 213 295 C 217 250, 180 230, 155 230 Z" fill="url(#bodyCavity)" stroke="#000" stroke-width="1.5"/>
       <path d="M 102 330 C 110 330, 135 348, 155 348 C 175 348, 200 330, 208 330 C 213 375, 197 435, 169 456 L 141 456 C 113 435, 97 375, 102 330 Z" fill="url(#skinGrad)" stroke="#3a2517" stroke-width="1.5"/>
 
-      <!-- Tiek pen tuisin -->
       <path d="M 137 378 L 173 378 L 169 388 L 141 388 Z" fill="#080302" stroke="#000" rx="1"/>
       <rect x="147" y="458" width="16" height="14" rx="2" fill="#060201"/>
 
-      <!-- Tiysu nukteleri (Korsetkishter) -->
       <ellipse id="dot-indicator" class="touch-point" cx="150" cy="100" rx="6" ry="3"/>
-
-      <!-- TUTAS MOJYN AYMAGHY (SAUSAQTY KOTERMEJ ERKIN SYRGHYTU ZONE) -->
       <rect id="neck-slide-area" x="120" y="46" width="70" height="234"/>
 
-      <!-- 4. Ysqysh -->
       <g id="bow-group" transform="translate(0, 310)">
         <path d="M 30 0 Q 155 -12 280 0 Q 155 -4 30 0 Z" class="bow-stick"/>
         <line x1="35" y1="3" x2="275" y2="3" class="bow-string"/>
@@ -183,26 +135,25 @@
 
   <div class="dashboard">
     <div>Ырғақ: <span id="rhythm-style" class="val-rhythm">Күтуде</span></div>
-    <div>Екпін: <span id="rhythm-tempo" class="val-tempo">— BPM</span></div>
+    <div>Ішек: <span id="bow-mode" class="val-mode">Жеке</span></div>
     <div>Нота: <span id="label-note" class="val-note">Тоғанақ (D3)</span></div>
-    <div>Резонатор: <span id="label-feedback" class="val-feedback">Терең</span></div>
   </div>
 
   <script>
     let actx = null;
-    let masterGain, filterBody, filterSkin;
-    let oscStickSlip, noiseFriction, frictionGain;
-    let droneOsc, droneGain;
+    let oscLeft, oscRight, gainLeft, gainRight, masterGain;
+    let filterSkin, filterBody;
+    let noiseFriction, frictionGain;
     let delayNode, feedbackGain;
-    let currentFreq = 146.83;
-    let isBass = true;
-    let isFeedbackEnabled = true;
-    let isDoubleStringEnabled = true;
+
+    let freqLeft = 146.83;  // D3
+    let freqRight = 220.00; // A3
+    let activeString = 'left'; // 'left', 'right', 'both'
 
     function initEngine() {
       if (!actx) {
         actx = new (window.AudioContext || window.webkitAudioContext)();
-        buildOptimalAcoustics();
+        buildIndependentStrings();
         startCanvasAnimation();
       }
       if (actx.state === 'suspended') actx.resume();
@@ -212,7 +163,7 @@
       document.getElementById('rhythm-style').innerText = 'Еркін сарын';
     }
 
-    function buildOptimalAcoustics() {
+    function buildIndependentStrings() {
       const t = actx.currentTime;
 
       const harmonics = 28;
@@ -223,14 +174,25 @@
       }
       const wave = actx.createPeriodicWave(real, imag);
 
-      oscStickSlip = actx.createOscillator();
-      oscStickSlip.setPeriodicWave(wave);
-      oscStickSlip.frequency.setValueAtTime(currentFreq, t);
+      // 1. Сол ішек генераторы (Тоғанақ)
+      oscLeft = actx.createOscillator();
+      oscLeft.setPeriodicWave(wave);
+      oscLeft.frequency.setValueAtTime(freqLeft, t);
 
-      droneOsc = actx.createOscillator();
-      droneOsc.setPeriodicWave(wave);
-      droneOsc.frequency.setValueAtTime(146.83, t);
+      gainLeft = actx.createGain();
+      gainLeft.gain.setValueAtTime(1.0, t);
+      oscLeft.connect(gainLeft);
 
+      // 2. Оң ішек генераторы (Кілтең)
+      oscRight = actx.createOscillator();
+      oscRight.setPeriodicWave(wave);
+      oscRight.frequency.setValueAtTime(freqRight, t);
+
+      gainRight = actx.createGain();
+      gainRight.gain.setValueAtTime(0.0, t);
+      oscRight.connect(gainRight);
+
+      // Үйкеліс шуылы
       const bSize = actx.sampleRate;
       const nBuf = actx.createBuffer(1, bSize, actx.sampleRate);
       const d = nBuf.getChannelData(0);
@@ -252,6 +214,7 @@
       nFilter.connect(frictionGain);
       noiseFriction.start(t);
 
+      // Шанақ сүзгілері
       filterSkin = actx.createBiquadFilter();
       filterSkin.type = 'bandpass';
       filterSkin.frequency.setValueAtTime(318, t);
@@ -267,18 +230,13 @@
       delayNode.delayTime.setValueAtTime(0.016, t);
 
       feedbackGain = actx.createGain();
-      feedbackGain.gain.setValueAtTime(0.26, t);
+      feedbackGain.gain.setValueAtTime(0.24, t);
 
       masterGain = actx.createGain();
       masterGain.gain.setValueAtTime(0, t);
 
-      droneGain = actx.createGain();
-      droneGain.gain.setValueAtTime(0.22, t);
-
-      droneOsc.connect(droneGain);
-      droneGain.connect(filterSkin);
-
-      oscStickSlip.connect(filterSkin);
+      gainLeft.connect(filterSkin);
+      gainRight.connect(filterSkin);
       filterSkin.connect(filterBody);
 
       filterBody.connect(delayNode);
@@ -290,42 +248,69 @@
 
       masterGain.connect(actx.destination);
 
-      oscStickSlip.start(t);
-      droneOsc.start(t);
+      oscLeft.start(t);
+      oscRight.start(t);
     }
 
-    function toggleFeedback(btn) {
-      if (!feedbackGain) return;
-      isFeedbackEnabled = !isFeedbackEnabled;
+    // Тырнақ тиген сәттегі микро-транзиент
+    function triggerNailTransient() {
+      if (!actx) return;
       const t = actx.currentTime;
-      feedbackGain.gain.setTargetAtTime(isFeedbackEnabled ? 0.26 : 0.0, t, 0.05);
-      btn.innerText = `Күңірен резонаторы: ${isFeedbackEnabled ? 'Қосулы' : 'Өшірулі'}`;
-      document.getElementById('label-feedback').innerText = isFeedbackEnabled ? 'Терең' : 'Құрғақ';
-      btn.classList.toggle('active', isFeedbackEnabled);
+      const snapOsc = actx.createOscillator();
+      const snapGain = actx.createGain();
+      snapOsc.type = 'triangle';
+      snapOsc.frequency.setValueAtTime(620, t);
+      snapOsc.frequency.exponentialRampToValueAtTime(140, t + 0.025);
+
+      snapGain.gain.setValueAtTime(0.08, t);
+      snapGain.gain.exponentialRampToValueAtTime(0.0001, t + 0.025);
+
+      snapOsc.connect(snapGain);
+      snapGain.connect(filterSkin);
+      snapOsc.start(t);
+      snapOsc.stop(t + 0.03);
     }
 
-    function toggleDoubleString(btn) {
-      isDoubleStringEnabled = !isDoubleStringEnabled;
-      if (droneGain) {
-        droneGain.gain.setTargetAtTime(isDoubleStringEnabled ? 0.22 : 0.0, actx.currentTime, 0.05);
+    // Ысқыштың оңға-солға орналасуы бойынша ішекті таңдау
+    function updateBowBalance(bowX) {
+      if (!actx || !gainLeft || !gainRight) return;
+      const t = actx.currentTime;
+
+      // bowX: -45 пен +45 аралығы
+      if (bowX < -14) {
+        // Сол жақ (Тоғанақ)
+        gainLeft.gain.setTargetAtTime(1.0, t, 0.04);
+        gainRight.gain.setTargetAtTime(0.0, t, 0.04);
+        activeString = 'left';
+        document.getElementById('bow-mode').innerText = 'Тоғанақ (Жеке)';
+      } else if (bowX > 14) {
+        // Оң жақ (Кілтең)
+        gainLeft.gain.setTargetAtTime(0.0, t, 0.04);
+        gainRight.gain.setTargetAtTime(1.0, t, 0.04);
+        activeString = 'right';
+        document.getElementById('bow-mode').innerText = 'Кілтең (Жеке)';
+      } else {
+        // Ортасы: Қос қыл қатар үндейді
+        gainLeft.gain.setTargetAtTime(0.85, t, 0.04);
+        gainRight.gain.setTargetAtTime(0.85, t, 0.04);
+        activeString = 'both';
+        document.getElementById('bow-mode').innerText = 'Қос қыл (Күңірен)';
       }
-      btn.innerText = `Қос қыл (Тоғанақ): ${isDoubleStringEnabled ? 'Қосулы' : 'Өшірулі'}`;
-      btn.classList.toggle('active', isDoubleStringEnabled);
     }
 
-    // Дыбысты бірден сырғыту (Glissando / Portamento)
-    function setNote(freq, bassMode) {
-      currentFreq = freq;
-      isBass = bassMode;
-      if (!actx || !oscStickSlip) return;
-      // 0.04s аралығы саусақты жылжытқан сайын дыбыстың үзілмей, нағыз қобызша сырғуын береді
-      oscStickSlip.frequency.setTargetAtTime(freq, actx.currentTime, 0.04);
+    function setStringPitch(freq, isLeft) {
+      if (!actx) return;
+      const t = actx.currentTime;
+      if (isLeft) {
+        freqLeft = freq;
+        if (oscLeft) oscLeft.frequency.setTargetAtTime(freq, t, 0.04);
+      } else {
+        freqRight = freq;
+        if (oscRight) oscRight.frequency.setTargetAtTime(freq, t, 0.04);
+      }
     }
 
-    /* =========================================================
-       2. YRGHAQTY TANYP-BİLETİN QOZGHALTQYSH
-       ========================================================= */
-
+    // Ырғақ талдау
     let strokeTimes = [];
     let lastDirection = 0;
     let stringVibAmp = 0;
@@ -338,21 +323,9 @@
         strokeTimes.push(now);
         if (strokeTimes.length > 5) strokeTimes.shift();
 
-        if (strokeTimes.length >= 3) {
-          let intervals = [];
-          for (let i = 1; i < strokeTimes.length; i++) {
-            intervals.push(strokeTimes[i] - strokeTimes[i - 1]);
-          }
-          let avgInterval = intervals.reduce((a, b) => a + b) / intervals.length;
-          let bpm = Math.round(60000 / avgInterval);
-          if (bpm >= 40 && bpm <= 260) {
-            document.getElementById('rhythm-tempo').innerText = `${bpm} BPM`;
-          }
-        }
-
         const styleLabel = document.getElementById('rhythm-style');
         if (velocity > 36) {
-          styleLabel.innerText = 'Дүбір (Жорға шабыс)';
+          styleLabel.innerText = 'Дүбір (Жорға)';
           styleLabel.style.color = '#ff8e82';
         } else if (velocity > 17) {
           styleLabel.innerText = 'Екпінді сарын';
@@ -381,10 +354,7 @@
       }
     }
 
-    /* =========================================================
-       3. SOL QOL: SAUSAQTY KOTERMEJ ZHAJ ZHYLZHYTU (TUTAS MOJYN)
-       ========================================================= */
-
+    // Сол қол: қыл бойымен сырғу
     const neckArea = document.getElementById('neck-slide-area');
     const dotInd = document.getElementById('dot-indicator');
     let isFingerDown = false;
@@ -393,15 +363,11 @@
     function getCoords(e, touchId = null) {
       const svg = document.querySelector('.qobyz-svg');
       const pt = svg.createSVGPoint();
-
       if (e.touches) {
         let t = e.touches[0];
         if (touchId !== null) {
           for (let i = 0; i < e.touches.length; i++) {
-            if (e.touches[i].identifier === touchId) {
-              t = e.touches[i];
-              break;
-            }
+            if (e.touches[i].identifier === touchId) { t = e.touches[i]; break; }
           }
         }
         pt.x = t.clientX;
@@ -416,22 +382,17 @@
     function updateFingerPosition(svgP) {
       const y = Math.max(46, Math.min(270, svgP.y));
       const x = svgP.x;
-
-      // X koordynatasy boiynsha ishekti anyqtau: 155-ten solgha — Toghanaq, onggha — Kiltegne
       const isLeft = x < 155;
       const baseF = isLeft ? 146.83 : 220.00;
       const sideName = isLeft ? 'Тоғанақ' : 'Кілтең';
 
-      // Nүктені қылдың дәл үстіне бекітіп, тек бойымен жылжыту
       dotInd.setAttribute('cx', isLeft ? 150 : 160);
       dotInd.setAttribute('cy', y);
 
-      // Y koordynatasy boiynsha notany eseptau (p: 0-den 1-ge deyin)
       const p = (y - 46) / (270 - 46);
       const f = baseF * Math.pow(2, (p * 14) / 12);
 
-      // Sausaqty koterip-baspaj-aq notany birte-birte jylzhytyp otyru
-      setNote(f, isLeft);
+      setStringPitch(f, isLeft);
       document.getElementById('label-note').innerText = `${sideName} (${Math.round(f)} Hz)`;
     }
 
@@ -440,20 +401,16 @@
       initEngine();
       isFingerDown = true;
       dotInd.classList.add('active');
+      triggerNailTransient();
 
-      if (e.touches) {
-        neckTouchId = e.changedTouches[0].identifier;
-      }
-
-      const svgP = getCoords(e, neckTouchId);
-      updateFingerPosition(svgP);
+      if (e.touches) neckTouchId = e.changedTouches[0].identifier;
+      updateFingerPosition(getCoords(e, neckTouchId));
     }
 
     function handleNeckMove(e) {
       if (!isFingerDown) return;
       e.preventDefault();
-      const svgP = getCoords(e, neckTouchId);
-      updateFingerPosition(svgP);
+      updateFingerPosition(getCoords(e, neckTouchId));
     }
 
     function handleNeckEnd(e) {
@@ -470,21 +427,16 @@
       dotInd.classList.remove('active');
     }
 
-    // Tintuuir oqighalary
     neckArea.addEventListener('mousedown', handleNeckStart);
     window.addEventListener('mousemove', (e) => { if (isFingerDown) handleNeckMove(e); });
     window.addEventListener('mouseup', handleNeckEnd);
 
-    // Touch (Mobil'di ekran) oqighalary
     neckArea.addEventListener('touchstart', handleNeckStart, { passive: false });
     window.addEventListener('touchmove', (e) => { if (isFingerDown) handleNeckMove(e); }, { passive: false });
     window.addEventListener('touchend', handleNeckEnd);
     window.addEventListener('touchcancel', handleNeckEnd);
 
-    /* =========================================================
-       4. OÑ QOL: YSQYSH OQIGHALARY (BOW TRACKING)
-       ========================================================= */
-
+    // Оң қол: ысқыш
     const bowGroup = document.getElementById('bow-group');
     let isBowing = false;
     let bowTouchId = null;
@@ -497,7 +449,6 @@
       initEngine();
       isBowing = true;
       bowGroup.classList.add('active');
-
       if (e.touches) {
         bowTouchId = e.changedTouches[0].identifier;
         lastX = e.changedTouches[0].clientX;
@@ -510,13 +461,9 @@
     function onBowMove(e) {
       if (!isBowing) return;
       let clientX = e.clientX;
-
       if (e.touches) {
         for (let i = 0; i < e.touches.length; i++) {
-          if (e.touches[i].identifier === bowTouchId) {
-            clientX = e.touches[i].clientX;
-            break;
-          }
+          if (e.touches[i].identifier === bowTouchId) { clientX = e.touches[i].clientX; break; }
         }
       }
 
@@ -532,6 +479,7 @@
 
         applyAcousticPressure(velocity);
         analyzeRhythm(dx, dt, velocity);
+        updateBowBalance(bowShiftX);
 
         lastX = clientX;
         lastTime = now;
@@ -564,15 +512,10 @@
     window.addEventListener('touchcancel', onBowEnd);
 
     setInterval(() => {
-      if (isBowing) {
-        if (performance.now() - lastTime > 70) applyAcousticPressure(0);
-      }
+      if (isBowing && performance.now() - lastTime > 70) applyAcousticPressure(0);
     }, 40);
 
-    /* =========================================================
-       5. QYLDARDYGN CANVASKI TİRI TERBELIS ANIMATSIYASY
-       ========================================================= */
-
+    // Canvas тербеліс
     const cvs = document.getElementById('stringCanvas');
     const ctx = cvs.getContext('2d');
     let phase = 0;
@@ -582,19 +525,22 @@
         ctx.clearRect(0, 0, cvs.width, cvs.height);
         phase += 0.45;
 
-        const leftVib = isBass ? Math.sin(phase) * stringVibAmp : 0;
+        const leftActive = activeString === 'left' || activeString === 'both';
+        const rightActive = activeString === 'right' || activeString === 'both';
+
+        const leftVib = leftActive ? Math.sin(phase) * stringVibAmp : 0;
         ctx.beginPath();
         ctx.moveTo(149, 24);
         ctx.quadraticCurveTo(149 + leftVib, 240, 151, 460);
-        ctx.strokeStyle = isBass && stringVibAmp > 0.5 ? '#fff' : '#baa592';
+        ctx.strokeStyle = leftActive && stringVibAmp > 0.5 ? '#fff' : '#baa592';
         ctx.lineWidth = 3.8;
         ctx.stroke();
 
-        const rightVib = !isBass ? Math.sin(phase * 1.3) * stringVibAmp : 0;
+        const rightVib = rightActive ? Math.sin(phase * 1.3) * stringVibAmp : 0;
         ctx.beginPath();
         ctx.moveTo(161, 36);
         ctx.quadraticCurveTo(161 + rightVib, 240, 159, 460);
-        ctx.strokeStyle = !isBass && stringVibAmp > 0.5 ? '#fff' : '#baa592';
+        ctx.strokeStyle = rightActive && stringVibAmp > 0.5 ? '#fff' : '#baa592';
         ctx.lineWidth = 2.4;
         ctx.stroke();
 
