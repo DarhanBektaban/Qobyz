@@ -3,55 +3,29 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Qobyz.com — Shynajy Qylqobyz Uini</title>
+  <title>Qobyz.com — Akustikalyq Spektrli Qylqobyz</title>
   <style>
     :root {
-      --bg: #090807;
+      --bg: #0a0807;
       --panel: #161210;
       --accent: #d4a373;
-      --accent-glow: #ffc872;
+      --glow: #ffc872;
       --wood: #1e0d07;
       --skin: #bda084;
-      --border: #28201b;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
     body { background: var(--bg); color: #e6e2dd; display: flex; flex-direction: column; align-items: center; min-height: 100vh; overflow: hidden; touch-action: none; }
 
-    header { text-align: center; padding: 16px 12px 6px; z-index: 10; }
-    h1 { color: var(--accent); letter-spacing: 2.5px; font-size: 1.5rem; text-transform: uppercase; margin-bottom: 4px; }
-    p { color: #8c827a; font-size: 0.85rem; max-width: 480px; line-height: 1.4; }
+    header { text-align: center; padding: 14px 10px 4px; z-index: 10; }
+    h1 { color: var(--accent); letter-spacing: 2px; font-size: 1.5rem; text-transform: uppercase; margin-bottom: 2px; }
+    p { color: #8c827a; font-size: 0.82rem; max-width: 480px; }
 
-    .btn-box {
-      margin-top: 10px;
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-    }
-
-    .btn {
-      padding: 8px 18px;
-      background: var(--accent);
-      color: #0c0a09;
-      font-weight: 600;
-      font-size: 0.82rem;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: 0.2s;
-    }
+    .btn-box { margin-top: 8px; display: flex; gap: 10px; justify-content: center; }
+    .btn { padding: 8px 18px; background: var(--accent); color: #0c0a09; font-weight: 600; font-size: 0.8rem; border: none; border-radius: 4px; cursor: pointer; }
     .btn:hover { background: #faedcd; }
-
-    .btn-hold {
-      background: transparent;
-      border: 1px solid var(--accent);
-      color: var(--accent);
-    }
-    .btn-hold.active {
-      background: var(--accent);
-      color: #0c0a09;
-      box-shadow: 0 0 12px var(--accent-glow);
-    }
+    .btn-hold { background: transparent; border: 1px solid var(--accent); color: var(--accent); }
+    .btn-hold.active { background: var(--accent); color: #0c0a09; box-shadow: 0 0 12px var(--glow); }
 
     .stage {
       position: relative;
@@ -65,19 +39,13 @@
     }
     .stage.ready { opacity: 1; pointer-events: auto; }
 
-    .qobyz-head {
-      width: 50px;
-      height: 70px;
-      background: #140804;
-      border-radius: 10px 10px 0 0;
-      position: relative;
-    }
-    .peg { width: 14px; height: 8px; background: #050201; position: absolute; }
-    .peg.l { left: -10px; top: 18px; }
-    .peg.r { right: -10px; top: 38px; }
+    .qobyz-head { width: 50px; height: 68px; background: #140804; border-radius: 8px 8px 0 0; position: relative; }
+    .peg { width: 14px; height: 8px; background: #000; position: absolute; }
+    .peg.l { left: -10px; top: 16px; }
+    .peg.r { right: -10px; top: 36px; }
 
     .qobyz-neck {
-      width: 56px;
+      width: 54px;
       height: 380px;
       background: linear-gradient(90deg, #0e0503, #220e07, #0e0503);
       position: relative;
@@ -85,8 +53,8 @@
     }
 
     .qobyz-body {
-      width: 220px;
-      height: 270px;
+      width: 216px;
+      height: 260px;
       background: radial-gradient(circle at 50% 30%, #36190e, #0e0503 85%);
       border-radius: 42% 42% 46% 46%;
       margin-top: -24px;
@@ -98,51 +66,42 @@
     }
 
     .qobyz-skin {
-      width: 168px;
-      height: 146px;
-      background: radial-gradient(circle, var(--skin), #7a6048);
+      width: 164px;
+      height: 140px;
+      background: radial-gradient(circle, var(--skin), #73573f);
       border-radius: 12px 12px 46% 46%;
       position: relative;
-      box-shadow: inset 0 0 20px rgba(0,0,0,0.6);
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.7);
     }
 
     .qobyz-bridge {
-      width: 44px;
+      width: 42px;
       height: 14px;
-      background: #0b0402;
+      background: #090302;
       position: absolute;
-      top: 26px;
+      top: 24px;
       left: 50%;
       transform: translateX(-50%);
       border-radius: 3px;
     }
 
-    .touch-lane {
-      position: absolute;
-      top: 0;
-      height: 100%;
-      width: 28px;
-      cursor: pointer;
-      display: flex;
-      justify-content: center;
-    }
+    .touch-lane { position: absolute; top: 0; height: 100%; width: 27px; cursor: pointer; display: flex; justify-content: center; }
     .touch-lane.l { left: 0; }
     .touch-lane.r { right: 0; }
 
     .wire {
       width: 4px;
       height: 480px;
-      background: #a89583;
+      background: #a39281;
       position: absolute;
       top: -24px;
       pointer-events: none;
-      transition: width 0.1s;
     }
     .wire.bass { width: 6.5px; }
 
     .touch-lane.active .wire {
       background: #fff;
-      box-shadow: 0 0 14px var(--accent-glow);
+      box-shadow: 0 0 14px var(--glow);
     }
 
     .touch-indicator {
@@ -155,29 +114,23 @@
       transform: translateX(-50%);
       pointer-events: none;
       opacity: 0;
-      box-shadow: 0 0 12px var(--accent-glow);
+      box-shadow: 0 0 12px var(--glow);
     }
     .touch-lane.active .touch-indicator { opacity: 1; }
 
-    .readout {
-      margin-top: 10px;
-      display: flex;
-      gap: 20px;
-      font-size: 0.82rem;
-      color: #998e84;
-    }
-    .readout span { color: var(--accent-glow); font-family: monospace; }
+    .readout { margin-top: 10px; font-size: 0.82rem; color: #998e84; display: flex; gap: 20px; }
+    .readout span { color: var(--glow); font-family: monospace; }
   </style>
 </head>
 <body>
 
   <header>
     <h1>Akustikalyq Qylqobyz</h1>
-    <p>Shanaq kuginireni, zhanasu uikeilisi zhaine qyl tolqyndary qajta esepteulip jaqyndatylghan uin.</p>
+    <p>Spektrlik taldau arqyly tuije terisi (F1=290Hz) men shanaq kuginireni (F2=680Hz) durystalghan model.</p>
     
     <div class="btn-box">
-      <button class="btn" id="startBtn" onclick="initAudioEngine()">Dybysty Iske Qosuu</button>
-      <button class="btn btn-hold" id="holdBtn" onclick="toggleDroneHold()">Sol qyldy bekituu (Hold)</button>
+      <button class="btn" id="startBtn" onclick="initAudio()">Dybysty Qosuu</button>
+      <button class="btn btn-hold" id="holdBtn" onclick="toggleHold()">Sol qyldy bekituu (Hold)</button>
     </div>
   </header>
 
@@ -188,12 +141,10 @@
     </div>
     
     <div class="qobyz-neck" id="neck">
-      <!-- Sol qyl: Tomen / Toghanaq (D3) -->
       <div class="touch-lane l" id="lane-l">
         <div class="wire bass"></div>
         <div class="touch-indicator" id="ind-l"></div>
       </div>
-      <!-- Ong qyl: Zhoghary / Kiltegne (A3) -->
       <div class="touch-lane r" id="lane-r">
         <div class="wire"></div>
         <div class="touch-indicator" id="ind-r"></div>
@@ -208,76 +159,59 @@
   </div>
 
   <div class="readout">
-    <div>Toghanaq: <span id="label-l">—</span></div>
-    <div>Kiltegne: <span id="label-r">—</span></div>
+    <div>Toghanaq (D3): <span id="label-l">—</span></div>
+    <div>Kiltegne (A3): <span id="label-r">—</span></div>
   </div>
 
   <script>
     let actx = null;
-    let customHorsehairWave = null;
-    let noiseBuffer = null;
-    let acousticChamber = null;
+    let horsehairWave = null;
+    let bowNoiseBuffer = null;
+    let bodyResonatorNetwork = null;
 
     function getAudioContext() {
       if (!actx) {
         actx = new (window.AudioContext || window.webkitAudioContext)();
-        buildAcousticEngine();
+        buildSpectralModel();
       }
       if (actx.state === 'suspended') actx.resume();
       return actx;
     }
 
-    // 1. Qobyz qylynygn tabyghi garmonikalyq spektrin zhasau (PeriodicWave)
-    function buildAcousticEngine() {
-      // 24 garmonika: Qobyzdygn oberton belsendiligin beregi (zhylqy qylynygn spektrlari)
-      const numHarmonics = 24;
-      const real = new Float32Array(numHarmonics);
-      const imag = new Float32Array(numHarmonics);
+    // 1. Shynajy qylqobyz spektrining garmonikalyq qurylymy (32 Harmonic PeriodicWave)
+    function buildSpectralModel() {
+      const harmonics = 32;
+      const real = new Float32Array(harmonics);
+      const imag = new Float32Array(harmonics);
       real[0] = 0;
       imag[0] = 0;
 
-      for (let n = 1; n < numHarmonics; n++) {
-        // Taqs obertondar ba basym, biraq zhup obertondar da kuginireuge qatysady
-        const decay = 1 / Math.pow(n, 1.18);
-        const warmth = (n % 2 === 1) ? 1.0 : 0.65;
-        imag[n] = decay * warmth;
+      // Qobyzda taqs garmonikalar basym zhaine 4-7 garmonikalar kuginireu uishin kuitli bolady
+      for (let n = 1; n < harmonics; n++) {
+        let amp = 1 / Math.pow(n, 0.95);
+        if (n % 2 !== 0) amp *= 1.35; // Taqs garmonikalardyn kuitiligi
+        if (n >= 3 && n <= 6) amp *= 1.4; // Terining rezonans aumaghy
+        imag[n] = amp;
       }
-      customHorsehairWave = actx.createPeriodicWave(real, imag, { disableNormalization: false });
+      horsehairWave = actx.createPeriodicWave(real, imag, { disableNormalization: false });
 
-      // 2. Ysqysh uikeilisining shuyly (Friction noise)
-      const bufferSize = actx.sampleRate * 2;
-      noiseBuffer = actx.createBuffer(1, bufferSize, actx.sampleRate);
-      const output = noiseBuffer.getChannelData(0);
-      for (let i = 0; i < bufferSize; i++) {
-        output[i] = (Math.random() * 2 - 1) * 0.5;
+      // Ysqysh shajyrynyn shuyly (Rosin noise)
+      const bSize = actx.sampleRate * 2;
+      bowNoiseBuffer = actx.createBuffer(1, bSize, actx.sampleRate);
+      const d = bowNoiseBuffer.getChannelData(0);
+      for (let i = 0; i < bSize; i++) {
+        d[i] = (Math.random() * 2 - 1) * 0.45;
       }
-
-      // 3. Shanaq kuysy zhaine dala uini (Chamber impulse)
-      const irLen = actx.sampleRate * 1.6;
-      const irBuf = actx.createBuffer(2, irLen, actx.sampleRate);
-      for (let c = 0; c < 2; c++) {
-        const d = irBuf.getChannelData(c);
-        for (let i = 0; i < irLen; i++) {
-          d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / irLen, 3.2);
-        }
-      }
-      acousticChamber = actx.createConvolver();
-      acousticChamber.buffer = irBuf;
-
-      const chamberGain = actx.createGain();
-      chamberGain.gain.value = 0.18;
-      acousticChamber.connect(chamberGain);
-      chamberGain.connect(actx.destination);
     }
 
-    function initAudioEngine() {
+    function initAudio() {
       getAudioContext();
       document.getElementById('stage').classList.add('ready');
       document.getElementById('startBtn').style.display = 'none';
     }
 
-    // Shynajy Akustikalyq Qobyz Dybys Modeli
-    class PureQobyzVoice {
+    // Qobyz Shanaq Akustikasy (Formant Resonators)
+    class SpectralQobyzVoice {
       constructor(baseFreq) {
         this.baseFreq = baseFreq;
         this.ctx = getAudioContext();
@@ -288,137 +222,132 @@
         this.stop();
         const t = this.ctx.currentTime;
 
-        // A. Qos qyl tolqyndary (Phase-chorus)
-        const osc1 = this.ctx.createOscillator();
-        const osc2 = this.ctx.createOscillator();
-        osc1.setPeriodicWave(customHorsehairWave);
-        osc2.setPeriodicWave(customHorsehairWave);
+        // Qos qyl tolqyny (Phase-detuned horsehair)
+        const o1 = this.ctx.createOscillator();
+        const o2 = this.ctx.createOscillator();
+        o1.setPeriodicWave(horsehairWave);
+        o2.setPeriodicWave(horsehairWave);
 
-        osc1.frequency.setValueAtTime(freq, t);
-        osc2.frequency.setValueAtTime(freq + (isBass ? 0.35 : 0.55), t);
+        o1.frequency.setValueAtTime(freq, t);
+        o2.frequency.setValueAtTime(freq + (isBass ? 0.45 : 0.7), t); // Qyl shoghyry
 
-        // B. Tabyghi Terbelis (Micro-Vibrato)
+        // Tabyghi vibrational modulyatsiya
         const lfo = this.ctx.createOscillator();
         const lfoGain = this.ctx.createGain();
-        lfo.frequency.setValueAtTime(isBass ? 4.2 : 5.1, t);
-        lfoGain.gain.setValueAtTime(freq * 0.012, t);
-        lfo.connect(osc1.frequency);
-        lfo.connect(osc2.frequency);
+        lfo.frequency.setValueAtTime(isBass ? 3.8 : 4.6, t);
+        lfoGain.gain.setValueAtTime(freq * 0.011, t);
+        lfo.connect(o1.frequency);
+        lfo.connect(o2.frequency);
         lfo.start(t);
 
-        // C. Tuije terisi men aghash shanaqtyn 4 formantty filtrleri
-        const skinResonance = this.ctx.createBiquadFilter();
-        skinResonance.type = 'bandpass';
-        skinResonance.frequency.setValueAtTime(310, t); // Negizgi kuys kuginireni
-        skinResonance.Q.setValueAtTime(2.8, t);
+        // FORMANT 1: Tuije terisi (F1 = 290 Hz, Q = 3.5)
+        const skinF = this.ctx.createBiquadFilter();
+        skinF.type = 'bandpass';
+        skinF.frequency.setValueAtTime(290, t);
+        skinF.Q.setValueAtTime(3.5, t);
 
-        const bodyResonance = this.ctx.createBiquadFilter();
-        bodyResonance.type = 'peaking';
-        bodyResonance.frequency.setValueAtTime(580, t); // Aghashtyn zhumsartylyuy
-        bodyResonance.gain.setValueAtTime(5.0, t);
-        bodyResonance.Q.setValueAtTime(2.2, t);
+        // FORMANT 2: Aghash shanaq zhaine kuomej uini (F2 = 680 Hz, Q = 2.4)
+        const woodF = this.ctx.createBiquadFilter();
+        woodF.type = 'peaking';
+        woodF.frequency.setValueAtTime(680, t);
+        woodF.gain.setValueAtTime(6.5, t);
+        woodF.Q.setValueAtTime(2.4, t);
 
-        const woodWarmth = this.ctx.createBiquadFilter();
-        woodWarmth.type = 'lowpass';
-        woodWarmth.frequency.setValueAtTime(2600, t); // Zhogharghy qattylyqty kesuu
+        // FORMANT 3: Zhogharghy qattylyqty kesip, qongyr uin beru
+        const dampF = this.ctx.createBiquadFilter();
+        dampF.type = 'lowpass';
+        dampF.frequency.setValueAtTime(2100, t);
 
-        // D. Ysqysh pen qyl zhanasuu shuyly
-        const noiseNode = this.ctx.createBufferSource();
-        noiseNode.buffer = noiseBuffer;
-        noiseNode.loop = true;
+        // Ysqyshtyng qylgha tiyui (Friction)
+        const noise = this.ctx.createBufferSource();
+        noise.buffer = bowNoiseBuffer;
+        noise.loop = true;
 
         const noiseFilter = this.ctx.createBiquadFilter();
         noiseFilter.type = 'bandpass';
-        noiseFilter.frequency.setValueAtTime(freq * 2.1, t);
-        noiseFilter.Q.setValueAtTime(3.5, t);
+        noiseFilter.frequency.setValueAtTime(freq * 2.3, t);
+        noiseFilter.Q.setValueAtTime(2.8, t);
 
         const noiseGain = this.ctx.createGain();
-        noiseGain.gain.setValueAtTime(0.035, t);
+        noiseGain.gain.setValueAtTime(0.042, t);
 
-        noiseNode.connect(noiseFilter);
+        noise.connect(noiseFilter);
         noiseFilter.connect(noiseGain);
-        noiseNode.start(t);
+        noise.start(t);
 
-        // E. Negizgi dinamikalyq envelope
-        const gainNode = this.ctx.createGain();
-        gainNode.gain.setValueAtTime(0.001, t);
-        // Qobyz ysqyshy tartylghandaghy zhumsalyp bastalu (Crescendo attack)
-        gainNode.gain.exponentialRampToValueAtTime(isBass ? 0.38 : 0.44, t + 0.14);
+        // Negizgi dynamyka (Crescendo Attack)
+        const mainGain = this.ctx.createGain();
+        mainGain.gain.setValueAtTime(0.001, t);
+        mainGain.gain.exponentialRampToValueAtTime(isBass ? 0.36 : 0.42, t + 0.12);
 
-        // Biriktiruu zhelisi
-        osc1.connect(skinResonance);
-        osc2.connect(skinResonance);
-        skinResonance.connect(bodyResonance);
-        bodyResonance.connect(woodWarmth);
+        // Qosu zhelisi
+        o1.connect(skinF);
+        o2.connect(skinF);
+        skinF.connect(woodF);
+        woodF.connect(dampF);
+        dampF.connect(mainGain);
+        noiseGain.connect(mainGain);
 
-        woodWarmth.connect(gainNode);
-        noiseGain.connect(gainNode);
+        mainGain.connect(this.ctx.destination);
 
-        gainNode.connect(this.ctx.destination);
-        if (acousticChamber) gainNode.connect(acousticChamber);
+        o1.start(t);
+        o2.start(t);
 
-        osc1.start(t);
-        osc2.start(t);
-
-        this.voice = { osc1, osc2, lfo, lfoGain, noiseFilter, noiseNode, gainNode };
+        this.voice = { o1, o2, lfo, lfoGain, noiseFilter, noise, mainGain };
       }
 
       setPitch(freq) {
         if (!this.voice) return;
         const t = this.ctx.currentTime;
-        // Glissando / Iirim zhumsaqtyghy
-        this.voice.osc1.frequency.setTargetAtTime(freq, t, 0.045);
-        this.voice.osc2.frequency.setTargetAtTime(freq + 0.5, t, 0.045);
-        this.voice.lfoGain.gain.setTargetAtTime(freq * 0.012, t, 0.045);
-        this.voice.noiseFilter.frequency.setTargetAtTime(freq * 2.1, t, 0.045);
+        this.voice.o1.frequency.setTargetAtTime(freq, t, 0.045);
+        this.voice.o2.frequency.setTargetAtTime(freq + 0.6, t, 0.045);
+        this.voice.lfoGain.gain.setTargetAtTime(freq * 0.011, t, 0.045);
+        this.voice.noiseFilter.frequency.setTargetAtTime(freq * 2.3, t, 0.045);
       }
 
       stop() {
         if (!this.voice) return;
         const t = this.ctx.currentTime;
         const v = this.voice;
-        v.gainNode.gain.cancelScheduledValues(t);
-        v.gainNode.gain.linearRampToValueAtTime(0.0001, t + 0.18);
+        v.mainGain.gain.cancelScheduledValues(t);
+        v.mainGain.gain.linearRampToValueAtTime(0.0001, t + 0.16);
         setTimeout(() => {
           try {
-            v.osc1.stop();
-            v.osc2.stop();
+            v.o1.stop();
+            v.o2.stop();
             v.lfo.stop();
-            v.noiseNode.stop();
-          } catch(e) {}
-        }, 220);
+            v.noise.stop();
+          } catch(e){}
+        }, 200);
         this.voice = null;
       }
     }
 
-    const bassVoice = new PureQobyzVoice(146.83); // D3
-    const trebleVoice = new PureQobyzVoice(220.00); // A3
+    const bass = new SpectralQobyzVoice(146.83);  // D3
+    const treble = new SpectralQobyzVoice(220.00); // A3
 
-    let isDroneLocked = false;
-
-    function toggleDroneHold() {
-      initAudioEngine();
-      isDroneLocked = !isDroneLocked;
+    let isHold = false;
+    function toggleHold() {
+      initAudio();
+      isHold = !isHold;
       const btn = document.getElementById('holdBtn');
       const laneL = document.getElementById('lane-l');
       const labelL = document.getElementById('label-l');
 
-      if (isDroneLocked) {
+      if (isHold) {
         btn.classList.add('active');
         laneL.classList.add('active');
-        bassVoice.play(146.83, true);
-        labelL.innerText = 'D3 (147 Hz) [Hold]';
+        bass.play(146.83, true);
+        labelL.innerText = '147 Hz [Hold]';
       } else {
         btn.classList.remove('active');
         laneL.classList.remove('active');
-        bassVoice.stop();
+        bass.stop();
         labelL.innerText = '—';
       }
     }
 
-    // Ekrandyq qos sauusaq (Multi-touch) basqaruuy
     const activeTouches = {};
-
     function calcFreq(y, h, baseFreq) {
       const p = Math.max(0, Math.min(1, y / h));
       return baseFreq * Math.pow(2, (p * 14) / 12);
@@ -428,14 +357,14 @@
 
     neck.addEventListener('touchstart', (e) => {
       e.preventDefault();
-      initAudioEngine();
+      initAudio();
       const rect = neck.getBoundingClientRect();
 
       for (let i = 0; i < e.changedTouches.length; i++) {
         const t = e.changedTouches[i];
         const isLeft = (t.clientX - rect.left) < rect.width / 2;
         const side = isLeft ? 'l' : 'r';
-        const inst = isLeft ? bassVoice : trebleVoice;
+        const inst = isLeft ? bass : treble;
 
         activeTouches[t.identifier] = { side, inst };
 
@@ -472,7 +401,7 @@
         const t = e.changedTouches[i];
         const item = activeTouches[t.identifier];
         if (item) {
-          if (!(item.side === 'l' && isDroneLocked)) {
+          if (!(item.side === 'l' && isHold)) {
             item.inst.stop();
             document.getElementById(`lane-${item.side}`).classList.remove('active');
             document.getElementById(`label-${item.side}`).innerText = '—';
@@ -484,19 +413,19 @@
     neck.addEventListener('touchend', endTouches);
     neck.addEventListener('touchcancel', endTouches);
 
-    // Tintuuir (Mouse) qoldauy
+    // Tintuuir (Mouse)
     const laneR = document.getElementById('lane-r');
     let isMouseDown = false;
 
     laneR.addEventListener('mousedown', (e) => {
       e.preventDefault();
-      initAudioEngine();
+      initAudio();
       isMouseDown = true;
       laneR.classList.add('active');
       const rect = laneR.getBoundingClientRect();
       const y = e.clientY - rect.top;
-      const f = calcFreq(y, rect.height, trebleVoice.baseFreq);
-      trebleVoice.play(f, false);
+      const f = calcFreq(y, rect.height, treble.baseFreq);
+      treble.play(f, false);
       document.getElementById('ind-r').style.top = y + 'px';
       document.getElementById('label-r').innerText = Math.round(f) + ' Hz';
     });
@@ -505,8 +434,8 @@
       if (!isMouseDown) return;
       const rect = laneR.getBoundingClientRect();
       const y = Math.max(0, Math.min(rect.height, e.clientY - rect.top));
-      const f = calcFreq(y, rect.height, trebleVoice.baseFreq);
-      trebleVoice.setPitch(f);
+      const f = calcFreq(y, rect.height, treble.baseFreq);
+      treble.setPitch(f);
       document.getElementById('ind-r').style.top = y + 'px';
       document.getElementById('label-r').innerText = Math.round(f) + ' Hz';
     });
@@ -515,7 +444,7 @@
       if (isMouseDown) {
         isMouseDown = false;
         laneR.classList.remove('active');
-        trebleVoice.stop();
+        treble.stop();
         document.getElementById('label-r').innerText = '—';
       }
     });
