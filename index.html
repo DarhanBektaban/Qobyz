@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Qobyz.com — Akustikalyq Spektrli Qylqobyz</title>
+  <title>Qobyz.com — Qobyz Yrghaghy</title>
   <style>
     :root {
       --bg: #0a0807;
@@ -19,11 +19,36 @@
 
     header { text-align: center; padding: 14px 10px 4px; z-index: 10; }
     h1 { color: var(--accent); letter-spacing: 2px; font-size: 1.5rem; text-transform: uppercase; margin-bottom: 2px; }
-    p { color: #8c827a; font-size: 0.82rem; max-width: 480px; }
+    p { color: #8c827a; font-size: 0.82rem; max-width: 500px; }
 
-    .btn-box { margin-top: 8px; display: flex; gap: 10px; justify-content: center; }
+    /* Yrghaq Taikter */
+    .rhythm-bar {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .r-btn {
+      padding: 6px 14px;
+      background: var(--panel);
+      border: 1px solid #332720;
+      color: #b5a497;
+      font-size: 0.78rem;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .r-btn.active {
+      background: var(--accent);
+      color: #0c0a09;
+      font-weight: bold;
+      border-color: var(--accent);
+      box-shadow: 0 0 10px rgba(212, 163, 115, 0.4);
+    }
+
+    .btn-box { margin-top: 8px; display: flex; gap: 8px; justify-content: center; }
     .btn { padding: 8px 18px; background: var(--accent); color: #0c0a09; font-weight: 600; font-size: 0.8rem; border: none; border-radius: 4px; cursor: pointer; }
-    .btn:hover { background: #faedcd; }
     .btn-hold { background: transparent; border: 1px solid var(--accent); color: var(--accent); }
     .btn-hold.active { background: var(--accent); color: #0c0a09; box-shadow: 0 0 12px var(--glow); }
 
@@ -125,12 +150,19 @@
 <body>
 
   <header>
-    <h1>Akustikalyq Qylqobyz</h1>
-    <p>Spektrlik taldau arqyly tuije terisi (F1=290Hz) men shanaq kuginireni (F2=680Hz) durystalghan model.</p>
+    <h1>Qobyz Yrghaghy Men Shrtikhtary</h1>
+    <p>Ysqyshtyn serpinin tandagnyz: erkin tartuu, tolghau tynysy nemese dubir zhelisi.</p>
     
+    <div class="rhythm-bar">
+      <button class="r-btn active" onclick="setRhythm('free', this)">Еркін тарту (Созылмалы)</button>
+      <button class="r-btn" onclick="setRhythm('tolghau', this)">Толғау тынысы (Баяу толқын)</button>
+      <button class="r-btn" onclick="setRhythm('dubir', this)">Дүбір (Жорға шабыс)</button>
+      <button class="r-btn" onclick="setRhythm('aqqu', this)">Аққу қанаты (Желпініс)</button>
+    </div>
+
     <div class="btn-box">
-      <button class="btn" id="startBtn" onclick="initAudio()">Dybysty Qosuu</button>
-      <button class="btn btn-hold" id="holdBtn" onclick="toggleHold()">Sol qyldy bekituu (Hold)</button>
+      <button class="btn" id="startBtn" onclick="initAudio()">Дыбысты Қосу</button>
+      <button class="btn btn-hold" id="holdBtn" onclick="toggleHold()">Сол қылды бекіту (Hold)</button>
     </div>
   </header>
 
@@ -159,15 +191,21 @@
   </div>
 
   <div class="readout">
-    <div>Toghanaq (D3): <span id="label-l">—</span></div>
-    <div>Kiltegne (A3): <span id="label-r">—</span></div>
+    <div>Тоғанақ (D3): <span id="label-l">—</span></div>
+    <div>Кілтең (A3): <span id="label-r">—</span></div>
   </div>
 
   <script>
     let actx = null;
     let horsehairWave = null;
     let bowNoiseBuffer = null;
-    let bodyResonatorNetwork = null;
+    let currentRhythm = 'free'; // free, tolghau, dubir, aqqu
+
+    function setRhythm(type, btn) {
+      currentRhythm = type;
+      document.querySelectorAll('.r-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
 
     function getAudioContext() {
       if (!actx) {
@@ -178,7 +216,6 @@
       return actx;
     }
 
-    // 1. Shynajy qylqobyz spektrining garmonikalyq qurylymy (32 Harmonic PeriodicWave)
     function buildSpectralModel() {
       const harmonics = 32;
       const real = new Float32Array(harmonics);
@@ -186,16 +223,14 @@
       real[0] = 0;
       imag[0] = 0;
 
-      // Qobyzda taqs garmonikalar basym zhaine 4-7 garmonikalar kuginireu uishin kuitli bolady
       for (let n = 1; n < harmonics; n++) {
         let amp = 1 / Math.pow(n, 0.95);
-        if (n % 2 !== 0) amp *= 1.35; // Taqs garmonikalardyn kuitiligi
-        if (n >= 3 && n <= 6) amp *= 1.4; // Terining rezonans aumaghy
+        if (n % 2 !== 0) amp *= 1.35;
+        if (n >= 3 && n <= 6) amp *= 1.4;
         imag[n] = amp;
       }
       horsehairWave = actx.createPeriodicWave(real, imag, { disableNormalization: false });
 
-      // Ysqysh shajyrynyn shuyly (Rosin noise)
       const bSize = actx.sampleRate * 2;
       bowNoiseBuffer = actx.createBuffer(1, bSize, actx.sampleRate);
       const d = bowNoiseBuffer.getChannelData(0);
@@ -210,8 +245,7 @@
       document.getElementById('startBtn').style.display = 'none';
     }
 
-    // Qobyz Shanaq Akustikasy (Formant Resonators)
-    class SpectralQobyzVoice {
+    class RhythmicQobyzVoice {
       constructor(baseFreq) {
         this.baseFreq = baseFreq;
         this.ctx = getAudioContext();
@@ -222,16 +256,15 @@
         this.stop();
         const t = this.ctx.currentTime;
 
-        // Qos qyl tolqyny (Phase-detuned horsehair)
         const o1 = this.ctx.createOscillator();
         const o2 = this.ctx.createOscillator();
         o1.setPeriodicWave(horsehairWave);
         o2.setPeriodicWave(horsehairWave);
 
         o1.frequency.setValueAtTime(freq, t);
-        o2.frequency.setValueAtTime(freq + (isBass ? 0.45 : 0.7), t); // Qyl shoghyry
+        o2.frequency.setValueAtTime(freq + (isBass ? 0.45 : 0.7), t);
 
-        // Tabyghi vibrational modulyatsiya
+        // Қол вибратосы
         const lfo = this.ctx.createOscillator();
         const lfoGain = this.ctx.createGain();
         lfo.frequency.setValueAtTime(isBass ? 3.8 : 4.6, t);
@@ -240,25 +273,50 @@
         lfo.connect(o2.frequency);
         lfo.start(t);
 
-        // FORMANT 1: Tuije terisi (F1 = 290 Hz, Q = 3.5)
+        // ЫРҒАҚТЫҚ ТРЕМОР / ЫСҚЫШ СЕРПІНІ (Rhythm Modulator)
+        const rhythmOsc = this.ctx.createOscillator();
+        const rhythmGain = this.ctx.createGain();
+
+        // Ырғақ түрлеріне қарай модуляцияны баптау
+        if (currentRhythm === 'free') {
+          rhythmGain.gain.setValueAtTime(1.0, t); // Бір қалыпты
+        } else if (currentRhythm === 'tolghau') {
+          rhythmOsc.type = 'sine';
+          rhythmOsc.frequency.setValueAtTime(1.2, t); // Баяу тыныс (1.2 Hz)
+          rhythmGain.gain.setValueAtTime(0.7, t);
+          rhythmOsc.connect(rhythmGain.gain);
+          rhythmOsc.start(t);
+        } else if (currentRhythm === 'dubir') {
+          rhythmOsc.type = 'sawtooth';
+          rhythmOsc.frequency.setValueAtTime(5.8, t); // Шабыс соққысы (5.8 Hz)
+          rhythmGain.gain.setValueAtTime(0.5, t);
+          rhythmOsc.connect(rhythmGain.gain);
+          rhythmOsc.start(t);
+        } else if (currentRhythm === 'aqqu') {
+          rhythmOsc.type = 'triangle';
+          rhythmOsc.frequency.setValueAtTime(3.2, t); // Желпініс (3.2 Hz)
+          rhythmGain.gain.setValueAtTime(0.6, t);
+          rhythmOsc.connect(rhythmGain.gain);
+          rhythmOsc.start(t);
+        }
+
+        // Форманттар
         const skinF = this.ctx.createBiquadFilter();
         skinF.type = 'bandpass';
         skinF.frequency.setValueAtTime(290, t);
         skinF.Q.setValueAtTime(3.5, t);
 
-        // FORMANT 2: Aghash shanaq zhaine kuomej uini (F2 = 680 Hz, Q = 2.4)
         const woodF = this.ctx.createBiquadFilter();
         woodF.type = 'peaking';
         woodF.frequency.setValueAtTime(680, t);
         woodF.gain.setValueAtTime(6.5, t);
         woodF.Q.setValueAtTime(2.4, t);
 
-        // FORMANT 3: Zhogharghy qattylyqty kesip, qongyr uin beru
         const dampF = this.ctx.createBiquadFilter();
         dampF.type = 'lowpass';
         dampF.frequency.setValueAtTime(2100, t);
 
-        // Ysqyshtyng qylgha tiyui (Friction)
+        // Ысқыш қажалу шуылы
         const noise = this.ctx.createBufferSource();
         noise.buffer = bowNoiseBuffer;
         noise.loop = true;
@@ -275,25 +333,27 @@
         noiseFilter.connect(noiseGain);
         noise.start(t);
 
-        // Negizgi dynamyka (Crescendo Attack)
+        // Негізгі динамика
         const mainGain = this.ctx.createGain();
         mainGain.gain.setValueAtTime(0.001, t);
         mainGain.gain.exponentialRampToValueAtTime(isBass ? 0.36 : 0.42, t + 0.12);
 
-        // Qosu zhelisi
+        // Қосылу тізбегі
         o1.connect(skinF);
         o2.connect(skinF);
         skinF.connect(woodF);
         woodF.connect(dampF);
-        dampF.connect(mainGain);
-        noiseGain.connect(mainGain);
+        
+        dampF.connect(rhythmGain);
+        noiseGain.connect(rhythmGain);
+        rhythmGain.connect(mainGain);
 
         mainGain.connect(this.ctx.destination);
 
         o1.start(t);
         o2.start(t);
 
-        this.voice = { o1, o2, lfo, lfoGain, noiseFilter, noise, mainGain };
+        this.voice = { o1, o2, lfo, lfoGain, noiseFilter, noise, mainGain, rhythmOsc };
       }
 
       setPitch(freq) {
@@ -317,14 +377,15 @@
             v.o2.stop();
             v.lfo.stop();
             v.noise.stop();
+            if (v.rhythmOsc) v.rhythmOsc.stop();
           } catch(e){}
         }, 200);
         this.voice = null;
       }
     }
 
-    const bass = new SpectralQobyzVoice(146.83);  // D3
-    const treble = new SpectralQobyzVoice(220.00); // A3
+    const bass = new RhythmicQobyzVoice(146.83);
+    const treble = new RhythmicQobyzVoice(220.00);
 
     let isHold = false;
     function toggleHold() {
@@ -413,7 +474,7 @@
     neck.addEventListener('touchend', endTouches);
     neck.addEventListener('touchcancel', endTouches);
 
-    // Tintuuir (Mouse)
+    // Mouse
     const laneR = document.getElementById('lane-r');
     let isMouseDown = false;
 
