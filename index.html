@@ -3,118 +3,129 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QOBYZ.COM — Shynajy Qylqobyz</title>
+  <title>QOBYZ.COM — Shynajy Qylqobyz Muzikalyq Quraly</title>
   <style>
     :root {
-      --bg: #090807;
-      --panel: #161210;
+      --bg: #070605;
+      --panel: #140f0c;
+      --panel-border: #2c1e16;
       --accent: #d4a373;
       --glow: #ffb852;
-      --wood-dark: #1b0c05;
-      --wood-mid: #3d1e10;
-      --skin: #b89c7d;
+      --wood-dark: #120703;
+      --skin: #b3987d;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
     body { background: var(--bg); color: #e6e2dd; display: flex; flex-direction: column; align-items: center; min-height: 100vh; overflow-x: hidden; touch-action: none; }
 
-    header { text-align: center; padding: 12px 10px 4px; z-index: 10; }
-    h1 { color: var(--accent); letter-spacing: 2px; font-size: 1.35rem; text-transform: uppercase; margin-bottom: 2px; }
-    p { color: #8c827a; font-size: 0.8rem; max-width: 500px; line-height: 1.4; }
+    header { text-align: center; padding: 10px 10px 4px; z-index: 10; }
+    h1 { color: var(--accent); letter-spacing: 3px; font-size: 1.35rem; text-transform: uppercase; margin-bottom: 2px; }
+    p { color: #8c827a; font-size: 0.78rem; max-width: 520px; line-height: 1.35; }
 
-    .makam-bar {
+    /* Retteu zhaine basqaru quraldary */
+    .control-deck {
       display: flex;
-      gap: 6px;
-      margin-top: 8px;
+      gap: 10px;
+      margin-top: 6px;
       flex-wrap: wrap;
       justify-content: center;
+      align-items: center;
+      z-index: 10;
     }
-    .m-btn {
-      padding: 5px 12px;
+
+    .btn {
+      padding: 6px 14px;
       background: var(--panel);
-      border: 1px solid #332720;
+      border: 1px solid var(--panel-border);
       color: #b5a497;
       font-size: 0.75rem;
       border-radius: 4px;
       cursor: pointer;
       transition: 0.2s;
     }
-    .m-btn:hover { border-color: var(--accent); color: #fff; }
-    .m-btn.active {
+    .btn:hover { border-color: var(--accent); color: #fff; }
+    .btn.active {
       background: var(--accent);
-      color: #0c0a09;
+      color: #070605;
       font-weight: bold;
       border-color: var(--accent);
-      box-shadow: 0 0 10px rgba(212, 163, 115, 0.35);
+      box-shadow: 0 0 10px rgba(212, 163, 115, 0.4);
     }
 
-    .btn-main {
-      padding: 7px 20px;
-      background: var(--accent);
-      color: #0b0908;
-      font-weight: 600;
-      font-size: 0.8rem;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      margin-top: 8px;
+    .btn-rec {
+      background: #2b110d;
+      border-color: #632219;
+      color: #ff8e82;
     }
-    .btn-main:hover { background: #faedcd; }
+    .btn-rec.recording {
+      background: #851c10;
+      color: #fff;
+      box-shadow: 0 0 12px #ff4d4d;
+      animation: pulseRec 1.2s infinite;
+    }
+    @keyframes pulseRec { 0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; } }
 
+    /* Qobyz Arenasy */
     .qobyz-stage {
       position: relative;
-      margin-top: 6px;
-      width: 290px;
+      margin-top: 4px;
+      width: 320px;
       height: 480px;
-      opacity: 0.4;
+      opacity: 0.45;
       pointer-events: none;
       transition: opacity 0.3s;
-      filter: drop-shadow(0 14px 28px rgba(0,0,0,0.85));
+      filter: drop-shadow(0 14px 30px rgba(0,0,0,0.9));
     }
     .qobyz-stage.ready { opacity: 1; pointer-events: auto; }
 
-    svg.qobyz-svg { width: 100%; height: 100%; overflow: visible; }
+    svg.qobyz-svg { width: 100%; height: 100%; overflow: visible; position: absolute; top: 0; left: 0; }
+    canvas#stringCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 4; }
 
     .string-touch { cursor: pointer; fill: transparent; }
-    .string-visual { stroke: #baa592; stroke-width: 2.2; pointer-events: none; transition: stroke 0.15s; }
-    .string-visual.bass { stroke-width: 3.8; }
-    .string-visual.active { stroke: #fff; filter: drop-shadow(0 0 8px var(--glow)); }
-
     .touch-point { fill: #fff; filter: drop-shadow(0 0 8px var(--glow)); opacity: 0; pointer-events: none; }
     .touch-point.active { opacity: 1; }
 
-    #bow-group { cursor: ew-resize; }
-    .bow-stick { fill: #422617; stroke: #693c24; stroke-width: 1.5; }
+    /* Ysqysh (Bow) */
+    #bow-group { cursor: grab; }
+    #bow-group:active { cursor: grabbing; }
+    .bow-stick { fill: #422617; stroke: #6e3d23; stroke-width: 1.5; }
     .bow-string { stroke: #faebd7; stroke-width: 3.5; stroke-linecap: round; }
-    #bow-group.active .bow-string { stroke: #fff; filter: drop-shadow(0 0 6px var(--glow)); }
+    #bow-group.active .bow-string { stroke: #fff; filter: drop-shadow(0 0 8px var(--glow)); }
 
-    .readout { margin-top: 6px; font-size: 0.8rem; color: #998e84; display: flex; gap: 20px; }
+    /* Qongyrau / Shyldyrmaqtar */
+    .jingle-bell { fill: #c49a45; stroke: #5c4314; transition: transform 0.1s; transform-origin: center; }
+    .jingle-ring.active .jingle-bell { transform: rotate(18deg); fill: #ffd978; filter: drop-shadow(0 0 6px #ffd978); }
+
+    .readout { margin-top: 4px; font-size: 0.78rem; color: #998e84; display: flex; gap: 18px; }
     .readout span { color: var(--glow); font-family: monospace; }
   </style>
 </head>
 <body>
 
   <header>
-    <h1>Qobyzshy Qobyzdauy</h1>
-    <p>Сол қолмен мойыннан қылды жанасып сырғытыңыз, оң қолмен ысқышты оңға-солға ырғақпен тартыңыз.</p>
+    <h1>Dala Qobyzshysy</h1>
+    <p>Кең дала жаңғырығы, бақсы қобызының шылдырмағы, тербелмелі қылдар мен сарынды жазып алу толықтырылған нағыз аспаптық модель.</p>
 
-    <div class="makam-bar">
-      <button class="m-btn" onclick="playMakam('qonur', this)">«Қоңыр» толғауы</button>
-      <button class="m-btn" onclick="playMakam('aqqu', this)">«Аққу» сарыны</button>
-      <button class="m-btn" onclick="playMakam('zhelmaya', this)">«Желмая» желісі</button>
-      <button class="m-btn active" onclick="stopMakam(this)">Еркін қобыздау</button>
+    <div class="control-deck">
+      <button class="btn" id="startBtn" onclick="initAudio()">Қобызды ояту</button>
+      <button class="btn" onclick="playMakam('qonur', this)">«Қоңыр»</button>
+      <button class="btn" onclick="playMakam('aqqu', this)">«Аққу»</button>
+      <button class="btn" onclick="playMakam('zhelmaya', this)">«Желмая»</button>
+      <button class="btn active" onclick="stopMakam(this)">Еркін сарын</button>
+      <button class="btn btn-rec" id="recBtn" onclick="toggleRecording()">● Сарынды жазу</button>
     </div>
-
-    <button class="btn-main" id="startBtn" onclick="initAudio()">Қобызды Қолға Алу</button>
   </header>
 
   <div class="qobyz-stage" id="stage">
-    <svg class="qobyz-svg" viewBox="0 0 290 480">
+    <!-- Tiri terbelis canvasy -->
+    <canvas id="stringCanvas" width="320" height="480"></canvas>
+
+    <svg class="qobyz-svg" viewBox="0 0 320 480">
       <defs>
         <linearGradient id="woodGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stop-color="#140804"/>
+          <stop offset="0%" stop-color="#120603"/>
           <stop offset="50%" stop-color="#3d1e10"/>
-          <stop offset="100%" stop-color="#140804"/>
+          <stop offset="100%" stop-color="#120603"/>
         </linearGradient>
 
         <radialGradient id="bodyCavity" cx="50%" cy="40%" r="60%">
@@ -130,68 +141,79 @@
         </radialGradient>
       </defs>
 
-      <!-- 1. Basy zhaine quilaqtary -->
-      <path d="M 130 12 C 130 4, 160 4, 160 12 L 157 46 L 133 46 Z" fill="url(#woodGrad)" stroke="#090302" stroke-width="1.5"/>
-      <rect x="109" y="20" width="22" height="6" rx="2" fill="#0c0503"/>
-      <circle cx="107" cy="23" r="5" fill="#241208"/>
-      <rect x="159" y="32" width="22" height="6" rx="2" fill="#0c0503"/>
-      <circle cx="183" cy="35" r="5" fill="#241208"/>
+      <!-- 1. BASY, QUILAQ ZHÄNE SHYLDYRMAQ QOÑYRAULARY -->
+      <path d="M 145 12 C 145 4, 175 4, 175 12 L 172 46 L 148 46 Z" fill="url(#woodGrad)" stroke="#090302" stroke-width="1.5"/>
+      <rect x="124" y="20" width="22" height="6" rx="2" fill="#0c0503"/>
+      <circle cx="122" cy="23" r="5" fill="#241208"/>
+      <rect x="174" y="32" width="22" height="6" rx="2" fill="#0c0503"/>
+      <circle cx="198" cy="35" r="5" fill="#241208"/>
 
-      <!-- 2. Mojyn -->
-      <path d="M 133 46 L 129 220 L 161 220 L 157 46 Z" fill="url(#woodGrad)" stroke="#0c0503"/>
-      <line x1="135" y1="46" x2="131" y2="220" stroke="#000" opacity="0.6"/>
-      <line x1="155" y1="46" x2="159" y2="220" stroke="#000" opacity="0.6"/>
+      <!-- Shanaq basyndaghy baqsy shyldyrmaqtary -->
+      <g id="jingles" class="jingle-ring">
+        <circle cx="138" cy="18" r="4" class="jingle-bell"/>
+        <circle cx="182" cy="18" r="4" class="jingle-bell"/>
+        <circle cx="160" cy="8" r="4.5" class="jingle-bell"/>
+      </g>
 
-      <!-- 3. Shanaq zhaine terisi -->
-      <path d="M 129 220 C 80 210, 55 270, 61 320 C 67 370, 87 450, 125 468 L 165 468 C 203 450, 223 370, 229 320 C 235 270, 210 210, 161 220 Z" fill="url(#woodGrad)" stroke="#090302" stroke-width="2"/>
-      <path d="M 145 230 C 120 230, 83 250, 87 295 C 91 335, 125 350, 145 358 C 165 350, 199 335, 203 295 C 207 250, 170 230, 145 230 Z" fill="url(#bodyCavity)" stroke="#000" stroke-width="1.5"/>
-      <path d="M 92 330 C 100 330, 125 348, 145 348 C 165 348, 190 330, 198 330 C 203 375, 187 435, 159 456 L 131 456 C 103 435, 87 375, 92 330 Z" fill="url(#skinGrad)" stroke="#3a2517" stroke-width="1.5"/>
+      <!-- 2. MOJYN (OYNAU AYMAGHY) -->
+      <path d="M 148 46 L 144 220 L 176 220 L 172 46 Z" fill="url(#woodGrad)" stroke="#0c0503"/>
+
+      <!-- 3. SHANAQ ZHÄNE TUIJE TERISI -->
+      <path d="M 144 220 C 95 210, 70 270, 76 320 C 82 370, 102 450, 140 468 L 180 468 C 218 450, 238 370, 244 320 C 250 270, 225 210, 176 220 Z" fill="url(#woodGrad)" stroke="#090302" stroke-width="2"/>
+      <path d="M 160 230 C 135 230, 98 250, 102 295 C 106 335, 140 350, 160 358 C 180 350, 214 335, 218 295 C 222 250, 185 230, 160 230 Z" fill="url(#bodyCavity)" stroke="#000" stroke-width="1.5"/>
+      <path d="M 107 330 C 115 330, 140 348, 160 348 C 180 348, 205 330, 213 330 C 218 375, 202 435, 174 456 L 146 456 C 118 435, 102 375, 107 330 Z" fill="url(#skinGrad)" stroke="#3a2517" stroke-width="1.5"/>
 
       <!-- Tiek pen tuisin -->
-      <path d="M 127 378 L 163 378 L 159 388 L 131 388 Z" fill="#080302" stroke="#000" rx="1"/>
-      <rect x="137" y="458" width="16" height="14" rx="2" fill="#060201"/>
+      <path d="M 142 378 L 178 378 L 174 388 L 146 388 Z" fill="#080302" stroke="#000" rx="1"/>
+      <rect x="152" y="458" width="16" height="14" rx="2" fill="#060201"/>
 
-      <!-- 4. Qyldar -->
-      <line id="line-l" class="string-visual bass" x1="139" y1="24" x2="141" y2="460"/>
-      <line id="line-r" class="string-visual" x1="151" y1="36" x2="149" y2="460"/>
+      <!-- Tiysu nukteleri -->
+      <ellipse id="dot-l" class="touch-point" cx="155" cy="100" rx="6" ry="3"/>
+      <ellipse id="dot-r" class="touch-point" cx="165" cy="100" rx="6" ry="3"/>
 
-      <ellipse id="dot-l" class="touch-point" cx="140" cy="100" rx="6" ry="3"/>
-      <ellipse id="dot-r" class="touch-point" cx="150" cy="100" rx="6" ry="3"/>
+      <!-- Sol qolmen basatyn hitboxter -->
+      <rect id="hit-l" class="string-touch" x="130" y="46" width="30" height="230"/>
+      <rect id="hit-r" class="string-touch" x="160" y="46" width="30" height="230"/>
 
-      <!-- Basatyn ajmaqtar -->
-      <rect id="hit-l" class="string-touch" x="115" y="46" width="30" height="230"/>
-      <rect id="hit-r" class="string-touch" x="145" y="46" width="30" height="230"/>
-
-      <!-- 5. Ysqysh -->
+      <!-- 4. YSQYSH (BOW) -->
       <g id="bow-group" transform="translate(0, 310)">
-        <path d="M 20 0 Q 145 -12 270 0 Q 145 -4 20 0 Z" class="bow-stick"/>
-        <line x1="25" y1="3" x2="265" y2="3" class="bow-string"/>
-        <rect x="245" y="-8" width="24" height="15" rx="3" fill="#140804" stroke="#543320"/>
+        <path d="M 35 0 Q 160 -12 285 0 Q 160 -4 35 0 Z" class="bow-stick"/>
+        <line x1="40" y1="3" x2="280" y2="3" class="bow-string"/>
+        <rect x="260" y="-8" width="24" height="15" rx="3" fill="#140804" stroke="#543320"/>
       </g>
     </svg>
   </div>
 
   <div class="readout">
-    <div>Күй сарыны: <span id="label-note">Тоғанақ (D3)</span></div>
-    <div>Қобыздау күйі: <span id="label-bow">Тоқтап тұр</span></div>
+    <div>Сарын: <span id="label-note">Тоғанақ (D3)</span></div>
+    <div>Ысқыш: <span id="label-bow">Тоқтап тұр</span></div>
+    <div>Орны: <span id="label-pos">Қалыпты</span></div>
   </div>
 
   <script>
     let actx = null;
     let horsehairWave = null;
     let rosinNoise = null;
+    let reverbNode = null;
     let makamTimer = null;
+
+    // Jazyvaluu (Recorder)
+    let mediaRecorder = null;
+    let recordedChunks = [];
+    let isRecording = false;
 
     function getAudioContext() {
       if (!actx) {
         actx = new (window.AudioContext || window.webkitAudioContext)();
-        buildQobyzAcoustics();
+        buildAcousticCore();
       }
       if (actx.state === 'suspended') actx.resume();
       return actx;
     }
 
-    function buildQobyzAcoustics() {
+    // Algoritmik dalalyq reverberatsiia (Keng Dala Reverb)
+    function buildAcousticCore() {
+      // 1. 40 Garmonikalyq spektr
       const harmonics = 40;
       const real = new Float32Array(harmonics);
       const imag = new Float32Array(harmonics);
@@ -207,25 +229,46 @@
       }
       horsehairWave = actx.createPeriodicWave(real, imag, { disableNormalization: false });
 
+      // 2. Rosin friction shuyly
       const bSize = actx.sampleRate * 2;
       rosinNoise = actx.createBuffer(1, bSize, actx.sampleRate);
       const d = rosinNoise.getChannelData(0);
       for (let i = 0; i < bSize; i++) d[i] = (Math.random() * 2 - 1) * 0.4;
+
+      // 3. Keng Dala Reverb Impulse
+      const revLen = actx.sampleRate * 2.5;
+      const revBuf = actx.createBuffer(2, revLen, actx.sampleRate);
+      for (let ch = 0; ch < 2; ch++) {
+        const cd = revBuf.getChannelData(ch);
+        for (let i = 0; i < revLen; i++) {
+          cd[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / revLen, 3.0);
+        }
+      }
+      reverbNode = actx.createConvolver();
+      reverbNode.buffer = revBuf;
+
+      const revGain = actx.createGain();
+      revGain.gain.value = 0.28; // Dalalyq janghyryq molsheri
+      reverbNode.connect(revGain);
+      revGain.connect(actx.destination);
     }
 
     function initAudio() {
       getAudioContext();
       document.getElementById('stage').classList.add('ready');
       document.getElementById('startBtn').style.display = 'none';
-      setupEngineAudio();
+      setupPhysicalQobyz();
+      startStringAnimation();
     }
 
     let o1, o2, oSub, oDrone;
     let lfo, lfoGain, nSrc, nFilter, nGain, masterGain;
+    let skinF, cavityF, warmF;
     let currentFreq = 146.83;
     let isBass = true;
+    let destStreamNode = null;
 
-    function setupEngineAudio() {
+    function setupPhysicalQobyz() {
       const t = actx.currentTime;
 
       o1 = actx.createOscillator();
@@ -251,18 +294,18 @@
       lfo.connect(o2.frequency);
       lfo.start(t);
 
-      const skinF = actx.createBiquadFilter();
+      skinF = actx.createBiquadFilter();
       skinF.type = 'bandpass';
       skinF.frequency.setValueAtTime(315, t);
       skinF.Q.setValueAtTime(3.2, t);
 
-      const cavityF = actx.createBiquadFilter();
+      cavityF = actx.createBiquadFilter();
       cavityF.type = 'peaking';
       cavityF.frequency.setValueAtTime(540, t);
       cavityF.gain.setValueAtTime(8.5, t);
       cavityF.Q.setValueAtTime(2.0, t);
 
-      const warmF = actx.createBiquadFilter();
+      warmF = actx.createBiquadFilter();
       warmF.type = 'lowpass';
       warmF.frequency.setValueAtTime(1850, t);
 
@@ -302,7 +345,14 @@
 
       warmF.connect(masterGain);
       nGain.connect(masterGain);
+
+      // Reverb zhaine tikeliye shygys
       masterGain.connect(actx.destination);
+      masterGain.connect(reverbNode);
+
+      // Diktofon uishin MediaStreamDestination
+      destStreamNode = actx.createMediaStreamDestination();
+      masterGain.connect(destStreamNode);
 
       o1.start(t);
       o2.start(t);
@@ -310,18 +360,68 @@
       oDrone.start(t);
     }
 
+    // Shyldyrmaq qoñyrauyn shylanghytatu (Jingle Bell Trigger)
+    function ringJingles() {
+      if (!actx) return;
+      const t = actx.currentTime;
+      const bellOsc = actx.createOscillator();
+      const bellGain = actx.createGain();
+      const bellFilter = actx.createBiquadFilter();
+
+      bellOsc.type = 'sine';
+      bellOsc.frequency.setValueAtTime(3200 + Math.random() * 800, t);
+
+      bellFilter.type = 'highpass';
+      bellFilter.frequency.setValueAtTime(2800, t);
+
+      bellGain.gain.setValueAtTime(0.045, t);
+      bellGain.gain.exponentialRampToValueAtTime(0.0001, t + 0.35);
+
+      bellOsc.connect(bellFilter);
+      bellFilter.connect(bellGain);
+      bellGain.connect(actx.destination);
+      if (reverbNode) bellGain.connect(reverbNode);
+
+      bellOsc.start(t);
+      bellOsc.stop(t + 0.4);
+
+      const jEl = document.getElementById('jingles');
+      jEl.classList.add('active');
+      setTimeout(() => jEl.classList.remove('active'), 120);
+    }
+
+    // Ysqyshtyn vertikal ornyna bajlanysty tembrdi uozgertu (Sul Ponticello / Sul Tasto)
+    function applyBowVerticalPosition(bowY) {
+      if (!actx || !warmF) return;
+      const t = actx.currentTime;
+      // Tiekke jaqyn (Y=350-380) nemese mojyngha jaqyn (Y=260-290)
+      if (bowY > 340) {
+        // Sul Ponticello: Otzkir oberton, zhogharghy filtr ashylady
+        warmF.frequency.setTargetAtTime(2800, t, 0.08);
+        document.getElementById('label-pos').innerText = 'Тиекте (Өткір)';
+      } else if (bowY < 290) {
+        // Sul Tasto: Zhumsaq, qongyr, barqyt uin
+        warmF.frequency.setTargetAtTime(1400, t, 0.08);
+        document.getElementById('label-pos').innerText = 'Мойында (Қоңыр)';
+      } else {
+        warmF.frequency.setTargetAtTime(1850, t, 0.08);
+        document.getElementById('label-pos').innerText = 'Қалыпты';
+      }
+    }
+
     function setNotePitch(freq, bassMode) {
       currentFreq = freq;
       isBass = bassMode;
       if (!actx || !o1) return;
       const t = actx.currentTime;
-      // Zhumsaq mikro-glissando (0.05s)
       o1.frequency.setTargetAtTime(freq, t, 0.05);
       o2.frequency.setTargetAtTime(freq + (isBass ? 0.42 : 0.65), t, 0.05);
       oSub.frequency.setTargetAtTime(freq * 0.5, t, 0.05);
       lfoGain.gain.setTargetAtTime(freq * 0.012, t, 0.05);
       nFilter.frequency.setTargetAtTime(freq * 2.4, t, 0.05);
     }
+
+    let stringVibrationAmp = 0;
 
     function applyBowMotion(velocity) {
       if (!actx || !masterGain) return;
@@ -332,26 +432,29 @@
         const vol = 0.2 + (norm * 0.55);
         masterGain.gain.setTargetAtTime(vol, t, 0.04);
         nGain.gain.setTargetAtTime(norm * 0.05, t, 0.04);
+        stringVibrationAmp = norm * 4.5;
         document.getElementById('label-bow').innerText = `Қобыздалуда (${Math.round(norm * 100)}%)`;
+
+        // Qatty ysqysh siltenisi kezinde shyldyrmaq synghyry
+        if (norm > 0.68 && Math.random() < 0.3) {
+          ringJingles();
+        }
       } else {
-        // Ysqysh toqtaghanda birte-birte zhumsap oshu (0.12s)
         masterGain.gain.setTargetAtTime(0.0001, t, 0.12);
         nGain.gain.setTargetAtTime(0, t, 0.12);
+        stringVibrationAmp *= 0.85;
         document.getElementById('label-bow').innerText = 'Тоқтап тұр';
       }
     }
 
-    // Sol qol (mojyn)
+    // 1. SOL QOL
     const hitL = document.getElementById('hit-l');
     const hitR = document.getElementById('hit-r');
     const dotL = document.getElementById('dot-l');
     const dotR = document.getElementById('dot-r');
-    const lineL = document.getElementById('line-l');
-    const lineR = document.getElementById('line-r');
 
-    function bindNeckString(hitElem, dotElem, lineElem, baseF, bassMode, sideName) {
+    function bindNeck(hitElem, dotElem, baseF, bassMode, sideName) {
       let active = false;
-
       function getSvgY(e) {
         const svg = document.querySelector('.qobyz-svg');
         const pt = svg.createSVGPoint();
@@ -366,11 +469,8 @@
         initAudio();
         active = true;
         dotElem.classList.add('active');
-        lineElem.classList.add('active');
-
         const y = getSvgY(e);
         dotElem.setAttribute('cy', y);
-
         const p = (y - 46) / (270 - 46);
         const f = baseF * Math.pow(2, (p * 14) / 12);
         setNotePitch(f, bassMode);
@@ -382,7 +482,6 @@
         e.preventDefault();
         const y = getSvgY(e);
         dotElem.setAttribute('cy', y);
-
         const p = (y - 46) / (270 - 46);
         const f = baseF * Math.pow(2, (p * 14) / 12);
         setNotePitch(f, bassMode);
@@ -393,7 +492,6 @@
         if (active) {
           active = false;
           dotElem.classList.remove('active');
-          lineElem.classList.remove('active');
         }
       }
 
@@ -406,15 +504,17 @@
       window.addEventListener('touchend', onUp);
     }
 
-    bindNeckString(hitL, dotL, lineL, 146.83, true, 'Тоғанақ');
-    bindNeckString(hitR, dotR, lineR, 220.00, false, 'Кілтең');
+    bindNeck(hitL, dotL, 146.83, true, 'Тоғанақ');
+    bindNeck(hitR, dotR, 220.00, false, 'Кілтең');
 
-    // Ong qol (ysqysh)
+    // 2. ONG QOL (YSQYSH - EKİ OISTI QOZGHALYS)
     const bowGroup = document.getElementById('bow-group');
     let isBowing = false;
     let lastX = 0;
+    let lastY = 310;
     let lastTime = performance.now();
-    let bowShift = 0;
+    let bowShiftX = 0;
+    let bowShiftY = 310;
 
     function onBowStart(e) {
       e.preventDefault();
@@ -422,25 +522,32 @@
       isBowing = true;
       bowGroup.classList.add('active');
       lastX = e.touches ? e.touches[0].clientX : e.clientX;
+      lastY = e.touches ? e.touches[0].clientY : e.clientY;
       lastTime = performance.now();
     }
 
     function onBowMove(e) {
       if (!isBowing) return;
       const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
       const now = performance.now();
       const dt = now - lastTime;
 
       if (dt > 12) {
         const dx = clientX - lastX;
+        const dy = clientY - lastY;
         const velocity = (Math.abs(dx) / dt) * 35;
 
-        bowShift = Math.max(-40, Math.min(40, bowShift + dx * 0.7));
-        bowGroup.setAttribute('transform', `translate(${bowShift}, 310)`);
+        bowShiftX = Math.max(-45, Math.min(45, bowShiftX + dx * 0.7));
+        bowShiftY = Math.max(260, Math.min(370, bowShiftY + dy * 0.5));
+
+        bowGroup.setAttribute('transform', `translate(${bowShiftX}, ${bowShiftY})`);
 
         applyBowMotion(velocity);
+        applyBowVerticalPosition(bowShiftY);
 
         lastX = clientX;
+        lastY = clientY;
         lastTime = now;
       }
     }
@@ -467,24 +574,56 @@
       }
     }, 40);
 
-    // Kúi makamdary
+    // 3. QYLDARDYGN TİRI TERBELIS ANIMATSIYASY (CANVAS PHYSICS)
+    const cvs = document.getElementById('stringCanvas');
+    const ctx = cvs.getContext('2d');
+    let phase = 0;
+
+    function startStringAnimation() {
+      function drawStrings() {
+        ctx.clearRect(0, 0, cvs.width, cvs.height);
+        phase += 0.45;
+
+        // Sol qyl (Toghanaq) terbelisi
+        const leftVib = isBass ? Math.sin(phase) * stringVibrationAmp : 0;
+        ctx.beginPath();
+        ctx.moveTo(154, 24);
+        ctx.quadraticCurveTo(154 + leftVib, 240, 156, 460);
+        ctx.strokeStyle = isBass && stringVibrationAmp > 0.5 ? '#fff' : '#baa592';
+        ctx.lineWidth = 3.8;
+        ctx.stroke();
+
+        // Ong qyl (Kiltegne) terbelisi
+        const rightVib = !isBass ? Math.sin(phase * 1.3) * stringVibrationAmp : 0;
+        ctx.beginPath();
+        ctx.moveTo(166, 36);
+        ctx.quadraticCurveTo(166 + rightVib, 240, 164, 460);
+        ctx.strokeStyle = !isBass && stringVibrationAmp > 0.5 ? '#fff' : '#baa592';
+        ctx.lineWidth = 2.4;
+        ctx.stroke();
+
+        requestAnimationFrame(drawStrings);
+      }
+      requestAnimationFrame(drawStrings);
+    }
+
+    // 4. KÜIJ MAQAMDARY
     function stopMakam(btn) {
       if (makamTimer) clearTimeout(makamTimer);
-      document.querySelectorAll('.m-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.control-deck .btn').forEach(b => {
+        if (b.id !== 'recBtn') b.classList.remove('active');
+      });
       if (btn) btn.classList.add('active');
       applyBowMotion(0);
       dotR.classList.remove('active');
-      lineR.classList.remove('active');
-      document.getElementById('label-note').innerText = 'Еркін қобыздау';
+      document.getElementById('label-note').innerText = 'Еркін сарын';
     }
 
     function playMakam(type, btn) {
       initAudio();
       stopMakam();
       btn.classList.add('active');
-
       dotR.classList.add('active');
-      lineR.classList.add('active');
 
       const makams = {
         qonur: [
@@ -502,10 +641,10 @@
           { y: 120, f: 261.6, v: 18, t: 600 }
         ],
         zhelmaya: [
-          { y: 70, f: 220.0, v: 28, t: 300 },
-          { y: 110, f: 246.9, v: 32, t: 300 },
-          { y: 140, f: 277.1, v: 35, t: 350 },
-          { y: 110, f: 246.9, v: 30, t: 300 }
+          { y: 70, f: 220.0, v: 32, t: 300 },
+          { y: 110, f: 246.9, v: 36, t: 300 },
+          { y: 140, f: 277.1, v: 40, t: 350 },
+          { y: 110, f: 246.9, v: 34, t: 300 }
         ]
       };
 
@@ -520,14 +659,56 @@
         document.getElementById('label-note').innerText = `${Math.round(item.f)} Hz (Күй)`;
 
         bowDir *= -1;
-        bowGroup.setAttribute('transform', `translate(${bowDir * 25}, 310)`);
+        bowGroup.setAttribute('transform', `translate(${bowDir * 28}, 310)`);
         applyBowMotion(item.v);
 
         step = (step + 1) % sequence.length;
         makamTimer = setTimeout(playStep, item.t);
       }
-
       playStep();
+    }
+
+    // 5. AUDIONY JAZU ZHÄNE SAQTAU (AUDIO RECORDER)
+    function toggleRecording() {
+      initAudio();
+      const recBtn = document.getElementById('recBtn');
+
+      if (!isRecording) {
+        // Bastau
+        recordedChunks = [];
+        const stream = destStreamNode.stream;
+        mediaRecorder = new MediaRecorder(stream);
+
+        mediaRecorder.ondataavailable = (e) => {
+          if (e.data.size > 0) recordedChunks.push(e.data);
+        };
+
+        mediaRecorder.onstop = () => {
+          const blob = new Blob(recordedChunks, { type: 'audio/webm' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.style.display = 'none';
+          a.href = url;
+          a.download = `qobyz_saryny_${Date.now()}.webm`;
+          document.body.appendChild(a);
+          a.click();
+          setTimeout(() => {
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+          }, 100);
+        };
+
+        mediaRecorder.start();
+        isRecording = true;
+        recBtn.classList.add('recording');
+        recBtn.innerText = '■ Жазуды тоқтату';
+      } else {
+        // Toqtatu zhaine saqtau
+        mediaRecorder.stop();
+        isRecording = false;
+        recBtn.classList.remove('recording');
+        recBtn.innerText = '● Сарынды жазу';
+      }
     }
   </script>
 </body>
