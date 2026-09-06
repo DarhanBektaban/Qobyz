@@ -3,166 +3,152 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Qobyz.com — Kuidelengen Qylqobyz Modeli</title>
+  <title>Qobyz.com — Qos Sauusaqpen Uindetuu</title>
   <style>
     :root {
-      --bg: #0a0807;
+      --bg: #090807;
       --panel: #161210;
       --accent: #d4a373;
       --accent-glow: #ffc872;
-      --wood-deep: #1e0d07;
-      --wood-rim: #3a1c10;
+      --wood: #1e0d07;
       --skin: #c2a688;
       --border: #28201b;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    body { background: var(--bg); color: #e6e2dd; display: flex; flex-direction: column; align-items: center; min-height: 100vh; overflow-x: hidden; }
+    body { background: var(--bg); color: #e6e2dd; display: flex; flex-direction: column; align-items: center; min-height: 100vh; overflow: hidden; touch-action: none; }
 
-    header { text-align: center; padding: 20px 10px 10px; z-index: 10; }
-    h1 { color: var(--accent); letter-spacing: 3px; font-size: 1.8rem; text-transform: uppercase; margin-bottom: 6px; }
-    p { color: #8c827a; font-size: 0.9rem; max-width: 540px; margin: 0 auto; line-height: 1.5; }
+    header { text-align: center; padding: 18px 12px 10px; z-index: 10; }
+    h1 { color: var(--accent); letter-spacing: 2px; font-size: 1.6rem; text-transform: uppercase; margin-bottom: 4px; }
+    p { color: #8c827a; font-size: 0.88rem; max-width: 500px; line-height: 1.4; }
 
-    .top-bar {
+    .btn-box {
+      margin-top: 10px;
       display: flex;
-      gap: 12px;
-      margin-top: 14px;
-      flex-wrap: wrap;
+      gap: 10px;
       justify-content: center;
     }
 
     .btn {
-      padding: 10px 20px;
+      padding: 9px 20px;
       background: var(--accent);
       color: #0c0a09;
       font-weight: 600;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       border: none;
       border-radius: 4px;
       cursor: pointer;
-      transition: 0.2s;
     }
     .btn:hover { background: #faedcd; }
-    .btn-outline {
+
+    .btn-hold {
       background: transparent;
       border: 1px solid var(--accent);
       color: var(--accent);
     }
-    .btn-outline:hover {
-      background: var(--panel);
-      color: #fff;
+    .btn-hold.active {
+      background: var(--accent);
+      color: #0c0a09;
+      box-shadow: 0 0 12px var(--accent-glow);
     }
 
-    /* Qobyz Qurylymy */
+    /* Qobyz Korpusy */
     .stage {
       position: relative;
       display: flex;
       flex-direction: column;
       align-items: center;
-      margin-top: 16px;
-      opacity: 0.4;
+      margin-top: 12px;
+      opacity: 0.35;
       pointer-events: none;
-      transition: opacity 0.4s;
+      transition: opacity 0.3s;
     }
-    .stage.active { opacity: 1; pointer-events: auto; }
+    .stage.ready { opacity: 1; pointer-events: auto; }
 
-    .qobyz-scroll {
-      width: 54px;
-      height: 76px;
-      background: linear-gradient(180deg, #140804, var(--wood-deep));
-      border-radius: 10px 10px 2px 2px;
-      border: 1px solid #000;
+    .qobyz-head {
+      width: 52px;
+      height: 72px;
+      background: #150905;
+      border-radius: 10px 10px 0 0;
       position: relative;
     }
-    .peg {
-      width: 14px;
-      height: 8px;
-      background: #000;
-      position: absolute;
-      border-radius: 2px;
-    }
-    .peg.l { left: -10px; top: 22px; }
-    .peg.r { right: -10px; top: 44px; }
+    .peg { width: 14px; height: 8px; background: #050201; position: absolute; }
+    .peg.l { left: -10px; top: 20px; }
+    .peg.r { right: -10px; top: 40px; }
 
     .qobyz-neck {
-      width: 48px;
+      width: 56px;
       height: 380px;
-      background: linear-gradient(90deg, #120703 0%, var(--wood-deep) 50%, #120703 100%);
+      background: linear-gradient(90deg, #110603, #220e07, #110603);
       position: relative;
-      border-left: 1px solid #2d160c;
-      border-right: 1px solid #2d160c;
-      box-shadow: inset 0 0 15px rgba(0,0,0,0.9);
+      box-shadow: inset 0 0 16px rgba(0,0,0,0.9);
     }
 
     .qobyz-body {
-      width: 230px;
-      height: 290px;
-      background: radial-gradient(circle at 50% 30%, var(--wood-rim), #140703 80%);
+      width: 220px;
+      height: 270px;
+      background: radial-gradient(circle at 50% 30%, #36190e, #110603 85%);
       border-radius: 42% 42% 46% 46%;
-      margin-top: -30px;
+      margin-top: -24px;
       display: flex;
       justify-content: center;
       align-items: flex-end;
-      padding-bottom: 24px;
+      padding-bottom: 20px;
       position: relative;
-      border: 2px solid #140703;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.8);
     }
 
-    .qobyz-membrane {
-      width: 174px;
-      height: 154px;
-      background: radial-gradient(circle at 50% 50%, var(--skin), #8a7057 85%);
+    .qobyz-skin {
+      width: 168px;
+      height: 146px;
+      background: radial-gradient(circle, var(--skin), #826850);
       border-radius: 12px 12px 46% 46%;
       position: relative;
-      box-shadow: inset 0 0 25px rgba(0,0,0,0.7);
     }
 
     .qobyz-bridge {
       width: 44px;
       height: 14px;
-      background: #0d0503;
+      background: #0f0603;
       position: absolute;
-      top: 32px;
+      top: 26px;
       left: 50%;
       transform: translateX(-50%);
       border-radius: 3px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.6);
     }
 
-    /* Qyldar */
-    .string-track {
+    /* Qos Qyl Zholynyn Qurylymy */
+    .touch-lane {
       position: absolute;
       top: 0;
       height: 100%;
-      width: 24px;
-      cursor: ns-resize;
+      width: 28px;
+      cursor: pointer;
       display: flex;
       justify-content: center;
-      touch-action: none;
     }
-    .string-track.left { left: 0; }
-    .string-track.right { right: 0; }
+    .touch-lane.l { left: 0; }
+    .touch-lane.r { right: 0; }
 
-    .string-wire {
+    .wire {
       width: 4px;
       height: 480px;
-      background: linear-gradient(180deg, #d8ccbe, #a89685);
+      background: #b5a290;
       position: absolute;
       top: -24px;
       pointer-events: none;
-      transition: transform 0.05s ease, background 0.1s;
+      transition: width 0.1s;
     }
-    .string-wire.bass { width: 5.5px; }
+    .wire.bass { width: 6px; }
 
-    .string-track.active .string-wire {
+    .touch-lane.active .wire {
       background: #fff;
-      box-shadow: 0 0 16px var(--accent-glow), 0 0 4px #fff;
+      box-shadow: 0 0 15px var(--accent-glow);
+      width: 6.5px;
     }
 
-    .finger-touch {
-      width: 16px;
-      height: 8px;
+    .touch-indicator {
+      width: 18px;
+      height: 9px;
       background: #fff;
       border-radius: 50%;
       position: absolute;
@@ -172,343 +158,283 @@
       opacity: 0;
       box-shadow: 0 0 12px var(--accent-glow);
     }
-    .string-track.active .finger-touch { opacity: 1; }
+    .touch-lane.active .touch-indicator { opacity: 1; }
 
-    .dashboard {
-      margin-top: 16px;
+    .readout {
+      margin-top: 14px;
       display: flex;
-      gap: 24px;
-      background: var(--panel);
-      border: 1px solid var(--border);
-      padding: 14px 22px;
-      border-radius: 6px;
-      font-size: 0.8rem;
-      color: #a0958c;
-      align-items: center;
+      gap: 20px;
+      font-size: 0.85rem;
+      color: #998e84;
     }
-    .dash-item { display: flex; align-items: center; gap: 8px; }
-    .dash-item input[type="range"] { accent-color: var(--accent); }
-
-    #live-note {
-      font-family: monospace;
-      color: var(--accent-glow);
-      font-size: 0.95rem;
-      min-width: 120px;
-      text-align: right;
-    }
+    .readout span { color: var(--accent-glow); font-family: monospace; }
   </style>
 </head>
 <body>
 
   <header>
-    <h1>Qylqobyz Dala Saryny</h1>
-    <p>Qos qyl uinlesimi, terini kuginirentin akustikalyq formant zhaine ysqysh uikeilisi birlesken zhana buoilim.</p>
+    <h1>QOS SAUUSAQ SARYNY</h1>
+    <p>Бір саусақпен төменгі қылды басып үнді ұстаңыз, екінші саусақпен жоғарғы қылды сырғытып әуендетіңіз.</p>
     
-    <div class="top-bar">
-      <button class="btn" id="start-btn" onclick="bootQobyz()">Qobyzdy Iske Qosuu</button>
-      <button class="btn btn-outline" onclick="playPreset('qonur')">«Qonur» Uilgisii</button>
-      <button class="btn btn-outline" onclick="playPreset('aqqu')">«Aqquu» Aiuueni</button>
+    <div class="btn-box">
+      <button class="btn" id="startBtn" onclick="initSystem()">Дыбысты Қосу</button>
+      <button class="btn btn-hold" id="holdBtn" onclick="toggleDroneHold()">Сол қылды бекіту (Hold)</button>
     </div>
   </header>
 
-  <div class="stage" id="main-stage">
-    <div class="qobyz-scroll">
+  <div class="stage" id="stage">
+    <div class="qobyz-head">
       <div class="peg l"></div>
       <div class="peg r"></div>
     </div>
     
-    <div class="qobyz-neck" id="neck-elem">
-      <!-- Sol zhaghy: Zhuan qyl (D3 - Toghanaq) -->
-      <div class="string-track left" id="track-left">
-        <div class="string-wire bass"></div>
-        <div class="finger-touch" id="touch-left"></div>
+    <div class="qobyz-neck" id="neck">
+      <!-- Сол қыл: Ұстап тұратын тұрақты үн (D3) -->
+      <div class="touch-lane l" id="lane-l">
+        <div class="wire bass"></div>
+        <div class="touch-indicator" id="ind-l"></div>
       </div>
-      
-      <!-- Ong zhaghy: Zhignishke qyl (A3 - Kiltegne) -->
-      <div class="string-track right" id="track-right">
-        <div class="string-wire"></div>
-        <div class="finger-touch" id="touch-right"></div>
+      <!-- Оң қыл: Үндейтін, құбылатын әуен (A3) -->
+      <div class="touch-lane r" id="lane-r">
+        <div class="wire"></div>
+        <div class="touch-indicator" id="ind-r"></div>
       </div>
     </div>
 
     <div class="qobyz-body">
-      <div class="qobyz-membrane">
+      <div class="qobyz-skin">
         <div class="qobyz-bridge"></div>
       </div>
     </div>
   </div>
 
-  <div class="dashboard">
-    <div class="dash-item">
-      <label>Burdondyq Qos-uin (Drone):</label>
-      <input type="checkbox" id="droneToggle" checked>
-    </div>
-    <div class="dash-item">
-      <label>Shanaq kuginireni:</label>
-      <input type="range" id="bodyResonance" min="0.4" max="1.6" step="0.1" value="1.0">
-    </div>
-    <div class="dash-item">
-      <span id="live-note">Uin: Kuituude</span>
-    </div>
+  <div class="readout">
+    <div>Тұрақты сарын: <span id="label-l">—</span></div>
+    <div>Әуендеу: <span id="label-r">—</span></div>
   </div>
 
   <script>
     let actx = null;
-    let masterReverb = null;
 
     function getAudioContext() {
-      if (!actx) {
-        actx = new (window.AudioContext || window.webkitAudioContext)();
-        setupAcousticSpace();
-      }
+      if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
       if (actx.state === 'suspended') actx.resume();
       return actx;
     }
 
-    // Dala zhagnghyryghy men shanyshqy akustikasy (Algorithmic Reverb)
-    function setupAcousticSpace() {
-      const length = actx.sampleRate * 2.2;
-      const impulse = actx.createBuffer(2, length, actx.sampleRate);
-      for (let ch = 0; ch < 2; ch++) {
-        const d = impulse.getChannelData(ch);
-        for (let i = 0; i < length; i++) {
-          d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / length, 2.5);
-        }
-      }
-      masterReverb = actx.createConvolver();
-      masterReverb.buffer = impulse;
-
-      const reverbGain = actx.createGain();
-      reverbGain.gain.value = 0.22;
-      masterReverb.connect(reverbGain);
-      reverbGain.connect(actx.destination);
-    }
-
-    function bootQobyz() {
+    function initSystem() {
       getAudioContext();
-      document.getElementById('main-stage').classList.add('active');
-      document.getElementById('start-btn').style.display = 'none';
-      document.getElementById('live-note').innerText = 'Uin: Iske qosyldy';
+      document.getElementById('stage').classList.add('ready');
+      document.getElementById('startBtn').style.display = 'none';
     }
 
-    // Qylqobyzdygn akustikalyq formantтыq un modeli
-    class QobyzString {
-      constructor(baseFreq, side) {
+    // Қылқобыз үнінің акустикалық генераторы
+    class StringVoice {
+      constructor(baseFreq) {
         this.baseFreq = baseFreq;
-        this.side = side;
         this.ctx = getAudioContext();
-        this.nodes = null;
+        this.voice = null;
       }
 
-      start(freq) {
+      play(freq, isDrone = false) {
         this.stop();
         const t = this.ctx.currentTime;
 
-        // 1. Qos aralyq tolqyndar (Qyl shoghyrynyn chorused fazasy)
         const osc1 = this.ctx.createOscillator();
         const osc2 = this.ctx.createOscillator();
-        const oscSub = this.ctx.createOscillator();
-
         osc1.type = 'sawtooth';
         osc2.type = 'sawtooth';
-        oscSub.type = 'triangle';
-
         osc1.frequency.setValueAtTime(freq, t);
-        osc2.frequency.setValueAtTime(freq + 0.65, t);
-        oscSub.frequency.setValueAtTime(freq * 0.5, t); // shaghar tүbinin terendigi
+        osc2.frequency.setValueAtTime(freq + 0.7, t); // Қыл шоғырының қалыңдығы
 
-        // 2. Tabyghi vibrato (LFO)
+        // Үндеу кезіндегі қол дірілі (Вибрато)
         const lfo = this.ctx.createOscillator();
-        const lfoG = this.ctx.createGain();
-        lfo.frequency.setValueAtTime(4.6, t);
-        lfoG.gain.setValueAtTime(freq * 0.014, t);
+        const lfoGain = this.ctx.createGain();
+        lfo.frequency.setValueAtTime(isDrone ? 3.5 : 4.8, t);
+        lfoGain.gain.setValueAtTime(freq * (isDrone ? 0.008 : 0.016), t);
         lfo.connect(osc1.frequency);
         lfo.connect(osc2.frequency);
         lfo.start(t);
 
-        // 3. Shanaqtyn 3 formanttyq filtrleri (Resonance)
-        const f1 = this.ctx.createBiquadFilter(); // Tuije terisi
-        f1.type = 'bandpass';
-        f1.frequency.setValueAtTime(360, t);
-        f1.Q.setValueAtTime(2.2, t);
+        // Қобыз шанағының түпкі форманты
+        const body = this.ctx.createBiquadFilter();
+        body.type = 'bandpass';
+        body.frequency.setValueAtTime(420, t);
+        body.Q.setValueAtTime(2.4, t);
 
-        const f2 = this.ctx.createBiquadFilter(); // Aghash shanaq
-        f2.type = 'peaking';
-        f2.frequency.setValueAtTime(780, t);
-        f2.gain.setValueAtTime(6.0, t);
-        f2.Q.setValueAtTime(1.8, t);
+        const gain = this.ctx.createGain();
+        gain.gain.setValueAtTime(0.001, t);
+        gain.gain.exponentialRampToValueAtTime(isDrone ? 0.28 : 0.38, t + 0.1);
 
-        // 4. Ysqysh uikeilisi (Bow Noise)
-        const noiseBuf = this.ctx.createBuffer(1, this.ctx.sampleRate, this.ctx.sampleRate);
-        const data = noiseBuf.getChannelData(0);
-        for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
-        
-        const noiseSrc = this.ctx.createBufferSource();
-        noiseSrc.buffer = noiseBuf;
-        noiseSrc.loop = true;
-
-        const nFilter = this.ctx.createBiquadFilter();
-        nFilter.type = 'bandpass';
-        nFilter.frequency.setValueAtTime(freq * 2.2, t);
-        nFilter.Q.setValueAtTime(3.0, t);
-
-        const nGain = this.ctx.createGain();
-        nGain.gain.setValueAtTime(0.045, t);
-
-        noiseSrc.connect(nFilter);
-        nFilter.connect(nGain);
-        noiseSrc.start(t);
-
-        // Zhelilerdi kosu
-        const mainGain = this.ctx.createGain();
-        mainGain.gain.setValueAtTime(0.001, t);
-        mainGain.gain.exponentialRampToValueAtTime(0.38, t + 0.12);
-
-        osc1.connect(f1);
-        osc2.connect(f1);
-        oscSub.connect(f1);
-        f1.connect(f2);
-        f2.connect(mainGain);
-        nGain.connect(mainGain);
-
-        mainGain.connect(this.ctx.destination);
-        if (masterReverb) mainGain.connect(masterReverb);
+        osc1.connect(body);
+        osc2.connect(body);
+        body.connect(gain);
+        gain.connect(this.ctx.destination);
 
         osc1.start(t);
         osc2.start(t);
-        oscSub.start(t);
 
-        this.nodes = { osc1, osc2, oscSub, lfo, lfoG, nFilter, mainGain, noiseSrc };
+        this.voice = { osc1, osc2, lfo, gain, lfoGain };
       }
 
       setPitch(freq) {
-        if (!this.nodes) return;
+        if (!this.voice) return;
         const t = this.ctx.currentTime;
-        this.nodes.osc1.frequency.setTargetAtTime(freq, t, 0.045);
-        this.nodes.osc2.frequency.setTargetAtTime(freq + 0.65, t, 0.045);
-        this.nodes.oscSub.frequency.setTargetAtTime(freq * 0.5, t, 0.045);
-        this.nodes.lfoG.gain.setTargetAtTime(freq * 0.014, t, 0.045);
-        this.nodes.nFilter.frequency.setTargetAtTime(freq * 2.2, t, 0.045);
+        this.voice.osc1.frequency.setTargetAtTime(freq, t, 0.04);
+        this.voice.osc2.frequency.setTargetAtTime(freq + 0.7, t, 0.04);
+        this.voice.lfoGain.gain.setTargetAtTime(freq * 0.016, t, 0.04);
       }
 
       stop() {
-        if (!this.nodes) return;
+        if (!this.voice) return;
         const t = this.ctx.currentTime;
-        const n = this.nodes;
-        n.mainGain.gain.cancelScheduledValues(t);
-        n.mainGain.gain.linearRampToValueAtTime(0, t + 0.18);
+        const v = this.voice;
+        v.gain.linearRampToValueAtTime(0.0001, t + 0.16);
         setTimeout(() => {
-          try {
-            n.osc1.stop();
-            n.osc2.stop();
-            n.oscSub.stop();
-            n.lfo.stop();
-            n.noiseSrc.stop();
-          } catch(e){}
-        }, 220);
-        this.nodes = null;
+          try { v.osc1.stop(); v.osc2.stop(); v.lfo.stop(); } catch(e){}
+        }, 200);
+        this.voice = null;
       }
     }
 
-    const strLeft = new QobyzString(146.83, 'left');  // D3
-    const strRight = new QobyzString(220.00, 'right'); // A3
-    let droneVoice = null;
+    const bassString = new StringVoice(146.83); // D3 (Тоғанақ)
+    const melodyString = new StringVoice(220.00); // A3 (Кілтең)
 
-    function handleInteraction(trackId, side, stringInst, otherStringInst) {
-      const el = document.getElementById(trackId);
-      const touch = document.getElementById(`touch-${side}`);
-      let isPressed = false;
+    let isDroneLocked = false;
 
-      function getFreqFromY(y, h) {
-        const p = Math.max(0, Math.min(1, y / h));
-        return stringInst.baseFreq * Math.pow(2, (p * 14) / 12);
+    // Тінтуір үшін «Сол қылды бекіту» батырмасы
+    function toggleDroneHold() {
+      initSystem();
+      isDroneLocked = !isDroneLocked;
+      const btn = document.getElementById('holdBtn');
+      const laneL = document.getElementById('lane-l');
+      const labelL = document.getElementById('label-l');
+
+      if (isDroneLocked) {
+        btn.classList.add('active');
+        laneL.classList.add('active');
+        bassString.play(146.83, true);
+        labelL.innerText = 'D3 (147 Hz) [Бекітілді]';
+      } else {
+        btn.classList.remove('active');
+        laneL.classList.remove('active');
+        bassString.stop();
+        labelL.innerText = '—';
       }
+    }
 
-      function start(e) {
+    // MULTI-TOUCH ҚОЛДАУЫ: Екі саусақпен қатар басқару
+    const activeTouches = {};
+
+    function calcFreq(y, h, baseFreq) {
+      const p = Math.max(0, Math.min(1, y / h));
+      return baseFreq * Math.pow(2, (p * 14) / 12);
+    }
+
+    function setupMultiTouch() {
+      const neck = document.getElementById('neck');
+
+      neck.addEventListener('touchstart', (e) => {
         e.preventDefault();
-        getAudioContext();
-        isPressed = true;
-        el.classList.add('active');
+        initSystem();
+        const rect = neck.getBoundingClientRect();
 
-        const rect = el.getBoundingClientRect();
-        const y = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
-        touch.style.top = y + 'px';
+        for (let i = 0; i < e.changedTouches.length; i++) {
+          const t = e.changedTouches[i];
+          const x = t.clientX - rect.left;
+          const y = t.clientY - rect.top;
 
-        const f = getFreqFromY(y, rect.height);
-        stringInst.start(f);
-        updateLiveLabel(f);
+          // Сол жақ па, әлде оң жақ қыл ма?
+          const isLeft = x < rect.width / 2;
+          const side = isLeft ? 'l' : 'r';
+          const stringInst = isLeft ? bassString : melodyString;
 
-        // Burdondyq qos-uin: Eger ong qyldy ojnasa, sol qyl bos kuginirep turady
-        if (side === 'right' && document.getElementById('droneToggle').checked && !droneVoice) {
-          droneVoice = new QobyzString(146.83, 'left');
-          droneVoice.start(146.83);
-          droneVoice.nodes.mainGain.gain.value = 0.12; // aqyryn fon
+          activeTouches[t.identifier] = { side, stringInst };
+
+          const f = calcFreq(y, rect.height, stringInst.baseFreq);
+          stringInst.play(f, isLeft);
+
+          document.getElementById(`lane-${side}`).classList.add('active');
+          const ind = document.getElementById(`ind-${side}`);
+          ind.style.top = y + 'px';
+          document.getElementById(`label-${side}`).innerText = Math.round(f) + ' Hz';
         }
-      }
+      }, { passive: false });
 
-      function move(e) {
-        if (!isPressed) return;
+      neck.addEventListener('touchmove', (e) => {
         e.preventDefault();
-        const rect = el.getBoundingClientRect();
-        const y = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
-        touch.style.top = Math.max(0, Math.min(rect.height, y)) + 'px';
+        const rect = neck.getBoundingClientRect();
 
-        const f = getFreqFromY(y, rect.height);
-        stringInst.setPitch(f);
-        updateLiveLabel(f);
-      }
+        for (let i = 0; i < e.changedTouches.length; i++) {
+          const t = e.changedTouches[i];
+          const item = activeTouches[t.identifier];
+          if (item) {
+            const y = Math.max(0, Math.min(rect.height, t.clientY - rect.top));
+            const f = calcFreq(y, rect.height, item.stringInst.baseFreq);
+            item.stringInst.setPitch(f);
 
-      function end(e) {
-        if (isPressed) {
-          isPressed = false;
-          el.classList.remove('active');
-          stringInst.stop();
-          document.getElementById('live-note').innerText = 'Uin: Kuituude';
+            document.getElementById(`ind-${item.side}`).style.top = y + 'px';
+            document.getElementById(`label-${item.side}`).innerText = Math.round(f) + ' Hz';
+          }
+        }
+      }, { passive: false });
 
-          if (droneVoice) {
-            droneVoice.stop();
-            droneVoice = null;
+      function endTouch(e) {
+        for (let i = 0; i < e.changedTouches.length; i++) {
+          const t = e.changedTouches[i];
+          const item = activeTouches[t.identifier];
+          if (item) {
+            if (!(item.side === 'l' && isDroneLocked)) {
+              item.stringInst.stop();
+              document.getElementById(`lane-${item.side}`).classList.remove('active');
+              document.getElementById(`label-${item.side}`).innerText = '—';
+            }
+            delete activeTouches[t.identifier];
           }
         }
       }
 
-      el.addEventListener('mousedown', start);
-      window.addEventListener('mousemove', (e) => { if(isPressed) move(e); });
-      window.addEventListener('mouseup', end);
+      neck.addEventListener('touchend', endTouch);
+      neck.addEventListener('touchcancel', endTouch);
 
-      el.addEventListener('touchstart', start, {passive: false});
-      el.addEventListener('touchmove', move, {passive: false});
-      window.addEventListener('touchend', end);
-    }
+      // Компьютерде Тінтуірмен (Mouse) ойнау: Оң ішекпен үндеу
+      const laneR = document.getElementById('lane-r');
+      let mousePlaying = false;
 
-    handleInteraction('track-left', 'left', strLeft, strRight);
-    handleInteraction('track-right', 'right', strRight, strLeft);
+      laneR.addEventListener('mousedown', (e) => {
+        e.preventDefault();
+        initSystem();
+        mousePlaying = true;
+        laneR.classList.add('active');
+        const rect = laneR.getBoundingClientRect();
+        const y = e.clientY - rect.top;
+        const f = calcFreq(y, rect.height, melodyString.baseFreq);
+        melodyString.play(f, false);
+        document.getElementById('ind-r').style.top = y + 'px';
+        document.getElementById('label-r').innerText = Math.round(f) + ' Hz';
+      });
 
-    function updateLiveLabel(f) {
-      document.getElementById('live-note').innerText = `${Math.round(f)} Hz`;
-    }
+      window.addEventListener('mousemove', (e) => {
+        if (!mousePlaying) return;
+        const rect = laneR.getBoundingClientRect();
+        const y = Math.max(0, Math.min(rect.height, e.clientY - rect.top));
+        const f = calcFreq(y, rect.height, melodyString.baseFreq);
+        melodyString.setPitch(f);
+        document.getElementById('ind-r').style.top = y + 'px';
+        document.getElementById('label-r').innerText = Math.round(f) + ' Hz';
+      });
 
-    // Kuij aiuuenderin avtomatty tuirde ojnatuu
-    function playPreset(type) {
-      bootQobyz();
-      strRight.start(220.00);
-      
-      const score = (type === 'qonur') 
-        ? [{f:220, t:0.6}, {f:246.9, t:0.5}, {f:220, t:0.7}, {f:196, t:0.5}, {f:220, t:1.2}]
-        : [{f:220, t:0.4}, {f:293.6, t:0.4}, {f:329.6, t:0.6}, {f:293.6, t:0.4}, {f:246.9, t:0.8}];
-
-      let acc = 0;
-      score.forEach((note, i) => {
-        setTimeout(() => {
-          strRight.setPitch(note.f);
-          updateLiveLabel(note.f);
-          if (i === score.length - 1) {
-            setTimeout(() => strRight.stop(), note.t * 1000);
-          }
-        }, acc * 1000);
-        acc += note.t;
+      window.addEventListener('mouseup', () => {
+        if (mousePlaying) {
+          mousePlaying = false;
+          laneR.classList.remove('active');
+          melodyString.stop();
+          document.getElementById('label-r').innerText = '—';
+        }
       });
     }
+
+    setupMultiTouch();
   </script>
 </body>
 </html>
