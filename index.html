@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QOBYZ.COM — Shynajy Qobyzshy Qobyzdauy</title>
+  <title>QOBYZ.COM — Shynajy Qylqobyz</title>
   <style>
     :root {
       --bg: #090807;
@@ -18,24 +18,23 @@
     * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
     body { background: var(--bg); color: #e6e2dd; display: flex; flex-direction: column; align-items: center; min-height: 100vh; overflow-x: hidden; touch-action: none; }
 
-    header { text-align: center; padding: 14px 10px 4px; z-index: 10; }
-    h1 { color: var(--accent); letter-spacing: 2.5px; font-size: 1.45rem; text-transform: uppercase; margin-bottom: 2px; }
-    p { color: #8c827a; font-size: 0.82rem; max-width: 520px; line-height: 1.4; }
+    header { text-align: center; padding: 12px 10px 4px; z-index: 10; }
+    h1 { color: var(--accent); letter-spacing: 2px; font-size: 1.35rem; text-transform: uppercase; margin-bottom: 2px; }
+    p { color: #8c827a; font-size: 0.8rem; max-width: 500px; line-height: 1.4; }
 
-    /* Qobyzshynygn makamdary */
     .makam-bar {
       display: flex;
-      gap: 8px;
-      margin-top: 10px;
+      gap: 6px;
+      margin-top: 8px;
       flex-wrap: wrap;
       justify-content: center;
     }
     .m-btn {
-      padding: 6px 14px;
+      padding: 5px 12px;
       background: var(--panel);
       border: 1px solid #332720;
       color: #b5a497;
-      font-size: 0.78rem;
+      font-size: 0.75rem;
       border-radius: 4px;
       cursor: pointer;
       transition: 0.2s;
@@ -46,15 +45,15 @@
       color: #0c0a09;
       font-weight: bold;
       border-color: var(--accent);
-      box-shadow: 0 0 10px rgba(212, 163, 115, 0.4);
+      box-shadow: 0 0 10px rgba(212, 163, 115, 0.35);
     }
 
     .btn-main {
-      padding: 8px 22px;
+      padding: 7px 20px;
       background: var(--accent);
       color: #0b0908;
       font-weight: 600;
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       border: none;
       border-radius: 4px;
       cursor: pointer;
@@ -62,10 +61,9 @@
     }
     .btn-main:hover { background: #faedcd; }
 
-    /* Qobyz Korpusy (SVG) */
     .qobyz-stage {
       position: relative;
-      margin-top: 8px;
+      margin-top: 6px;
       width: 290px;
       height: 480px;
       opacity: 0.4;
@@ -78,39 +76,33 @@
     svg.qobyz-svg { width: 100%; height: 100%; overflow: visible; }
 
     .string-touch { cursor: pointer; fill: transparent; }
-    .string-visual { stroke: #baa592; stroke-width: 2.2; pointer-events: none; }
+    .string-visual { stroke: #baa592; stroke-width: 2.2; pointer-events: none; transition: stroke 0.15s; }
     .string-visual.bass { stroke-width: 3.8; }
-
-    .string-visual.active {
-      stroke: #fff;
-      filter: drop-shadow(0 0 8px var(--glow));
-    }
+    .string-visual.active { stroke: #fff; filter: drop-shadow(0 0 8px var(--glow)); }
 
     .touch-point { fill: #fff; filter: drop-shadow(0 0 8px var(--glow)); opacity: 0; pointer-events: none; }
     .touch-point.active { opacity: 1; }
 
-    /* YSQYSH */
     #bow-group { cursor: ew-resize; }
     .bow-stick { fill: #422617; stroke: #693c24; stroke-width: 1.5; }
     .bow-string { stroke: #faebd7; stroke-width: 3.5; stroke-linecap: round; }
     #bow-group.active .bow-string { stroke: #fff; filter: drop-shadow(0 0 6px var(--glow)); }
 
-    .readout { margin-top: 8px; font-size: 0.82rem; color: #998e84; display: flex; gap: 24px; }
+    .readout { margin-top: 6px; font-size: 0.8rem; color: #998e84; display: flex; gap: 20px; }
     .readout span { color: var(--glow); font-family: monospace; }
   </style>
 </head>
 <body>
 
   <header>
-    <h1>Qobyzshynygn Qobyzdauy</h1>
-    <p>Төмендегі мақамдарды таңдап нағыз қобыз сарынын тыңдаңыз, немесе мойыннан тырнақты сырғытып, ысқышты өз қолыңызбен тартыңыз.</p>
+    <h1>Qobyzshy Qobyzdauy</h1>
+    <p>Сол қолмен мойыннан қылды жанасып сырғытыңыз, оң қолмен ысқышты оңға-солға ырғақпен тартыңыз.</p>
 
-    <!-- Qobyzshynygn dajyn kuij makamdary -->
     <div class="makam-bar">
       <button class="m-btn" onclick="playMakam('qonur', this)">«Қоңыр» толғауы</button>
       <button class="m-btn" onclick="playMakam('aqqu', this)">«Аққу» сарыны</button>
       <button class="m-btn" onclick="playMakam('zhelmaya', this)">«Желмая» желісі</button>
-      <button class="m-btn active" onclick="stopMakam(this)">Еркін қобыздау (Қолмен)</button>
+      <button class="m-btn active" onclick="stopMakam(this)">Еркін қобыздау</button>
     </div>
 
     <button class="btn-main" id="startBtn" onclick="initAudio()">Қобызды Қолға Алу</button>
@@ -138,19 +130,19 @@
         </radialGradient>
       </defs>
 
-      <!-- 1. BASY ZHÄNE QUILAQ TUGHYRY -->
+      <!-- 1. Basy zhaine quilaqtary -->
       <path d="M 130 12 C 130 4, 160 4, 160 12 L 157 46 L 133 46 Z" fill="url(#woodGrad)" stroke="#090302" stroke-width="1.5"/>
       <rect x="109" y="20" width="22" height="6" rx="2" fill="#0c0503"/>
       <circle cx="107" cy="23" r="5" fill="#241208"/>
       <rect x="159" y="32" width="22" height="6" rx="2" fill="#0c0503"/>
       <circle cx="183" cy="35" r="5" fill="#241208"/>
 
-      <!-- 2. MOJYN (OYNAU AYMAGHY) -->
+      <!-- 2. Mojyn -->
       <path d="M 133 46 L 129 220 L 161 220 L 157 46 Z" fill="url(#woodGrad)" stroke="#0c0503"/>
       <line x1="135" y1="46" x2="131" y2="220" stroke="#000" opacity="0.6"/>
       <line x1="155" y1="46" x2="159" y2="220" stroke="#000" opacity="0.6"/>
 
-      <!-- 3. SHANAQ (KÖMEJ MEN TUIJE TERISI) -->
+      <!-- 3. Shanaq zhaine terisi -->
       <path d="M 129 220 C 80 210, 55 270, 61 320 C 67 370, 87 450, 125 468 L 165 468 C 203 450, 223 370, 229 320 C 235 270, 210 210, 161 220 Z" fill="url(#woodGrad)" stroke="#090302" stroke-width="2"/>
       <path d="M 145 230 C 120 230, 83 250, 87 295 C 91 335, 125 350, 145 358 C 165 350, 199 335, 203 295 C 207 250, 170 230, 145 230 Z" fill="url(#bodyCavity)" stroke="#000" stroke-width="1.5"/>
       <path d="M 92 330 C 100 330, 125 348, 145 348 C 165 348, 190 330, 198 330 C 203 375, 187 435, 159 456 L 131 456 C 103 435, 87 375, 92 330 Z" fill="url(#skinGrad)" stroke="#3a2517" stroke-width="1.5"/>
@@ -159,11 +151,10 @@
       <path d="M 127 378 L 163 378 L 159 388 L 131 388 Z" fill="#080302" stroke="#000" rx="1"/>
       <rect x="137" y="458" width="16" height="14" rx="2" fill="#060201"/>
 
-      <!-- 4. QYLDAR -->
+      <!-- 4. Qyldar -->
       <line id="line-l" class="string-visual bass" x1="139" y1="24" x2="141" y2="460"/>
       <line id="line-r" class="string-visual" x1="151" y1="36" x2="149" y2="460"/>
 
-      <!-- Tiyisu nukteleri -->
       <ellipse id="dot-l" class="touch-point" cx="140" cy="100" rx="6" ry="3"/>
       <ellipse id="dot-r" class="touch-point" cx="150" cy="100" rx="6" ry="3"/>
 
@@ -171,7 +162,7 @@
       <rect id="hit-l" class="string-touch" x="115" y="46" width="30" height="230"/>
       <rect id="hit-r" class="string-touch" x="145" y="46" width="30" height="230"/>
 
-      <!-- 5. SADAT YSQYSH -->
+      <!-- 5. Ysqysh -->
       <g id="bow-group" transform="translate(0, 310)">
         <path d="M 20 0 Q 145 -12 270 0 Q 145 -4 20 0 Z" class="bow-stick"/>
         <line x1="25" y1="3" x2="265" y2="3" class="bow-string"/>
@@ -210,7 +201,7 @@
         let amp = 1 / Math.pow(n, 0.88);
         if (n === 1) amp = 1.0;
         if (n === 2) amp = 0.45;
-        if (n >= 3 && n <= 5) amp *= 1.35; // Kuginirenishti formant
+        if (n >= 3 && n <= 5) amp *= 1.35;
         if (n % 2 !== 0) amp *= 1.2;
         imag[n] = amp;
       }
@@ -231,7 +222,7 @@
 
     let o1, o2, oSub, oDrone;
     let lfo, lfoGain, nSrc, nFilter, nGain, masterGain;
-    let currentFreq = 146.83; // D3
+    let currentFreq = 146.83;
     let isBass = true;
 
     function setupEngineAudio() {
@@ -240,7 +231,7 @@
       o1 = actx.createOscillator();
       o2 = actx.createOscillator();
       oSub = actx.createOscillator();
-      oDrone = actx.createOscillator(); // Qos qyl kuginireni (Burdondyq togany)
+      oDrone = actx.createOscillator();
 
       o1.setPeriodicWave(horsehairWave);
       o2.setPeriodicWave(horsehairWave);
@@ -250,7 +241,7 @@
       o1.frequency.setValueAtTime(currentFreq, t);
       o2.frequency.setValueAtTime(currentFreq + 0.5, t);
       oSub.frequency.setValueAtTime(currentFreq * 0.5, t);
-      oDrone.frequency.setValueAtTime(146.83, t); // Turaqty D3
+      oDrone.frequency.setValueAtTime(146.83, t);
 
       lfo = actx.createOscillator();
       lfoGain = actx.createGain();
@@ -260,7 +251,6 @@
       lfo.connect(o2.frequency);
       lfo.start(t);
 
-      // Terining kuginirenishti formanttary
       const skinF = actx.createBiquadFilter();
       skinF.type = 'bandpass';
       skinF.frequency.setValueAtTime(315, t);
@@ -276,7 +266,6 @@
       warmF.type = 'lowpass';
       warmF.frequency.setValueAtTime(1850, t);
 
-      // Ysqysh uikeilisi
       nSrc = actx.createBufferSource();
       nSrc.buffer = rosinNoise;
       nSrc.loop = true;
@@ -293,11 +282,9 @@
       nFilter.connect(nGain);
       nSrc.start(t);
 
-      // Master Gain
       masterGain = actx.createGain();
       masterGain.gain.setValueAtTime(0, t);
 
-      // Burdondyq qos-uin (sol qyldyn artty kuginireni)
       const droneGain = actx.createGain();
       droneGain.gain.setValueAtTime(0.28, t);
       oDrone.connect(droneGain);
@@ -328,6 +315,7 @@
       isBass = bassMode;
       if (!actx || !o1) return;
       const t = actx.currentTime;
+      // Zhumsaq mikro-glissando (0.05s)
       o1.frequency.setTargetAtTime(freq, t, 0.05);
       o2.frequency.setTargetAtTime(freq + (isBass ? 0.42 : 0.65), t, 0.05);
       oSub.frequency.setTargetAtTime(freq * 0.5, t, 0.05);
@@ -340,19 +328,20 @@
       const t = actx.currentTime;
       const norm = Math.min(1.0, velocity / 30);
 
-      if (norm > 0.04) {
+      if (norm > 0.03) {
         const vol = 0.2 + (norm * 0.55);
-        masterGain.gain.setTargetAtTime(vol, t, 0.03);
-        nGain.gain.setTargetAtTime(norm * 0.05, t, 0.03);
+        masterGain.gain.setTargetAtTime(vol, t, 0.04);
+        nGain.gain.setTargetAtTime(norm * 0.05, t, 0.04);
         document.getElementById('label-bow').innerText = `Қобыздалуда (${Math.round(norm * 100)}%)`;
       } else {
-        masterGain.gain.setTargetAtTime(0.0001, t, 0.08);
-        nGain.gain.setTargetAtTime(0, t, 0.08);
+        // Ysqysh toqtaghanda birte-birte zhumsap oshu (0.12s)
+        masterGain.gain.setTargetAtTime(0.0001, t, 0.12);
+        nGain.gain.setTargetAtTime(0, t, 0.12);
         document.getElementById('label-bow').innerText = 'Тоқтап тұр';
       }
     }
 
-    // 1. SOL QOL: BASU ZHÄNE IİRİU
+    // Sol qol (mojyn)
     const hitL = document.getElementById('hit-l');
     const hitR = document.getElementById('hit-r');
     const dotL = document.getElementById('dot-l');
@@ -420,7 +409,7 @@
     bindNeckString(hitL, dotL, lineL, 146.83, true, 'Тоғанақ');
     bindNeckString(hitR, dotR, lineR, 220.00, false, 'Кілтең');
 
-    // 2. ONG QOL: YSQYSH
+    // Ong qol (ysqysh)
     const bowGroup = document.getElementById('bow-group');
     let isBowing = false;
     let lastX = 0;
@@ -474,13 +463,13 @@
 
     setInterval(() => {
       if (isBowing) {
-        if (performance.now() - lastTime > 60) applyBowMotion(0);
+        if (performance.now() - lastTime > 75) applyBowMotion(0);
       }
     }, 40);
 
-    // 3. QOBYZSHYNYGN KÜIJ MAQAMDARYN AVTOMATTY TARTU
+    // Kúi makamdary
     function stopMakam(btn) {
-      if (makamTimer) clearInterval(makamTimer);
+      if (makamTimer) clearTimeout(makamTimer);
       document.querySelectorAll('.m-btn').forEach(b => b.classList.remove('active'));
       if (btn) btn.classList.add('active');
       applyBowMotion(0);
@@ -497,7 +486,6 @@
       dotR.classList.add('active');
       lineR.classList.add('active');
 
-      // Kuij makamdarynygn notalary men ysqysh yrgaghy
       const makams = {
         qonur: [
           { y: 60, f: 220.0, v: 22, t: 800 },
@@ -531,7 +519,6 @@
         setNotePitch(item.f, false);
         document.getElementById('label-note').innerText = `${Math.round(item.f)} Hz (Күй)`;
 
-        // Ysqyshtyn avtomatty qozghalysy
         bowDir *= -1;
         bowGroup.setAttribute('transform', `translate(${bowDir * 25}, 310)`);
         applyBowMotion(item.v);
