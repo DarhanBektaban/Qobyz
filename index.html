@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QOBYZ.COM — Kúidelengen Qylqobyz</title>
+  <title>QOBYZ.COM — Shynajy Saby Menyrghaghy</title>
   <style>
     :root {
       --bg: #070605;
@@ -75,7 +75,12 @@
     svg.qobyz-svg { width: 100%; height: 100%; overflow: visible; position: absolute; top: 0; left: 0; }
     canvas#stringCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 4; }
 
-    .string-touch { cursor: pointer; fill: transparent; }
+    /* Mojyn boiynsha tutas syrghu zonasy */
+    #neck-slide-area {
+      cursor: pointer;
+      fill: transparent;
+    }
+
     .touch-point { fill: #fff; filter: drop-shadow(0 0 8px var(--glow)); opacity: 0; pointer-events: none; }
     .touch-point.active { opacity: 1; }
 
@@ -86,7 +91,7 @@
     .bow-string { stroke: #faebd7; stroke-width: 3.5; stroke-linecap: round; }
     #bow-group.active .bow-string { stroke: #fff; filter: drop-shadow(0 0 8px var(--glow)); }
 
-    /* Yrghaq pen Dybys Kórsetkishi */
+    /* Dashboard */
     .dashboard {
       margin-top: 8px;
       background: var(--panel);
@@ -108,13 +113,13 @@
 <body>
 
   <header>
-    <h1>QOBYZ.COM — Shynajy Aspap Modeli</h1>
-    <p>Тұңғиық шанақ күңірені (Waveguide Feedback), қос қыл үйлесімі және екпінді танитын сандық жүйе.</p>
+    <h1>QOBYZ.COM — Shynajy Syrghytu Modeli</h1>
+    <p>Саусақты көтермей қыл бойымен жай сырғытыңыз — үн мен иірімдер бір-біріне үзіліссіз ұласып отырады.</p>
 
     <div class="deck">
-      <button class="btn btn-start" id="startBtn" onclick="initEngine()">Қобызды қолға алу</button>
+      <button class="btn btn-start" id="startBtn" onclick="initEngine()">Қобызды ояту</button>
       <button class="btn" id="feedbackBtn" onclick="toggleFeedback(this)">Күңірен резонаторы: Қосулы</button>
-      <button class="btn" id="doubleStringBtn" onclick="toggleDoubleString(this)">Қос қылды қатар тарту: Қосулы</button>
+      <button class="btn" id="doubleStringBtn" onclick="toggleDoubleString(this)">Қос қыл (Тоғанақ): Қосулы</button>
     </div>
   </header>
 
@@ -161,13 +166,11 @@
       <path d="M 137 378 L 173 378 L 169 388 L 141 388 Z" fill="#080302" stroke="#000" rx="1"/>
       <rect x="147" y="458" width="16" height="14" rx="2" fill="#060201"/>
 
-      <!-- Tiysu nukteleri -->
-      <ellipse id="dot-l" class="touch-point" cx="150" cy="100" rx="6" ry="3"/>
-      <ellipse id="dot-r" class="touch-point" cx="160" cy="100" rx="6" ry="3"/>
+      <!-- Tiysu nukteleri (Korsetkishter) -->
+      <ellipse id="dot-indicator" class="touch-point" cx="150" cy="100" rx="6" ry="3"/>
 
-      <!-- Basatyn ajmaqtar -->
-      <rect id="hit-l" class="string-touch" x="125" y="46" width="30" height="230"/>
-      <rect id="hit-r" class="string-touch" x="155" y="46" width="30" height="230"/>
+      <!-- TUTAS MOJYN AYMAGHY (SAUSAQTY KOTERMEJ ERKIN SYRGHYTU ZONE) -->
+      <rect id="neck-slide-area" x="120" y="46" width="70" height="234"/>
 
       <!-- 4. Ysqysh -->
       <g id="bow-group" transform="translate(0, 310)">
@@ -181,17 +184,13 @@
   <div class="dashboard">
     <div>Ырғақ: <span id="rhythm-style" class="val-rhythm">Күтуде</span></div>
     <div>Екпін: <span id="rhythm-tempo" class="val-tempo">— BPM</span></div>
-    <div>Нота: <span id="label-note" class="val-note">D3 (147 Hz)</span></div>
+    <div>Нота: <span id="label-note" class="val-note">Тоғанақ (D3)</span></div>
     <div>Резонатор: <span id="label-feedback" class="val-feedback">Терең</span></div>
   </div>
 
   <script>
-    /* =========================================================
-       1. AKUSTIKALYQ FIZIKA ZHÄNE KÜÑİREN REZONATORY (FEEDBACK)
-       ========================================================= */
-
     let actx = null;
-    let masterGain, filterBody, filterSkin, filterWood;
+    let masterGain, filterBody, filterSkin;
     let oscStickSlip, noiseFriction, frictionGain;
     let droneOsc, droneGain;
     let delayNode, feedbackGain;
@@ -203,7 +202,7 @@
     function initEngine() {
       if (!actx) {
         actx = new (window.AudioContext || window.webkitAudioContext)();
-        buildPhysicalSynthesis();
+        buildOptimalAcoustics();
         startCanvasAnimation();
       }
       if (actx.state === 'suspended') actx.resume();
@@ -213,29 +212,26 @@
       document.getElementById('rhythm-style').innerText = 'Еркін сарын';
     }
 
-    function buildPhysicalSynthesis() {
+    function buildOptimalAcoustics() {
       const t = actx.currentTime;
 
-      // 40 Garmonikalyq Stick-Slip толқыны
-      const harmonics = 40;
+      const harmonics = 28;
       const real = new Float32Array(harmonics);
       const imag = new Float32Array(harmonics);
       for (let n = 1; n < harmonics; n++) {
         imag[n] = (1 / Math.pow(n, 0.86)) * (n % 2 === 1 ? 1.25 : 0.7);
       }
-      const stickSlipWave = actx.createPeriodicWave(real, imag);
+      const wave = actx.createPeriodicWave(real, imag);
 
       oscStickSlip = actx.createOscillator();
-      oscStickSlip.setPeriodicWave(stickSlipWave);
+      oscStickSlip.setPeriodicWave(wave);
       oscStickSlip.frequency.setValueAtTime(currentFreq, t);
 
-      // Turaqty toghanaq gurili (Burdondyq D3)
       droneOsc = actx.createOscillator();
-      droneOsc.setPeriodicWave(stickSlipWave);
+      droneOsc.setPeriodicWave(wave);
       droneOsc.frequency.setValueAtTime(146.83, t);
 
-      // Rosin Friction noise
-      const bSize = actx.sampleRate * 2;
+      const bSize = actx.sampleRate;
       const nBuf = actx.createBuffer(1, bSize, actx.sampleRate);
       const d = nBuf.getChannelData(0);
       for (let i = 0; i < bSize; i++) d[i] = (Math.random() * 2 - 1) * 0.35;
@@ -246,7 +242,7 @@
 
       const nFilter = actx.createBiquadFilter();
       nFilter.type = 'bandpass';
-      nFilter.frequency.setValueAtTime(2400, t);
+      nFilter.frequency.setValueAtTime(2300, t);
       nFilter.Q.setValueAtTime(2.2, t);
 
       frictionGain = actx.createGain();
@@ -256,49 +252,40 @@
       nFilter.connect(frictionGain);
       noiseFriction.start(t);
 
-      // Formanttyq filtrler
       filterSkin = actx.createBiquadFilter();
       filterSkin.type = 'bandpass';
       filterSkin.frequency.setValueAtTime(318, t);
-      filterSkin.Q.setValueAtTime(3.4, t);
+      filterSkin.Q.setValueAtTime(3.2, t);
 
       filterBody = actx.createBiquadFilter();
       filterBody.type = 'peaking';
       filterBody.frequency.setValueAtTime(560, t);
-      filterBody.gain.setValueAtTime(8.5, t);
-      filterBody.Q.setValueAtTime(2.1, t);
+      filterBody.gain.setValueAtTime(7.5, t);
+      filterBody.Q.setValueAtTime(2.0, t);
 
-      filterWood = actx.createBiquadFilter();
-      filterWood.type = 'lowpass';
-      filterWood.frequency.setValueAtTime(1800, t);
-
-      // WAVEGUIDE FEEDBACK: Shanaqtygn kuynis kuginireni
       delayNode = actx.createDelay();
-      delayNode.delayTime.setValueAtTime(0.018, t); // 18ms keshigu (aghashtyn olshemi)
+      delayNode.delayTime.setValueAtTime(0.016, t);
 
       feedbackGain = actx.createGain();
-      feedbackGain.gain.setValueAtTime(0.32, t); // 32% zhumsaq keri bajlanys
+      feedbackGain.gain.setValueAtTime(0.26, t);
 
       masterGain = actx.createGain();
       masterGain.gain.setValueAtTime(0, t);
 
       droneGain = actx.createGain();
-      droneGain.gain.setValueAtTime(0.24, t);
+      droneGain.gain.setValueAtTime(0.22, t);
 
-      // Zhelilerdi toghystyp keri bajlanys jasau
       droneOsc.connect(droneGain);
       droneGain.connect(filterSkin);
 
       oscStickSlip.connect(filterSkin);
       filterSkin.connect(filterBody);
-      filterBody.connect(filterWood);
 
-      // Feedback loop (Shanaqtyn ishinde ajnalu)
-      filterWood.connect(delayNode);
+      filterBody.connect(delayNode);
       delayNode.connect(feedbackGain);
       feedbackGain.connect(filterSkin);
 
-      filterWood.connect(masterGain);
+      filterBody.connect(masterGain);
       frictionGain.connect(masterGain);
 
       masterGain.connect(actx.destination);
@@ -311,7 +298,7 @@
       if (!feedbackGain) return;
       isFeedbackEnabled = !isFeedbackEnabled;
       const t = actx.currentTime;
-      feedbackGain.gain.setTargetAtTime(isFeedbackEnabled ? 0.32 : 0.0, t, 0.05);
+      feedbackGain.gain.setTargetAtTime(isFeedbackEnabled ? 0.26 : 0.0, t, 0.05);
       btn.innerText = `Күңірен резонаторы: ${isFeedbackEnabled ? 'Қосулы' : 'Өшірулі'}`;
       document.getElementById('label-feedback').innerText = isFeedbackEnabled ? 'Терең' : 'Құрғақ';
       btn.classList.toggle('active', isFeedbackEnabled);
@@ -320,22 +307,23 @@
     function toggleDoubleString(btn) {
       isDoubleStringEnabled = !isDoubleStringEnabled;
       if (droneGain) {
-        droneGain.gain.setTargetAtTime(isDoubleStringEnabled ? 0.24 : 0.0, actx.currentTime, 0.05);
+        droneGain.gain.setTargetAtTime(isDoubleStringEnabled ? 0.22 : 0.0, actx.currentTime, 0.05);
       }
-      btn.innerText = `Қос қылды қатар тарту: ${isDoubleStringEnabled ? 'Қосулы' : 'Өшірулі'}`;
+      btn.innerText = `Қос қыл (Тоғанақ): ${isDoubleStringEnabled ? 'Қосулы' : 'Өшірулі'}`;
       btn.classList.toggle('active', isDoubleStringEnabled);
     }
 
+    // Дыбысты бірден сырғыту (Glissando / Portamento)
     function setNote(freq, bassMode) {
       currentFreq = freq;
       isBass = bassMode;
       if (!actx || !oscStickSlip) return;
-      const t = actx.currentTime;
-      oscStickSlip.frequency.setTargetAtTime(freq, t, 0.04);
+      // 0.04s аралығы саусақты жылжытқан сайын дыбыстың үзілмей, нағыз қобызша сырғуын береді
+      oscStickSlip.frequency.setTargetAtTime(freq, actx.currentTime, 0.04);
     }
 
     /* =========================================================
-       2. YRGHAQTY TANYP-BİLETİN QOZGHALTQYSH (RHYTHM ENGINE)
+       2. YRGHAQTY TANYP-BİLETİN QOZGHALTQYSH
        ========================================================= */
 
     let strokeTimes = [];
@@ -348,7 +336,7 @@
 
       if (lastDirection !== 0 && currentDir !== lastDirection && Math.abs(dx) > 3) {
         strokeTimes.push(now);
-        if (strokeTimes.length > 6) strokeTimes.shift();
+        if (strokeTimes.length > 5) strokeTimes.shift();
 
         if (strokeTimes.length >= 3) {
           let intervals = [];
@@ -363,10 +351,10 @@
         }
 
         const styleLabel = document.getElementById('rhythm-style');
-        if (velocity > 38) {
+        if (velocity > 36) {
           styleLabel.innerText = 'Дүбір (Жорға шабыс)';
           styleLabel.style.color = '#ff8e82';
-        } else if (velocity > 18) {
+        } else if (velocity > 17) {
           styleLabel.innerText = 'Екпінді сарын';
           styleLabel.style.color = '#ffb852';
         } else {
@@ -380,13 +368,12 @@
     function applyAcousticPressure(velocity) {
       if (!actx || !masterGain) return;
       const t = actx.currentTime;
-      const norm = Math.min(1.0, velocity / 32);
+      const norm = Math.min(1.0, velocity / 30);
 
       if (norm > 0.03) {
-        const vol = 0.22 + (norm * 0.58);
-        masterGain.gain.setTargetAtTime(vol, t, 0.03);
-        frictionGain.gain.setTargetAtTime(norm * 0.06, t, 0.03);
-        stringVibAmp = norm * 4.6;
+        masterGain.gain.setTargetAtTime(0.22 + norm * 0.55, t, 0.03);
+        frictionGain.gain.setTargetAtTime(norm * 0.05, t, 0.03);
+        stringVibAmp = norm * 4.4;
       } else {
         masterGain.gain.setTargetAtTime(0.0001, t, 0.12);
         frictionGain.gain.setTargetAtTime(0, t, 0.12);
@@ -395,71 +382,112 @@
     }
 
     /* =========================================================
-       3. INTERFEJS (SOL QOL MEN OÑ QOL)
+       3. SOL QOL: SAUSAQTY KOTERMEJ ZHAJ ZHYLZHYTU (TUTAS MOJYN)
        ========================================================= */
 
-    const hitL = document.getElementById('hit-l');
-    const hitR = document.getElementById('hit-r');
-    const dotL = document.getElementById('dot-l');
-    const dotR = document.getElementById('dot-r');
+    const neckArea = document.getElementById('neck-slide-area');
+    const dotInd = document.getElementById('dot-indicator');
+    let isFingerDown = false;
+    let neckTouchId = null;
 
-    function bindNeck(hitElem, dotElem, baseF, bassMode, sideName) {
-      let active = false;
-      function getSvgY(e) {
-        const svg = document.querySelector('.qobyz-svg');
-        const pt = svg.createSVGPoint();
-        pt.x = e.touches ? e.touches[0].clientX : e.clientX;
-        pt.y = e.touches ? e.touches[0].clientY : e.clientY;
-        const svgP = pt.matrixTransform(svg.getScreenCTM().inverse());
-        return Math.max(46, Math.min(270, svgP.y));
-      }
+    function getCoords(e, touchId = null) {
+      const svg = document.querySelector('.qobyz-svg');
+      const pt = svg.createSVGPoint();
 
-      function onDown(e) {
-        e.preventDefault();
-        initEngine();
-        active = true;
-        dotElem.classList.add('active');
-        const y = getSvgY(e);
-        dotElem.setAttribute('cy', y);
-        const p = (y - 46) / (270 - 46);
-        const f = baseF * Math.pow(2, (p * 14) / 12);
-        setNote(f, bassMode);
-        document.getElementById('label-note').innerText = `${sideName} (${Math.round(f)} Hz)`;
-      }
-
-      function onMove(e) {
-        if (!active) return;
-        e.preventDefault();
-        const y = getSvgY(e);
-        dotElem.setAttribute('cy', y);
-        const p = (y - 46) / (270 - 46);
-        const f = baseF * Math.pow(2, (p * 14) / 12);
-        setNote(f, bassMode);
-        document.getElementById('label-note').innerText = `${sideName} (${Math.round(f)} Hz)`;
-      }
-
-      function onUp() {
-        if (active) {
-          active = false;
-          dotElem.classList.remove('active');
+      if (e.touches) {
+        let t = e.touches[0];
+        if (touchId !== null) {
+          for (let i = 0; i < e.touches.length; i++) {
+            if (e.touches[i].identifier === touchId) {
+              t = e.touches[i];
+              break;
+            }
+          }
         }
+        pt.x = t.clientX;
+        pt.y = t.clientY;
+      } else {
+        pt.x = e.clientX;
+        pt.y = e.clientY;
       }
-
-      hitElem.addEventListener('mousedown', onDown);
-      window.addEventListener('mousemove', (e) => { if (active) onMove(e); });
-      window.addEventListener('mouseup', onUp);
-
-      hitElem.addEventListener('touchstart', onDown, { passive: false });
-      window.addEventListener('touchmove', (e) => { if (active) onMove(e); }, { passive: false });
-      window.addEventListener('touchend', onUp);
+      return pt.matrixTransform(svg.getScreenCTM().inverse());
     }
 
-    bindNeck(hitL, dotL, 146.83, true, 'Тоғанақ');
-    bindNeck(hitR, dotR, 220.00, false, 'Кілтең');
+    function updateFingerPosition(svgP) {
+      const y = Math.max(46, Math.min(270, svgP.y));
+      const x = svgP.x;
 
-    // Oñ qol (Ysqysh)
+      // X koordynatasy boiynsha ishekti anyqtau: 155-ten solgha — Toghanaq, onggha — Kiltegne
+      const isLeft = x < 155;
+      const baseF = isLeft ? 146.83 : 220.00;
+      const sideName = isLeft ? 'Тоғанақ' : 'Кілтең';
+
+      // Nүктені қылдың дәл үстіне бекітіп, тек бойымен жылжыту
+      dotInd.setAttribute('cx', isLeft ? 150 : 160);
+      dotInd.setAttribute('cy', y);
+
+      // Y koordynatasy boiynsha notany eseptau (p: 0-den 1-ge deyin)
+      const p = (y - 46) / (270 - 46);
+      const f = baseF * Math.pow(2, (p * 14) / 12);
+
+      // Sausaqty koterip-baspaj-aq notany birte-birte jylzhytyp otyru
+      setNote(f, isLeft);
+      document.getElementById('label-note').innerText = `${sideName} (${Math.round(f)} Hz)`;
+    }
+
+    function handleNeckStart(e) {
+      e.preventDefault();
+      initEngine();
+      isFingerDown = true;
+      dotInd.classList.add('active');
+
+      if (e.touches) {
+        neckTouchId = e.changedTouches[0].identifier;
+      }
+
+      const svgP = getCoords(e, neckTouchId);
+      updateFingerPosition(svgP);
+    }
+
+    function handleNeckMove(e) {
+      if (!isFingerDown) return;
+      e.preventDefault();
+      const svgP = getCoords(e, neckTouchId);
+      updateFingerPosition(svgP);
+    }
+
+    function handleNeckEnd(e) {
+      if (!isFingerDown) return;
+      if (e.touches && neckTouchId !== null) {
+        let stillTouching = false;
+        for (let i = 0; i < e.touches.length; i++) {
+          if (e.touches[i].identifier === neckTouchId) stillTouching = true;
+        }
+        if (stillTouching) return;
+      }
+      isFingerDown = false;
+      neckTouchId = null;
+      dotInd.classList.remove('active');
+    }
+
+    // Tintuuir oqighalary
+    neckArea.addEventListener('mousedown', handleNeckStart);
+    window.addEventListener('mousemove', (e) => { if (isFingerDown) handleNeckMove(e); });
+    window.addEventListener('mouseup', handleNeckEnd);
+
+    // Touch (Mobil'di ekran) oqighalary
+    neckArea.addEventListener('touchstart', handleNeckStart, { passive: false });
+    window.addEventListener('touchmove', (e) => { if (isFingerDown) handleNeckMove(e); }, { passive: false });
+    window.addEventListener('touchend', handleNeckEnd);
+    window.addEventListener('touchcancel', handleNeckEnd);
+
+    /* =========================================================
+       4. OÑ QOL: YSQYSH OQIGHALARY (BOW TRACKING)
+       ========================================================= */
+
     const bowGroup = document.getElementById('bow-group');
     let isBowing = false;
+    let bowTouchId = null;
     let lastX = 0;
     let lastTime = performance.now();
     let bowShiftX = 0;
@@ -469,17 +497,33 @@
       initEngine();
       isBowing = true;
       bowGroup.classList.add('active');
-      lastX = e.touches ? e.touches[0].clientX : e.clientX;
+
+      if (e.touches) {
+        bowTouchId = e.changedTouches[0].identifier;
+        lastX = e.changedTouches[0].clientX;
+      } else {
+        lastX = e.clientX;
+      }
       lastTime = performance.now();
     }
 
     function onBowMove(e) {
       if (!isBowing) return;
-      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      let clientX = e.clientX;
+
+      if (e.touches) {
+        for (let i = 0; i < e.touches.length; i++) {
+          if (e.touches[i].identifier === bowTouchId) {
+            clientX = e.touches[i].clientX;
+            break;
+          }
+        }
+      }
+
       const now = performance.now();
       const dt = now - lastTime;
 
-      if (dt > 10) {
+      if (dt > 11) {
         const dx = clientX - lastX;
         const velocity = (Math.abs(dx) / dt) * 35;
 
@@ -494,13 +538,20 @@
       }
     }
 
-    function onBowEnd() {
-      if (isBowing) {
-        isBowing = false;
-        bowGroup.classList.remove('active');
-        applyAcousticPressure(0);
-        document.getElementById('rhythm-style').innerText = 'Күтуде';
+    function onBowEnd(e) {
+      if (!isBowing) return;
+      if (e.touches && bowTouchId !== null) {
+        let stillTouching = false;
+        for (let i = 0; i < e.touches.length; i++) {
+          if (e.touches[i].identifier === bowTouchId) stillTouching = true;
+        }
+        if (stillTouching) return;
       }
+      isBowing = false;
+      bowTouchId = null;
+      bowGroup.classList.remove('active');
+      applyAcousticPressure(0);
+      document.getElementById('rhythm-style').innerText = 'Күтуде';
     }
 
     bowGroup.addEventListener('mousedown', onBowStart);
@@ -510,6 +561,7 @@
     bowGroup.addEventListener('touchstart', onBowStart, { passive: false });
     window.addEventListener('touchmove', onBowMove, { passive: false });
     window.addEventListener('touchend', onBowEnd);
+    window.addEventListener('touchcancel', onBowEnd);
 
     setInterval(() => {
       if (isBowing) {
@@ -517,7 +569,10 @@
       }
     }, 40);
 
-    // Canvas terbelisi
+    /* =========================================================
+       5. QYLDARDYGN CANVASKI TİRI TERBELIS ANIMATSIYASY
+       ========================================================= */
+
     const cvs = document.getElementById('stringCanvas');
     const ctx = cvs.getContext('2d');
     let phase = 0;
@@ -527,7 +582,6 @@
         ctx.clearRect(0, 0, cvs.width, cvs.height);
         phase += 0.45;
 
-        // Sol qyl
         const leftVib = isBass ? Math.sin(phase) * stringVibAmp : 0;
         ctx.beginPath();
         ctx.moveTo(149, 24);
@@ -536,7 +590,6 @@
         ctx.lineWidth = 3.8;
         ctx.stroke();
 
-        // Ong qyl
         const rightVib = !isBass ? Math.sin(phase * 1.3) * stringVibAmp : 0;
         ctx.beginPath();
         ctx.moveTo(161, 36);
