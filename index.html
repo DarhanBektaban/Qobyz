@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Qobyz.com — Qobyz Yrghaghy</title>
+  <title>Qobyz.com — Qobyzshy Qobyzdauy</title>
   <style>
     :root {
-      --bg: #0a0807;
+      --bg: #090807;
       --panel: #161210;
       --accent: #d4a373;
       --glow: #ffc872;
@@ -17,121 +17,115 @@
     * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
     body { background: var(--bg); color: #e6e2dd; display: flex; flex-direction: column; align-items: center; min-height: 100vh; overflow: hidden; touch-action: none; }
 
-    header { text-align: center; padding: 14px 10px 4px; z-index: 10; }
+    header { text-align: center; padding: 14px 10px 6px; z-index: 10; }
     h1 { color: var(--accent); letter-spacing: 2px; font-size: 1.5rem; text-transform: uppercase; margin-bottom: 2px; }
-    p { color: #8c827a; font-size: 0.82rem; max-width: 500px; }
+    p { color: #8c827a; font-size: 0.82rem; max-width: 520px; line-height: 1.4; }
 
-    /* Yrghaq Taikter */
-    .rhythm-bar {
+    .btn { padding: 8px 18px; background: var(--accent); color: #0c0a09; font-weight: 600; font-size: 0.8rem; border: none; border-radius: 4px; cursor: pointer; margin-top: 8px; }
+    .btn:hover { background: #faedcd; }
+
+    /* Ojnau arenasy: Sol qol men Ong qol */
+    .play-arena {
       display: flex;
-      gap: 8px;
-      margin-top: 8px;
-      flex-wrap: wrap;
+      align-items: center;
       justify-content: center;
+      gap: 36px;
+      margin-top: 14px;
+      opacity: 0.35;
+      pointer-events: none;
+      transition: opacity 0.3s;
     }
-    .r-btn {
-      padding: 6px 14px;
-      background: var(--panel);
-      border: 1px solid #332720;
-      color: #b5a497;
+    .play-arena.ready { opacity: 1; pointer-events: auto; }
+
+    .hand-column {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .column-title {
       font-size: 0.78rem;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-    .r-btn.active {
-      background: var(--accent);
-      color: #0c0a09;
-      font-weight: bold;
-      border-color: var(--accent);
-      box-shadow: 0 0 10px rgba(212, 163, 115, 0.4);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 8px;
     }
 
-    .btn-box { margin-top: 8px; display: flex; gap: 8px; justify-content: center; }
-    .btn { padding: 8px 18px; background: var(--accent); color: #0c0a09; font-weight: 600; font-size: 0.8rem; border: none; border-radius: 4px; cursor: pointer; }
-    .btn-hold { background: transparent; border: 1px solid var(--accent); color: var(--accent); }
-    .btn-hold.active { background: var(--accent); color: #0c0a09; box-shadow: 0 0 12px var(--glow); }
-
+    /* SOL QOL: Qobyz Moyny */
     .stage {
       position: relative;
       display: flex;
       flex-direction: column;
       align-items: center;
-      margin-top: 10px;
-      opacity: 0.35;
-      pointer-events: none;
-      transition: opacity 0.3s;
     }
-    .stage.ready { opacity: 1; pointer-events: auto; }
 
-    .qobyz-head { width: 50px; height: 68px; background: #140804; border-radius: 8px 8px 0 0; position: relative; }
-    .peg { width: 14px; height: 8px; background: #000; position: absolute; }
-    .peg.l { left: -10px; top: 16px; }
-    .peg.r { right: -10px; top: 36px; }
+    .qobyz-head { width: 46px; height: 60px; background: #140804; border-radius: 8px 8px 0 0; position: relative; }
+    .peg { width: 12px; height: 7px; background: #000; position: absolute; }
+    .peg.l { left: -9px; top: 14px; }
+    .peg.r { right: -9px; top: 32px; }
 
     .qobyz-neck {
-      width: 54px;
-      height: 380px;
+      width: 50px;
+      height: 350px;
       background: linear-gradient(90deg, #0e0503, #220e07, #0e0503);
       position: relative;
       box-shadow: inset 0 0 16px rgba(0,0,0,0.95);
     }
 
     .qobyz-body {
-      width: 216px;
-      height: 260px;
+      width: 190px;
+      height: 220px;
       background: radial-gradient(circle at 50% 30%, #36190e, #0e0503 85%);
       border-radius: 42% 42% 46% 46%;
-      margin-top: -24px;
+      margin-top: -20px;
       display: flex;
       justify-content: center;
       align-items: flex-end;
-      padding-bottom: 20px;
+      padding-bottom: 16px;
       position: relative;
     }
 
     .qobyz-skin {
-      width: 164px;
-      height: 140px;
+      width: 144px;
+      height: 120px;
       background: radial-gradient(circle, var(--skin), #73573f);
       border-radius: 12px 12px 46% 46%;
       position: relative;
-      box-shadow: inset 0 0 20px rgba(0,0,0,0.7);
+      box-shadow: inset 0 0 16px rgba(0,0,0,0.7);
     }
 
     .qobyz-bridge {
-      width: 42px;
-      height: 14px;
+      width: 36px;
+      height: 12px;
       background: #090302;
       position: absolute;
-      top: 24px;
+      top: 20px;
       left: 50%;
       transform: translateX(-50%);
-      border-radius: 3px;
+      border-radius: 2px;
     }
 
-    .touch-lane { position: absolute; top: 0; height: 100%; width: 27px; cursor: pointer; display: flex; justify-content: center; }
+    .touch-lane { position: absolute; top: 0; height: 100%; width: 25px; cursor: pointer; display: flex; justify-content: center; }
     .touch-lane.l { left: 0; }
     .touch-lane.r { right: 0; }
 
     .wire {
-      width: 4px;
-      height: 480px;
+      width: 3.5px;
+      height: 440px;
       background: #a39281;
       position: absolute;
-      top: -24px;
+      top: -20px;
       pointer-events: none;
     }
-    .wire.bass { width: 6.5px; }
+    .wire.bass { width: 5.5px; }
 
     .touch-lane.active .wire {
       background: #fff;
-      box-shadow: 0 0 14px var(--glow);
+      box-shadow: 0 0 12px var(--glow);
     }
 
     .touch-indicator {
-      width: 18px;
-      height: 9px;
+      width: 16px;
+      height: 8px;
       background: #fff;
       border-radius: 50%;
       position: absolute;
@@ -139,73 +133,120 @@
       transform: translateX(-50%);
       pointer-events: none;
       opacity: 0;
-      box-shadow: 0 0 12px var(--glow);
+      box-shadow: 0 0 10px var(--glow);
     }
     .touch-lane.active .touch-indicator { opacity: 1; }
 
-    .readout { margin-top: 10px; font-size: 0.82rem; color: #998e84; display: flex; gap: 20px; }
+    /* ONG QOL: Ysqysh Alanghy (Bow Track) */
+    .bow-zone {
+      width: 220px;
+      height: 350px;
+      background: #110e0c;
+      border: 1px dashed #332720;
+      border-radius: 8px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: ew-resize;
+    }
+
+    .bow-stick {
+      width: 180px;
+      height: 18px;
+      background: linear-gradient(180deg, #422617, #24140a);
+      border-radius: 9px;
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.8);
+      border: 1px solid #543320;
+      transition: box-shadow 0.1s;
+    }
+    .bow-hair {
+      width: 96%;
+      height: 3px;
+      background: #e8ded4;
+      border-radius: 2px;
+      box-shadow: 0 0 4px rgba(255,255,255,0.4);
+    }
+    .bow-stick.moving {
+      box-shadow: 0 0 16px var(--glow);
+    }
+
+    .bow-hint {
+      font-size: 0.75rem;
+      color: #70655d;
+      text-align: center;
+      pointer-events: none;
+      line-height: 1.4;
+      padding: 0 14px;
+    }
+
+    .readout { margin-top: 12px; font-size: 0.82rem; color: #998e84; display: flex; gap: 24px; }
     .readout span { color: var(--glow); font-family: monospace; }
   </style>
 </head>
 <body>
 
   <header>
-    <h1>Qobyz Yrghaghy Men Shrtikhtary</h1>
-    <p>Ysqyshtyn serpinin tandagnyz: erkin tartuu, tolghau tynysy nemese dubir zhelisi.</p>
-    
-    <div class="rhythm-bar">
-      <button class="r-btn active" onclick="setRhythm('free', this)">Еркін тарту (Созылмалы)</button>
-      <button class="r-btn" onclick="setRhythm('tolghau', this)">Толғау тынысы (Баяу толқын)</button>
-      <button class="r-btn" onclick="setRhythm('dubir', this)">Дүбір (Жорға шабыс)</button>
-      <button class="r-btn" onclick="setRhythm('aqqu', this)">Аққу қанаты (Желпініс)</button>
-    </div>
-
-    <div class="btn-box">
-      <button class="btn" id="startBtn" onclick="initAudio()">Дыбысты Қосу</button>
-      <button class="btn btn-hold" id="holdBtn" onclick="toggleHold()">Сол қылды бекіту (Hold)</button>
-    </div>
+    <h1>Qobyzshy Qobyzdauy</h1>
+    <p>Нағыз қобызшыдай ойнаңыз: <strong>Сол қолмен</strong> қылдың бойынан нотаны ұстаңыз, ал <strong>Оң қолмен</strong> ысқышты көлденең тартқанда ғана үн шығады.</p>
+    <button class="btn" id="startBtn" onclick="initEngine()">Қобызды Қолға Алу</button>
   </header>
 
-  <div class="stage" id="stage">
-    <div class="qobyz-head">
-      <div class="peg l"></div>
-      <div class="peg r"></div>
-    </div>
-    
-    <div class="qobyz-neck" id="neck">
-      <div class="touch-lane l" id="lane-l">
-        <div class="wire bass"></div>
-        <div class="touch-indicator" id="ind-l"></div>
-      </div>
-      <div class="touch-lane r" id="lane-r">
-        <div class="wire"></div>
-        <div class="touch-indicator" id="ind-r"></div>
+  <div class="play-arena" id="arena">
+    <!-- SOL QOL: MOJYN -->
+    <div class="hand-column">
+      <div class="column-title">Сол қол: Тырнақ басу</div>
+      <div class="stage">
+        <div class="qobyz-head">
+          <div class="peg l"></div>
+          <div class="peg r"></div>
+        </div>
+        
+        <div class="qobyz-neck" id="neck">
+          <div class="touch-lane l" id="lane-l">
+            <div class="wire bass"></div>
+            <div class="touch-indicator" id="ind-l"></div>
+          </div>
+          <div class="touch-lane r" id="lane-r">
+            <div class="wire"></div>
+            <div class="touch-indicator" id="ind-r"></div>
+          </div>
+        </div>
+
+        <div class="qobyz-body">
+          <div class="qobyz-skin">
+            <div class="qobyz-bridge"></div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="qobyz-body">
-      <div class="qobyz-skin">
-        <div class="qobyz-bridge"></div>
+    <!-- ONG QOL: YSQYSH -->
+    <div class="hand-column">
+      <div class="column-title">Оң қол: Ысқыш тарту</div>
+      <div class="bow-zone" id="bowZone">
+        <div class="bow-stick" id="bowStick">
+          <div class="bow-hair"></div>
+        </div>
+        <div class="bow-hint">Ысқышты басып тұрып<br><strong>оңға-солға</strong><br>ырғақпен тартыңыз</div>
       </div>
     </div>
   </div>
 
   <div class="readout">
-    <div>Тоғанақ (D3): <span id="label-l">—</span></div>
-    <div>Кілтең (A3): <span id="label-r">—</span></div>
+    <div>Сол қол (Нота): <span id="note-lbl">D3 (147 Hz)</span></div>
+    <div>Ысқыш қарқыны: <span id="bow-lbl">Тоқтап тұр</span></div>
   </div>
 
   <script>
     let actx = null;
     let horsehairWave = null;
     let bowNoiseBuffer = null;
-    let currentRhythm = 'free'; // free, tolghau, dubir, aqqu
-
-    function setRhythm(type, btn) {
-      currentRhythm = type;
-      document.querySelectorAll('.r-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-    }
 
     function getAudioContext() {
       if (!actx) {
@@ -239,276 +280,224 @@
       }
     }
 
-    function initAudio() {
+    function initEngine() {
       getAudioContext();
-      document.getElementById('stage').classList.add('ready');
+      document.getElementById('arena').classList.add('ready');
       document.getElementById('startBtn').style.display = 'none';
+      setupPhysicalAudio();
     }
 
-    class RhythmicQobyzVoice {
-      constructor(baseFreq) {
-        this.baseFreq = baseFreq;
-        this.ctx = getAudioContext();
-        this.voice = null;
-      }
+    // Физикалық акустикалық түйін
+    let osc1, osc2, lfo, lfoGain, noiseSource, noiseFilter, noiseGain;
+    let skinF, woodF, dampF, masterGain;
+    let currentFreq = 146.83; // Бастапқы ашық ішек (D3)
 
-      play(freq, isBass = false) {
-        this.stop();
-        const t = this.ctx.currentTime;
+    function setupPhysicalAudio() {
+      const t = actx.currentTime;
 
-        const o1 = this.ctx.createOscillator();
-        const o2 = this.ctx.createOscillator();
-        o1.setPeriodicWave(horsehairWave);
-        o2.setPeriodicWave(horsehairWave);
+      osc1 = actx.createOscillator();
+      osc2 = actx.createOscillator();
+      osc1.setPeriodicWave(horsehairWave);
+      osc2.setPeriodicWave(horsehairWave);
 
-        o1.frequency.setValueAtTime(freq, t);
-        o2.frequency.setValueAtTime(freq + (isBass ? 0.45 : 0.7), t);
+      osc1.frequency.setValueAtTime(currentFreq, t);
+      osc2.frequency.setValueAtTime(currentFreq + 0.5, t);
 
-        // Қол вибратосы
-        const lfo = this.ctx.createOscillator();
-        const lfoGain = this.ctx.createGain();
-        lfo.frequency.setValueAtTime(isBass ? 3.8 : 4.6, t);
-        lfoGain.gain.setValueAtTime(freq * 0.011, t);
-        lfo.connect(o1.frequency);
-        lfo.connect(o2.frequency);
-        lfo.start(t);
+      // Қол вибратосы
+      lfo = actx.createOscillator();
+      lfoGain = actx.createGain();
+      lfo.frequency.setValueAtTime(4.6, t);
+      lfoGain.gain.setValueAtTime(currentFreq * 0.012, t);
+      lfo.connect(osc1.frequency);
+      lfo.connect(osc2.frequency);
+      lfo.start(t);
 
-        // ЫРҒАҚТЫҚ ТРЕМОР / ЫСҚЫШ СЕРПІНІ (Rhythm Modulator)
-        const rhythmOsc = this.ctx.createOscillator();
-        const rhythmGain = this.ctx.createGain();
+      // 4 Форманттық қобыз шанағы
+      skinF = actx.createBiquadFilter();
+      skinF.type = 'bandpass';
+      skinF.frequency.setValueAtTime(290, t);
+      skinF.Q.setValueAtTime(3.5, t);
 
-        // Ырғақ түрлеріне қарай модуляцияны баптау
-        if (currentRhythm === 'free') {
-          rhythmGain.gain.setValueAtTime(1.0, t); // Бір қалыпты
-        } else if (currentRhythm === 'tolghau') {
-          rhythmOsc.type = 'sine';
-          rhythmOsc.frequency.setValueAtTime(1.2, t); // Баяу тыныс (1.2 Hz)
-          rhythmGain.gain.setValueAtTime(0.7, t);
-          rhythmOsc.connect(rhythmGain.gain);
-          rhythmOsc.start(t);
-        } else if (currentRhythm === 'dubir') {
-          rhythmOsc.type = 'sawtooth';
-          rhythmOsc.frequency.setValueAtTime(5.8, t); // Шабыс соққысы (5.8 Hz)
-          rhythmGain.gain.setValueAtTime(0.5, t);
-          rhythmOsc.connect(rhythmGain.gain);
-          rhythmOsc.start(t);
-        } else if (currentRhythm === 'aqqu') {
-          rhythmOsc.type = 'triangle';
-          rhythmOsc.frequency.setValueAtTime(3.2, t); // Желпініс (3.2 Hz)
-          rhythmGain.gain.setValueAtTime(0.6, t);
-          rhythmOsc.connect(rhythmGain.gain);
-          rhythmOsc.start(t);
-        }
+      woodF = actx.createBiquadFilter();
+      woodF.type = 'peaking';
+      woodF.frequency.setValueAtTime(680, t);
+      woodF.gain.setValueAtTime(6.5, t);
+      woodF.Q.setValueAtTime(2.4, t);
 
-        // Форманттар
-        const skinF = this.ctx.createBiquadFilter();
-        skinF.type = 'bandpass';
-        skinF.frequency.setValueAtTime(290, t);
-        skinF.Q.setValueAtTime(3.5, t);
+      dampF = actx.createBiquadFilter();
+      dampF.type = 'lowpass';
+      dampF.frequency.setValueAtTime(2100, t);
 
-        const woodF = this.ctx.createBiquadFilter();
-        woodF.type = 'peaking';
-        woodF.frequency.setValueAtTime(680, t);
-        woodF.gain.setValueAtTime(6.5, t);
-        woodF.Q.setValueAtTime(2.4, t);
+      // Ысқыш қажалу шуылы
+      noiseSource = actx.createBufferSource();
+      noiseSource.buffer = bowNoiseBuffer;
+      noiseSource.loop = true;
 
-        const dampF = this.ctx.createBiquadFilter();
-        dampF.type = 'lowpass';
-        dampF.frequency.setValueAtTime(2100, t);
+      noiseFilter = actx.createBiquadFilter();
+      noiseFilter.type = 'bandpass';
+      noiseFilter.frequency.setValueAtTime(currentFreq * 2.3, t);
+      noiseFilter.Q.setValueAtTime(2.8, t);
 
-        // Ысқыш қажалу шуылы
-        const noise = this.ctx.createBufferSource();
-        noise.buffer = bowNoiseBuffer;
-        noise.loop = true;
+      noiseGain = actx.createGain();
+      noiseGain.gain.setValueAtTime(0, t); // Басында ысқыш тоқтап тұр
 
-        const noiseFilter = this.ctx.createBiquadFilter();
-        noiseFilter.type = 'bandpass';
-        noiseFilter.frequency.setValueAtTime(freq * 2.3, t);
-        noiseFilter.Q.setValueAtTime(2.8, t);
+      noiseSource.connect(noiseFilter);
+      noiseFilter.connect(noiseGain);
+      noiseSource.start(t);
 
-        const noiseGain = this.ctx.createGain();
-        noiseGain.gain.setValueAtTime(0.042, t);
+      // Негізгі динамика (Дыбыс тек ысқыш қозғалғанда шығады!)
+      masterGain = actx.createGain();
+      masterGain.gain.setValueAtTime(0, t);
 
-        noise.connect(noiseFilter);
-        noiseFilter.connect(noiseGain);
-        noise.start(t);
+      osc1.connect(skinF);
+      osc2.connect(skinF);
+      skinF.connect(woodF);
+      woodF.connect(dampF);
+      dampF.connect(masterGain);
+      noiseGain.connect(masterGain);
 
-        // Негізгі динамика
-        const mainGain = this.ctx.createGain();
-        mainGain.gain.setValueAtTime(0.001, t);
-        mainGain.gain.exponentialRampToValueAtTime(isBass ? 0.36 : 0.42, t + 0.12);
+      masterGain.connect(actx.destination);
 
-        // Қосылу тізбегі
-        o1.connect(skinF);
-        o2.connect(skinF);
-        skinF.connect(woodF);
-        woodF.connect(dampF);
-        
-        dampF.connect(rhythmGain);
-        noiseGain.connect(rhythmGain);
-        rhythmGain.connect(mainGain);
-
-        mainGain.connect(this.ctx.destination);
-
-        o1.start(t);
-        o2.start(t);
-
-        this.voice = { o1, o2, lfo, lfoGain, noiseFilter, noise, mainGain, rhythmOsc };
-      }
-
-      setPitch(freq) {
-        if (!this.voice) return;
-        const t = this.ctx.currentTime;
-        this.voice.o1.frequency.setTargetAtTime(freq, t, 0.045);
-        this.voice.o2.frequency.setTargetAtTime(freq + 0.6, t, 0.045);
-        this.voice.lfoGain.gain.setTargetAtTime(freq * 0.011, t, 0.045);
-        this.voice.noiseFilter.frequency.setTargetAtTime(freq * 2.3, t, 0.045);
-      }
-
-      stop() {
-        if (!this.voice) return;
-        const t = this.ctx.currentTime;
-        const v = this.voice;
-        v.mainGain.gain.cancelScheduledValues(t);
-        v.mainGain.gain.linearRampToValueAtTime(0.0001, t + 0.16);
-        setTimeout(() => {
-          try {
-            v.o1.stop();
-            v.o2.stop();
-            v.lfo.stop();
-            v.noise.stop();
-            if (v.rhythmOsc) v.rhythmOsc.stop();
-          } catch(e){}
-        }, 200);
-        this.voice = null;
-      }
+      osc1.start(t);
+      osc2.start(t);
     }
 
-    const bass = new RhythmicQobyzVoice(146.83);
-    const treble = new RhythmicQobyzVoice(220.00);
+    // Нотаны өзгерту (Сол қол)
+    function updatePitch(f) {
+      currentFreq = f;
+      if (!actx || !osc1) return;
+      const t = actx.currentTime;
+      osc1.frequency.setTargetAtTime(f, t, 0.04);
+      osc2.frequency.setTargetAtTime(f + 0.5, t, 0.04);
+      lfoGain.gain.setTargetAtTime(f * 0.012, t, 0.04);
+      noiseFilter.frequency.setTargetAtTime(f * 2.3, t, 0.04);
+    }
 
-    let isHold = false;
-    function toggleHold() {
-      initAudio();
-      isHold = !isHold;
-      const btn = document.getElementById('holdBtn');
-      const laneL = document.getElementById('lane-l');
-      const labelL = document.getElementById('label-l');
+    // Ысқыштың жылдамдығына қарай дыбысты басқару (Оң қол)
+    function applyBowVelocity(velocity) {
+      if (!actx || !masterGain) return;
+      const t = actx.currentTime;
 
-      if (isHold) {
-        btn.classList.add('active');
-        laneL.classList.add('active');
-        bass.play(146.83, true);
-        labelL.innerText = '147 Hz [Hold]';
+      // Жылдамдық шегі (0-ден 1.0-ге дейін)
+      const normVel = Math.min(1.0, velocity / 35);
+
+      if (normVel > 0.04) {
+        // Ысқыш қозғалғанда дыбыс шығады
+        const targetVol = 0.15 + (normVel * 0.55);
+        masterGain.gain.setTargetAtTime(targetVol, t, 0.03);
+        noiseGain.gain.setTargetAtTime(normVel * 0.065, t, 0.03);
+        document.getElementById('bow-lbl').innerText = `Тартылуда (${Math.round(normVel * 100)}%)`;
       } else {
-        btn.classList.remove('active');
-        laneL.classList.remove('active');
-        bass.stop();
-        labelL.innerText = '—';
+        // Ысқыш тоқтаса үн сөнеді
+        masterGain.gain.setTargetAtTime(0.0001, t, 0.08);
+        noiseGain.gain.setTargetAtTime(0, t, 0.08);
+        document.getElementById('bow-lbl').innerText = 'Тоқтап тұр';
       }
     }
 
-    const activeTouches = {};
-    function calcFreq(y, h, baseFreq) {
-      const p = Math.max(0, Math.min(1, y / h));
-      return baseFreq * Math.pow(2, (p * 14) / 12);
-    }
-
+    // 1. СОЛ ҚОЛ: ҚЫЛ МОЙНЫН БАСУ
     const neck = document.getElementById('neck');
+    const indL = document.getElementById('ind-l');
+    const indR = document.getElementById('ind-r');
+    let activeSide = 'l';
 
-    neck.addEventListener('touchstart', (e) => {
-      e.preventDefault();
-      initAudio();
+    function handleNeckEvent(e) {
       const rect = neck.getBoundingClientRect();
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
 
-      for (let i = 0; i < e.changedTouches.length; i++) {
-        const t = e.changedTouches[i];
-        const isLeft = (t.clientX - rect.left) < rect.width / 2;
-        const side = isLeft ? 'l' : 'r';
-        const inst = isLeft ? bass : treble;
+      let y = Math.max(0, Math.min(rect.height, clientY - rect.top));
+      let isLeft = (clientX - rect.left) < rect.width / 2;
+      activeSide = isLeft ? 'l' : 'r';
 
-        activeTouches[t.identifier] = { side, inst };
+      const baseF = isLeft ? 146.83 : 220.00;
+      const p = y / rect.height;
+      const freq = baseF * Math.pow(2, (p * 14) / 12);
 
-        const y = t.clientY - rect.top;
-        const f = calcFreq(y, rect.height, inst.baseFreq);
-        inst.play(f, isLeft);
+      updatePitch(freq);
 
-        document.getElementById(`lane-${side}`).classList.add('active');
-        document.getElementById(`ind-${side}`).style.top = y + 'px';
-        document.getElementById(`label-${side}`).innerText = Math.round(f) + ' Hz';
+      document.getElementById('lane-l').classList.toggle('active', isLeft);
+      document.getElementById('lane-r').classList.toggle('active', !isLeft);
+
+      if (isLeft) {
+        indL.style.top = y + 'px';
+      } else {
+        indR.style.top = y + 'px';
       }
-    }, { passive: false });
 
-    neck.addEventListener('touchmove', (e) => {
-      e.preventDefault();
-      const rect = neck.getBoundingClientRect();
+      document.getElementById('note-lbl').innerText = `${Math.round(freq)} Hz (${isLeft ? 'Тоғанақ' : 'Кілтең'})`;
+    }
 
-      for (let i = 0; i < e.changedTouches.length; i++) {
-        const t = e.changedTouches[i];
-        const item = activeTouches[t.identifier];
-        if (item) {
-          const y = Math.max(0, Math.min(rect.height, t.clientY - rect.top));
-          const f = calcFreq(y, rect.height, item.inst.baseFreq);
-          item.inst.setPitch(f);
+    neck.addEventListener('mousedown', handleNeckEvent);
+    neck.addEventListener('mousemove', (e) => { if (e.buttons === 1) handleNeckEvent(e); });
+    neck.addEventListener('touchstart', (e) => { e.preventDefault(); handleNeckEvent(e); }, { passive: false });
+    neck.addEventListener('touchmove', (e) => { e.preventDefault(); handleNeckEvent(e); }, { passive: false });
 
-          document.getElementById(`ind-${item.side}`).style.top = y + 'px';
-          document.getElementById(`label-${item.side}`).innerText = Math.round(f) + ' Hz';
-        }
-      }
-    }, { passive: false });
+    // 2. ОҢ ҚОЛ: ЫСҚЫШТЫ КӨЛДЕНЕҢ ТАРТУ ЖӘНЕ ЖЫЛДАМДЫҚТЫ ЕСЕПТЕУ
+    const bowZone = document.getElementById('bowZone');
+    const bowStick = document.getElementById('bowStick');
 
-    function endTouches(e) {
-      for (let i = 0; i < e.changedTouches.length; i++) {
-        const t = e.changedTouches[i];
-        const item = activeTouches[t.identifier];
-        if (item) {
-          if (!(item.side === 'l' && isHold)) {
-            item.inst.stop();
-            document.getElementById(`lane-${item.side}`).classList.remove('active');
-            document.getElementById(`label-${item.side}`).innerText = '—';
-          }
-          delete activeTouches[t.identifier];
-        }
+    let isBowing = false;
+    let lastX = 0;
+    let lastTime = performance.now();
+    let currentVel = 0;
+
+    function startBow(e) {
+      isBowing = true;
+      bowStick.classList.add('moving');
+      lastX = e.touches ? e.touches[0].clientX : e.clientX;
+      lastTime = performance.now();
+    }
+
+    function moveBow(e) {
+      if (!isBowing) return;
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const now = performance.now();
+      const dt = now - lastTime;
+
+      if (dt > 12) {
+        const dx = Math.abs(clientX - lastX);
+        const velocity = (dx / dt) * 35; // Жылдамдық есебі
+        currentVel = velocity;
+
+        // Ысқышты визуалды түрде қозғалту
+        const rect = bowZone.getBoundingClientRect();
+        const offsetX = Math.max(-30, Math.min(30, (clientX - (rect.left + rect.width / 2)) * 0.4));
+        bowStick.style.transform = `translateX(${offsetX}px)`;
+
+        applyBowVelocity(velocity);
+
+        lastX = clientX;
+        lastTime = now;
       }
     }
-    neck.addEventListener('touchend', endTouches);
-    neck.addEventListener('touchcancel', endTouches);
 
-    // Mouse
-    const laneR = document.getElementById('lane-r');
-    let isMouseDown = false;
-
-    laneR.addEventListener('mousedown', (e) => {
-      e.preventDefault();
-      initAudio();
-      isMouseDown = true;
-      laneR.classList.add('active');
-      const rect = laneR.getBoundingClientRect();
-      const y = e.clientY - rect.top;
-      const f = calcFreq(y, rect.height, treble.baseFreq);
-      treble.play(f, false);
-      document.getElementById('ind-r').style.top = y + 'px';
-      document.getElementById('label-r').innerText = Math.round(f) + ' Hz';
-    });
-
-    window.addEventListener('mousemove', (e) => {
-      if (!isMouseDown) return;
-      const rect = laneR.getBoundingClientRect();
-      const y = Math.max(0, Math.min(rect.height, e.clientY - rect.top));
-      const f = calcFreq(y, rect.height, treble.baseFreq);
-      treble.setPitch(f);
-      document.getElementById('ind-r').style.top = y + 'px';
-      document.getElementById('label-r').innerText = Math.round(f) + ' Hz';
-    });
-
-    window.addEventListener('mouseup', () => {
-      if (isMouseDown) {
-        isMouseDown = false;
-        laneR.classList.remove('active');
-        treble.stop();
-        document.getElementById('label-r').innerText = '—';
+    function stopBow() {
+      if (isBowing) {
+        isBowing = false;
+        bowStick.classList.remove('moving');
+        bowStick.style.transform = 'translateX(0px)';
+        applyBowVelocity(0);
       }
-    });
+    }
+
+    bowZone.addEventListener('mousedown', startBow);
+    window.addEventListener('mousemove', moveBow);
+    window.addEventListener('mouseup', stopBow);
+
+    bowZone.addEventListener('touchstart', (e) => { e.preventDefault(); startBow(e); }, { passive: false });
+    window.addEventListener('touchmove', (e) => { if (isBowing) moveBow(e); }, { passive: false });
+    window.addEventListener('touchend', stopBow);
+
+    // Ысқыш тоқтап қалса дыбысты өшіріп отыратын цикл
+    setInterval(() => {
+      if (isBowing) {
+        const idleTime = performance.now() - lastTime;
+        if (idleTime > 60) {
+          applyBowVelocity(0);
+        }
+      }
+    }, 40);
   </script>
 </body>
 </html>
