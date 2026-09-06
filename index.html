@@ -3,16 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>QOBYZ.COM — Dala Uini</title>
+  <title>QOBYZ.COM — Шынайы Қылқобыз Үні</title>
   <style>
     :root {
       --bg: #0c0a09;
       --panel: #171412;
+      --panel-hover: #221d19;
       --accent: #d4a373;
       --accent-hover: #faedcd;
       --text: #e6e2dd;
       --muted: #8c827a;
       --border: #292420;
+      --string-glow: rgba(212, 163, 115, 0.45);
     }
 
     * {
@@ -20,6 +22,7 @@
       margin: 0;
       padding: 0;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      user-select: none;
     }
 
     body {
@@ -30,20 +33,20 @@
     }
 
     header {
-      padding: 24px 8%;
+      padding: 22px 8%;
       display: flex;
       justify-content: space-between;
       align-items: center;
       border-bottom: 1px solid var(--border);
       position: sticky;
       top: 0;
-      background: rgba(12, 10, 9, 0.92);
-      backdrop-filter: blur(8px);
+      background: rgba(12, 10, 9, 0.94);
+      backdrop-filter: blur(10px);
       z-index: 50;
     }
 
     .logo {
-      font-size: 1.4rem;
+      font-size: 1.35rem;
       font-weight: 700;
       letter-spacing: 0.18em;
       color: var(--accent);
@@ -53,7 +56,7 @@
     nav a {
       color: var(--muted);
       text-decoration: none;
-      margin-left: 28px;
+      margin-left: 24px;
       font-size: 0.95rem;
       transition: color 0.2s;
     }
@@ -63,85 +66,188 @@
     }
 
     .hero {
-      padding: 100px 8% 80px;
+      padding: 60px 8% 50px;
       display: grid;
-      grid-template-columns: 1.2fr 1fr;
-      gap: 48px;
+      grid-template-columns: 1.05fr 1.35fr;
+      gap: 40px;
       align-items: center;
-      min-height: 75vh;
+      min-height: 80vh;
     }
 
     .hero h1 {
-      font-size: 3.2rem;
+      font-size: 3rem;
       line-height: 1.15;
       font-weight: 600;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
       color: #fff;
     }
 
     .hero p {
       color: var(--muted);
-      font-size: 1.15rem;
-      max-width: 520px;
-      margin-bottom: 36px;
+      font-size: 1.05rem;
+      line-height: 1.7;
+      margin-bottom: 28px;
+    }
+
+    .controls-row {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      flex-wrap: wrap;
     }
 
     .btn {
       display: inline-block;
-      padding: 14px 32px;
+      padding: 13px 26px;
       background: var(--accent);
       color: var(--bg);
       text-decoration: none;
       font-weight: 600;
-      letter-spacing: 0.05em;
-      border-radius: 2px;
+      border-radius: 4px;
       border: none;
       cursor: pointer;
-      transition: background 0.2s;
+      transition: all 0.2s;
     }
 
     .btn:hover {
       background: var(--accent-hover);
+      box-shadow: 0 0 16px var(--string-glow);
     }
 
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    .btn-secondary:hover {
+      background: var(--panel);
+      border-color: var(--accent);
+    }
+
+    /* Қобыз интерактивті тақтасы */
     .interactive-card {
       background: var(--panel);
       border: 1px solid var(--border);
-      padding: 36px;
-      border-radius: 4px;
-      text-align: center;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
     }
 
-    .string-board {
+    .board-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .status-badge {
+      font-size: 0.8rem;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: #110e0c;
+      color: var(--accent);
+      border: 1px solid var(--border);
+    }
+
+    .qobyz-neck {
       display: flex;
       justify-content: center;
-      gap: 36px;
-      height: 220px;
-      margin: 28px 0;
-      background: #110e0c;
-      border-radius: 4px;
-      align-items: center;
-      cursor: pointer;
-      border: 1px dashed var(--border);
-    }
-
-    .string {
-      width: 4px;
-      height: 80%;
-      background: linear-gradient(180deg, var(--muted), var(--accent), var(--muted));
+      gap: 50px;
+      background: linear-gradient(180deg, #14100e 0%, #0d0a09 100%);
+      padding: 24px 20px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
       position: relative;
-      transition: transform 0.08s ease;
     }
 
-    .string.bass {
-      width: 7px;
+    .string-track {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      position: relative;
     }
 
-    .string:hover {
-      transform: scaleX(1.8);
-      background: #fff;
+    .string-track-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+      text-transform: uppercase;
     }
 
+    .note-stops {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      width: 140px;
+    }
+
+    .note-btn {
+      background: #120f0d;
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 10px 14px;
+      border-radius: 4px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+      transition: all 0.15s ease;
+    }
+
+    .note-btn kbd {
+      font-size: 0.7rem;
+      padding: 2px 6px;
+      background: #201b17;
+      border-radius: 3px;
+      color: var(--accent);
+      border: 1px solid #332b25;
+    }
+
+    .note-btn:hover {
+      background: #241e1a;
+      border-color: var(--accent);
+      transform: translateX(2px);
+    }
+
+    .note-btn.active {
+      background: var(--accent);
+      color: var(--bg);
+      border-color: var(--accent);
+      box-shadow: 0 0 12px var(--string-glow);
+    }
+
+    .note-btn.active kbd {
+      background: #a97e54;
+      color: #fff;
+      border-color: #8c633a;
+    }
+
+    .fx-bar {
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .fx-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .fx-item input[type="range"] {
+      accent-color: var(--accent);
+      cursor: pointer;
+    }
+
+    /* Ақпараттық секциялар */
     section {
       padding: 80px 8%;
       border-top: 1px solid var(--border);
@@ -149,7 +255,7 @@
 
     .section-title {
       font-size: 1.8rem;
-      margin-bottom: 40px;
+      margin-bottom: 36px;
       letter-spacing: 0.08em;
       text-transform: uppercase;
       color: var(--accent);
@@ -158,24 +264,19 @@
     .grid-3 {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 28px;
+      gap: 24px;
     }
 
     .card {
       background: var(--panel);
       border: 1px solid var(--border);
       padding: 28px;
-      border-radius: 2px;
-      transition: border-color 0.2s;
-    }
-
-    .card:hover {
-      border-color: var(--accent);
+      border-radius: 4px;
     }
 
     .card h3 {
-      margin-bottom: 12px;
-      font-size: 1.25rem;
+      margin-bottom: 10px;
+      font-size: 1.2rem;
       color: #fff;
     }
 
@@ -185,20 +286,23 @@
     }
 
     footer {
-      padding: 40px 8%;
+      padding: 36px 8%;
       text-align: center;
       border-top: 1px solid var(--border);
       color: var(--muted);
       font-size: 0.85rem;
     }
 
-    @media (max-width: 860px) {
+    @media (max-width: 960px) {
       .hero {
         grid-template-columns: 1fr;
         padding-top: 40px;
       }
-      .hero h1 {
-        font-size: 2.3rem;
+      .qobyz-neck {
+        gap: 20px;
+      }
+      .note-stops {
+        width: 100%;
       }
     }
   </style>
@@ -208,117 +312,339 @@
   <header>
     <div class="logo">Qobyz.com</div>
     <nav>
-      <a href="#mura">Mura</a>
-      <a href="#kui">Kuijler</a>
-      <a href="#anatomiia">Aspap</a>
-      <a href="#ustalar">Sheberler</a>
+      <a href="#uinder">Қыл дыбысы</a>
+      <a href="#anatomiia">Аспап сипаты</a>
+      <a href="#kuiler">Күйлер</a>
     </nav>
   </header>
 
   <main>
-    <section class="hero">
+    <section class="hero" id="uinder">
       <div>
-        <h1>Dala saryny men tuugnghjyq sandyq mura</h1>
-        <p>Qorqyt ata uuaqytynan bastauu alghan qylqobyz duinjetanymy. Tuipnusqa aiuuen, kuij qory zhaine zamanauuj kuoirkem uindestigi.</p>
-        <button class="btn" onclick="playChord()">Uindi ojnatuu</button>
+        <h1>Дала күңірені мен қыл сарыны</h1>
+        <p>
+          Қылқобыз — қарапайым екі ішектің ғана шертілуі емес, әр қыл шоғырының бойындағы тырнақ жанасуынан туатын обертондар, ысқыш пен терінің шуыл-резонансы. Төмендегі қылдарды басып, нағыз күй үнін тыңдаңыз немесе пернетақтамен ойнаңыз.
+        </p>
+
+        <div class="controls-row">
+          <button class="btn" onclick="playKorkytChord()">«Қоңыр» аккорды</button>
+          <button class="btn btn-secondary" onclick="playSaryarkaRun()">Күй үзіндісі</button>
+        </div>
       </div>
 
       <div class="interactive-card">
-        <h4 style="letter-spacing: 0.05em; color: var(--accent);">Qobyz qyly (Tuisip kuoirigniz)</h4>
-        <p style="font-size: 0.85rem; color: var(--muted); margin-top: 6px;">Qyl uistine aparygnyz nemese kuoirigniz</p>
-        
-        <div class="string-board">
-          <div class="string bass" id="str1" onmouseover="playTone(146.83)" onclick="playTone(146.83)" title="Tómen qyl (Re / D3)"></div>
-          <div class="string" id="str2" onmouseover="playTone(220.00)" onclick="playTone(220.00)" title="Zhoghary qyl (La / A3)"></div>
+        <div class="board-header">
+          <div>
+            <h4 style="color: var(--accent); font-weight: 600;">Қыл мойны (Ноталар мен пернелер)</h4>
+            <span style="font-size: 0.78rem; color: var(--muted);">Тырнақты жанастыру арқылы ойнау</span>
+          </div>
+          <span class="status-badge" id="currentNoteText">Үн: Күтуде</span>
         </div>
-        <span style="font-size: 0.8rem; color: var(--muted);" id="status">Kuij qalyby: D3 — A3 (Qujyn)</span>
+
+        <div class="qobyz-neck">
+          <!-- ЖУАН ҚЫЛ (Бас қыл / Ре - D3) -->
+          <div class="string-track">
+            <span class="string-track-label">Тоғанақ (D3)</span>
+            <div class="note-stops">
+              <button class="note-btn" data-key="a" onmousedown="triggerQobyz(146.83, this)" onmouseup="stopQobyz()" onmouseleave="stopQobyz()">
+                <span>Бос ішек (D3)</span> <kbd>A</kbd>
+              </button>
+              <button class="note-btn" data-key="s" onmousedown="triggerQobyz(164.81, this)" onmouseup="stopQobyz()" onmouseleave="stopQobyz()">
+                <span>Ми (E3)</span> <kbd>S</kbd>
+              </button>
+              <button class="note-btn" data-key="d" onmousedown="triggerQobyz(174.61, this)" onmouseup="stopQobyz()" onmouseleave="stopQobyz()">
+                <span>Фа (F3)</span> <kbd>D</kbd>
+              </button>
+              <button class="note-btn" data-key="f" onmousedown="triggerQobyz(196.00, this)" onmouseup="stopQobyz()" onmouseleave="stopQobyz()">
+                <span>Соль (G3)</span> <kbd>F</kbd>
+              </button>
+              <button class="note-btn" data-key="g" onmousedown="triggerQobyz(220.00, this)" onmouseup="stopQobyz()" onmouseleave="stopQobyz()">
+                <span>Ля (A3)</span> <kbd>G</kbd>
+              </button>
+            </div>
+          </div>
+
+          <!-- ЖІҢІШКЕ ҚЫЛ (Жоғарғы қыл / Ля - A3) -->
+          <div class="string-track">
+            <span class="string-track-label">Кілтең (A3)</span>
+            <div class="note-stops">
+              <button class="note-btn" data-key="q" onmousedown="triggerQobyz(220.00, this)" onmouseup="stopQobyz()" onmouseleave="stopQobyz()">
+                <span>Бос ішек (A3)</span> <kbd>Q</kbd>
+              </button>
+              <button class="note-btn" data-key="w" onmousedown="triggerQobyz(246.94, this)" onmouseup="stopQobyz()" onmouseleave="stopQobyz()">
+                <span>Си (B3)</span> <kbd>W</kbd>
+              </button>
+              <button class="note-btn" data-key="e" onmousedown="triggerQobyz(261.63, this)" onmouseup="stopQobyz()" onmouseleave="stopQobyz()">
+                <span>До (C4)</span> <kbd>E</kbd>
+              </button>
+              <button class="note-btn" data-key="r" onmousedown="triggerQobyz(293.66, this)" onmouseup="stopQobyz()" onmouseleave="stopQobyz()">
+                <span>Ре (D4)</span> <kbd>R</kbd>
+              </button>
+              <button class="note-btn" data-key="t" onmousedown="triggerQobyz(329.63, this)" onmouseup="stopQobyz()" onmouseleave="stopQobyz()">
+                <span>Ми (E4)</span> <kbd>T</kbd>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="fx-bar">
+          <div class="fx-item">
+            <label>Ысқыш үйкелісі (Қыл шықыры)</label>
+            <input type="range" id="bowNoise" min="0" max="0.35" step="0.01" value="0.14">
+          </div>
+          <div class="fx-item">
+            <label>Түйе терісі резонансы (Formant)</label>
+            <input type="range" id="bodyResonance" min="400" max="1100" step="10" value="620">
+          </div>
+        </div>
       </div>
     </section>
 
     <section id="anatomiia">
-      <div class="section-title">Aspap qurylymy</div>
+      <div class="section-title">Қылқобыз акустикасының құпиясы</div>
       <div class="grid-3">
         <div class="card">
-          <h3>Shanaq pen Qubys</h3>
-          <p>Tutas aghashtan (kuoibinese qaraghaj nemese emennen) ojylatyn kegnistigi.</p>
+          <h3>Тырнақ жанасуы (Қылды баспау)</h3>
+          <p>Қобызшы ішекті саусақ жастықшасымен баспайды, тырнақтың қырымен жанастырады. Бұл күңгірт әрі нәзік обертондардың ашылуына мүмкіндік береді.</p>
         </div>
         <div class="card">
-          <h3>Tanaq (Tuije terisi)</h3>
-          <p>Shanaqtyn tuoimen buoiligine tartylatyn uin qabyry. Dybysqa zhumsaq, kuinregn ari tugnghjyq beretin negizi.</p>
+          <h3>Түйе терісі (Шанақ мембранасы)</h3>
+          <p>Шанақтың төменгі жартысына керілген түйе терісі акустикалық резонатор қызметін атқарып, дыбысқа қоңыр, тұңғиық тембр қосады.</p>
         </div>
         <div class="card">
-          <h3>Zhylqy qyly</h3>
-          <p>Qobyz ishegi men ysqyshy saghaq qylynan tuuralady. 60-tan astam qyl shoghyry bir uinge toghysyp, saryn tolqyndaryn tuughyzady.</p>
-        </div>
-      </div>
-    </section>
-
-    <section id="kui">
-      <div class="section-title">Kuij qory</div>
-      <div class="grid-3">
-        <div class="card">
-          <h3>Qorqyt — «Qonur»</h3>
-          <p>Daistuirli. Dala duinjetanymy men maigngilik tolghanys.</p>
-        </div>
-        <div class="card">
-          <h3>Yqylas — «Zhorman»</h3>
-          <p>Aiuuendi ysqysh tairtibi men qobyz mektebinign shyny.</p>
-        </div>
-        <div class="card">
-          <h3>Ortasha </h3>
-          <p>Sandyq yrghaghymen sinisken zamanauuj baghyty.</p>
+          <h3>60-80 Жылқы қылы</h3>
+          <p>Бір ішекте ондаған қыл шоғырланады. Ысқышпен тартқанда әр талшық өз бетінше микро-фазалық ауытқу жасап, бірегей хор эффектісін жасайды.</p>
         </div>
       </div>
     </section>
   </main>
 
   <footer>
-    <p>&copy; 2026 Qobyz.com — Dala uinin saqtau zhaine sandyqtandyruu bastamasy.</p>
+    <p>&copy; 2026 Qobyz.com — Қазақ рухани мұрасын сақтау және сандық үн синтезі бастамасы.</p>
   </footer>
 
   <script>
-    let audioCtx = null;
+    /* ==========================================================
+       QOBYZ PHYSICAL-MODELING AUDIO SYNTHESIZER (Web Audio API)
+       ========================================================== */
 
-    function initAudio() {
+    let audioCtx = null;
+    let activeNodes = [];
+    let currentActiveButton = null;
+
+    function getAudioContext() {
       if (!audioCtx) {
         audioCtx = new (window.AudioContext || window.webkitAudioContext)();
       }
       if (audioCtx.state === 'suspended') {
         audioCtx.resume();
       }
+      return audioCtx;
     }
 
-    function playTone(freq) {
-      initAudio();
-
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      const filter = audioCtx.createBiquadFilter();
-
-      // Qobyz qylynyn tembrin jasau ushin ara-pishindi tolqyn
-      osc.type = 'sawtooth';
-      osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-
-      // Rezonansty zhumsaqtau
-      filter.type = 'lowpass';
-      filter.frequency.setValueAtTime(650, audioCtx.currentTime);
-
-      gain.gain.setValueAtTime(0.01, audioCtx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.28, audioCtx.currentTime + 0.1);
-      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1.2);
-
-      osc.connect(filter);
-      filter.connect(gain);
-      gain.connect(audioCtx.destination);
-
-      osc.start();
-      osc.stop(audioCtx.currentTime + 1.25);
+    // Ақ шуыл генераторы (Ысқыштың қылға үйкеліс дыбысы)
+    function createNoiseBuffer(ctx) {
+      const bufferSize = ctx.sampleRate * 2;
+      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) {
+        data[i] = Math.random() * 2 - 1;
+      }
+      return buffer;
     }
 
-    function playChord() {
-      playTone(146.83);
-      setTimeout(() => playTone(220.00), 120);
+    let noiseBuffer = null;
+
+    function playQobyzVoice(freq, duration = 0) {
+      const ctx = getAudioContext();
+      if (!noiseBuffer) noiseBuffer = createNoiseBuffer(ctx);
+
+      const now = ctx.currentTime;
+
+      // 1. Негізгі қыл генераторлары (Chorused Sawtooth + Triangle)
+      const osc1 = ctx.createOscillator();
+      const osc2 = ctx.createOscillator();
+      const subOsc = ctx.createOscillator();
+
+      osc1.type = 'sawtooth';
+      osc1.frequency.setValueAtTime(freq, now);
+
+      // Қыл шоғырының қалыңдығын беретін микро-ауытқу (detune)
+      osc2.type = 'sawtooth';
+      osc2.frequency.setValueAtTime(freq, now);
+      osc2.detune.setValueAtTime(7, now);
+
+      subOsc.type = 'triangle';
+      subOsc.frequency.setValueAtTime(freq * 0.5, now); // Шанақ түбіндегі бас гуіл
+
+      // 2. Вибрато (LFO) - орындаушы қол қимылы
+      const lfo = ctx.createOscillator();
+      const lfoGain = ctx.createGain();
+      lfo.frequency.setValueAtTime(5.2, now); // 5.2 Hz тербеліс
+      lfoGain.gain.setValueAtTime(3.5, now);  // Тереңдігі
+      lfo.connect(osc1.frequency);
+      lfo.connect(osc2.frequency);
+
+      // 3. Шанақ пен тері фильтрі (Body Formant Filter)
+      const bodyFilter = ctx.createBiquadFilter();
+      const userResonance = parseFloat(document.getElementById('bodyResonance').value) || 620;
+      bodyFilter.type = 'bandpass';
+      bodyFilter.frequency.setValueAtTime(userResonance, now);
+      bodyFilter.Q.setValueAtTime(3.2, now);
+
+      // Жоғарғы жиілікті жұмсарту
+      const lowpass = ctx.createBiquadFilter();
+      lowpass.type = 'lowpass';
+      lowpass.frequency.setValueAtTime(1600, now);
+
+      // 4. Ысқыштың қылға тию шуылы (Bow Friction)
+      const noiseSource = ctx.createBufferSource();
+      noiseSource.buffer = noiseBuffer;
+      noiseSource.loop = true;
+
+      const noiseFilter = ctx.createBiquadFilter();
+      noiseFilter.type = 'bandpass';
+      noiseFilter.frequency.setValueAtTime(freq * 2.5, now);
+      noiseFilter.Q.setValueAtTime(1.5, now);
+
+      const noiseGain = ctx.createGain();
+      const userNoise = parseFloat(document.getElementById('bowNoise').value) || 0.14;
+      noiseGain.gain.setValueAtTime(userNoise, now);
+
+      noiseSource.connect(noiseFilter);
+      noiseFilter.connect(noiseGain);
+
+      // 5. Негізгі дыбыс деңгейінің конверті (ADSR)
+      const masterGain = ctx.createGain();
+      masterGain.gain.setValueAtTime(0.001, now);
+      // Ысқыш тартылғандағы баяу басталу (Attack)
+      masterGain.gain.exponentialRampToValueAtTime(0.35, now + 0.18);
+
+      // Желілерді біріктіру
+      osc1.connect(bodyFilter);
+      osc2.connect(bodyFilter);
+      subOsc.connect(bodyFilter);
+
+      bodyFilter.connect(lowpass);
+      noiseGain.connect(lowpass);
+
+      lowpass.connect(masterGain);
+      masterGain.connect(ctx.destination);
+
+      // Ойнату
+      lfo.start(now);
+      osc1.start(now);
+      osc2.start(now);
+      subOsc.start(now);
+      noiseSource.start(now);
+
+      const voice = {
+        stop: function(releaseTime = 0.35) {
+          const stopNow = ctx.currentTime;
+          masterGain.gain.cancelScheduledValues(stopNow);
+          masterGain.gain.setValueAtTime(masterGain.gain.value, stopNow);
+          masterGain.gain.exponentialRampToValueAtTime(0.0001, stopNow + releaseTime);
+
+          setTimeout(() => {
+            try {
+              osc1.stop();
+              osc2.stop();
+              subOsc.stop();
+              lfo.stop();
+              noiseSource.stop();
+            } catch (e) {}
+          }, releaseTime * 1000 + 50);
+        }
+      };
+
+      if (duration > 0) {
+        setTimeout(() => voice.stop(), duration * 1000);
+      }
+
+      return voice;
     }
+
+    function triggerQobyz(freq, btnElement) {
+      stopQobyz();
+      if (btnElement) {
+        if (currentActiveButton) currentActiveButton.classList.remove('active');
+        currentActiveButton = btnElement;
+        currentActiveButton.classList.add('active');
+        document.getElementById('currentNoteText').textContent = 'Үн: ' + btnElement.querySelector('span').textContent;
+      }
+      const voice = playQobyzVoice(freq);
+      activeNodes.push(voice);
+    }
+
+    function stopQobyz() {
+      while (activeNodes.length > 0) {
+        const v = activeNodes.pop();
+        v.stop(0.25);
+      }
+      if (currentActiveButton) {
+        currentActiveButton.classList.remove('active');
+        currentActiveButton = null;
+      }
+      document.getElementById('currentNoteText').textContent = 'Үн: Күтуде';
+    }
+
+    // Қос қылмен «Қоңыр» аккордын ойнау
+    function playKorkytChord() {
+      stopQobyz();
+      document.getElementById('currentNoteText').textContent = 'Үн: Қоңыр (D3 + A3)';
+      const v1 = playQobyzVoice(146.83, 2.5);
+      const v2 = playQobyzVoice(220.00, 2.5);
+      activeNodes.push(v1, v2);
+    }
+
+    // Қысқа күй сарыны
+    function playSaryarkaRun() {
+      stopQobyz();
+      const melody = [
+        { f: 146.83, d: 0.35 },
+        { f: 174.61, d: 0.35 },
+        { f: 196.00, d: 0.4 },
+        { f: 220.00, d: 0.5 },
+        { f: 261.63, d: 0.4 },
+        { f: 246.94, d: 0.35 },
+        { f: 220.00, d: 0.9 }
+      ];
+
+      let delay = 0;
+      melody.forEach(item => {
+        setTimeout(() => {
+          playQobyzVoice(item.f, item.d);
+        }, delay * 1000);
+        delay += item.d * 0.85;
+      });
+    }
+
+    // Пернетақта батырмаларын тыңдау (A S D F G | Q W E R T)
+    const keyMap = {
+      'a': 146.83, 's': 164.81, 'd': 174.61, 'f': 196.00, 'g': 220.00,
+      'q': 220.00, 'w': 246.94, 'e': 261.63, 'r': 293.66, 't': 329.63
+    };
+
+    let pressedKeys = new Set();
+
+    window.addEventListener('keydown', (e) => {
+      const key = e.key.toLowerCase();
+      if (keyMap[key] && !pressedKeys.has(key)) {
+        pressedKeys.add(key);
+        const btn = document.querySelector(`button[data-key="${key}"]`);
+        triggerQobyz(keyMap[key], btn);
+      }
+    });
+
+    window.addEventListener('keyup', (e) => {
+      const key = e.key.toLowerCase();
+      if (pressedKeys.has(key)) {
+        pressedKeys.delete(key);
+        if (pressedKeys.size === 0) {
+          stopQobyz();
+        }
+      }
+    });
   </script>
 </body>
 </html>
